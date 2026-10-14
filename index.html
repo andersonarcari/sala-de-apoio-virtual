@@ -750,6 +750,31 @@ body.ocupado, body.ocupado * { cursor: progress !important; }
 button.pdf { background: none; border: 0; padding: 0; font: inherit; color: var(--azul, #1F4E79); cursor: pointer; text-decoration: underline; text-underline-offset: 2px; }
 button.pdf:hover { text-decoration-thickness: 2px; }
 .carregando { padding: 60px 16px; }
+.code.longo { font-size: 12.5px; letter-spacing: -.2px; }
+@media (min-width: 981px) {
+  .row { grid-template-columns: 182px minmax(0, 1.2fr) minmax(0, 1fr) 112px 166px; }
+  .list.gestor .row { grid-template-columns: 182px minmax(0, 1.1fr) 120px minmax(0, .85fr) 104px 166px; }
+  .code.longo { white-space: nowrap; }
+}
+.tipo.tipo-id { color: var(--ink, #2b2a27); font-weight: 700; }
+.row .cell-main { min-width: 0; }
+.row .code { overflow-wrap: anywhere; }
+.sec-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 10px; }
+.sec-head .btn svg { width: 14px; height: 14px; margin-right: 6px; vertical-align: -2px; }
+.at.at-gestor { border-color: var(--caqui, #a08f63); box-shadow: inset 3px 0 0 var(--caqui, #a08f63); }
+.nota-gestor { margin: 4px 0 10px; font-size: 13px; color: var(--muted, #6b665c); }
+.anexos { margin: 4px 0 14px; padding: 12px 14px; border: 1px solid var(--line); border-radius: 10px; background: #fff; }
+.anx-n { display: inline-block; min-width: 20px; padding: 0 6px; border-radius: 10px; background: var(--line); font-size: 12px; text-align: center; }
+.anx-lista { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+.anx { width: 100%; display: grid; grid-template-columns: 88px 1fr auto; gap: 10px; align-items: center; padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; background: none; font: inherit; text-align: left; cursor: pointer; color: inherit; }
+.anx:hover, .anx:focus-visible { border-color: var(--caqui); background: #faf8f3; }
+.anx-tipo { font-size: 11px; font-weight: 700; letter-spacing: .4px; text-transform: uppercase; color: #6b665c; }
+.anx-tipo[data-k="PDF"] { color: #b42318; }
+.anx-nome { overflow-wrap: anywhere; }
+.anx-tam { font-size: 12px; color: #6b665c; white-space: nowrap; }
+.anx-sub { margin-top: 6px; font-size: 12px; font-weight: 600; color: #6b665c; }
+.anx-carregando { margin: 0; color: #6b665c; }
+@media (max-width: 520px) { .anx { grid-template-columns: 1fr auto; } .anx-tipo { grid-column: 1 / -1; } }
 </style>
 
 <header class="masthead">
@@ -1172,7 +1197,7 @@ button.pdf:hover { text-decoration-thickness: 2px; }
         case "inconsist": if (!conferencia(d).length) return false; break;
         case "atendidas": if (!d.atend) return false; break;
       }
-      if (q && (d.codigo + " " + d.municipio + " " + d.natureza + " " + d.endereco + " " + d.anotacao).toUpperCase().indexOf(q) < 0) return false;
+      if (q && (d.codigo + " " + d.tipo + " " + d.municipio + " " + d.natureza + " " + d.endereco + " " + d.anotacao).toUpperCase().indexOf(q) < 0) return false;
       return true;
     }).sort(function (a, b) {
       if (!a.atend && !b.atend) {
@@ -1208,7 +1233,7 @@ button.pdf:hover { text-decoration-thickness: 2px; }
     return base.filter(function (d) {
       if (!naEtapa(d, st.etapa)) return false;
       if (pt && !pt[1](d)) return false;
-      if (q && (d.codigo + " " + d.municipio + " " + d.natureza + " " + d.endereco + " " + d.anotacao + " " + d.fracao).toUpperCase().indexOf(q) < 0) return false;
+      if (q && (d.codigo + " " + d.tipo + " " + d.municipio + " " + d.natureza + " " + d.endereco + " " + d.anotacao + " " + d.fracao).toUpperCase().indexOf(q) < 0) return false;
       return true;
     }).sort(function (a, b) {
       if (st.etapa === "encerradas") return a.respSemadEm > b.respSemadEm ? -1 : 1;
@@ -1269,6 +1294,15 @@ button.pdf:hover { text-decoration-thickness: 2px; }
       '<input id="busca" type="search" placeholder="Buscar código, município, anotação…" aria-label="Buscar" value="' + esc(st.busca) + '"></div>';
   }
 
+  /** protocolos novos da SEMAD (2026.09.01.503.0000535) cabem numa linha (coluna mais larga); o número curto
+      que identifica a demanda no SISDEN é o ID (ex.: DEN 1480), mostrado logo abaixo, em negrito */
+  function codHtml(c) {
+    c = String(c || "");
+    const k = c.lastIndexOf(".");
+    if (c.length <= 12 || k < 0) return '<span class="code">' + esc(c) + "</span>";
+    // uma linha só; em telas estreitas pode quebrar no último ponto
+    return '<span class="code longo" title="' + esc(c) + '">' + esc(c.slice(0, k + 1)) + "<wbr>" + esc(c.slice(k + 1)) + "</span>";
+  }
   function listHtml(lista, gestor) {
     if (!lista.length) return '<div class="list"><div class="empty">Nenhuma demanda neste filtro.</div></div>';
     let h = '<div class="list' + (gestor ? " gestor" : "") + '" role="list">';
@@ -1277,7 +1311,7 @@ button.pdf:hover { text-decoration-thickness: 2px; }
     lista.forEach(function (d) {
       const novo = naoLidos(d, gestor);
       h += '<button type="button" class="row' + (novo ? " unread" : "") + '" role="listitem" data-cod="' + esc(d.codigo) + '">' +
-        '<span class="cell-main"><span class="code">' + esc(d.codigo) + '</span><span class="tipo">' + esc(d.tipo) + "</span>" + prioTag(d) + "</span>" +
+        '<span class="cell-main">' + codHtml(d.codigo) + '<span class="tipo' + (/\d/.test(d.tipo || "") ? " tipo-id" : "") + '">' + esc(d.tipo) + "</span>" + prioTag(d) + "</span>" +
         '<span class="cell-main c-nat"><b>' + esc(d.natureza) + '</b><span class="cell-sub">' + esc(d.municipio) + '</span><span class="cell-sub">' + esc(d.endereco) + "</span></span>" +
         (gestor ? '<span class="cell-main c-fra"><span class="fra-name">' + esc(d.fracao) + "</span></span>" : "") +
         '<span class="cell-main c-anot">' + (d.anotacao ? '<span class="anot">' + ICO.note + "<span>" + esc(d.anotacao) + "</span></span>" : '<span class="anot-vazia">—</span>') + "</span>" +
@@ -1472,6 +1506,7 @@ button.pdf:hover { text-decoration-thickness: 2px; }
   function abrir(codigo, rolarPara, semDetalhe) {
     const d = DEMANDAS.find(x => x.codigo === codigo);
     if (!d) return;
+    if (!st.aberta || st.aberta.codigo !== codigo) st.editAt = false;
     st.aberta = d;
     const gestor = ehGestao(), sistema = ehSistema();
     let leu = false;
@@ -1539,9 +1574,11 @@ button.pdf:hover { text-decoration-thickness: 2px; }
 
     /* --- atendimento --- */
     let blocoAt;
-    if (gestor) {
+    const editaGestor = sistema && st.editAt;
+    if (gestor && !editaGestor) {
       const conf = conferencia(d);
-      blocoAt = '<section class="bloco"><p class="section-t">Atendimento (preenchido pela fração)</p><dl class="facts">' +
+      blocoAt = '<section class="bloco"><div class="sec-head"><p class="section-t" style="margin:0">Atendimento (preenchido pela fração)</p>' +
+        (sistema ? '<button type="button" class="btn sm" data-act="at-editar">' + ICO.note + (d.atend ? "Corrigir dados" : "Registrar pela fração") + "</button>" : "") + '</div><dl class="facts">' +
         fato("Data do atendimento", br(d.atend)) + fato("Resultado", esc(d.resultado || "—")) +
         fato("Nº GAIA", d.gaia ? '<span class="mono">' + esc(d.gaia) + "</span>" : "—", true) +
         fato("Nº REDS", d.reds ? '<span class="mono">' + esc(d.reds) + "</span>" : "—", true) +
@@ -1556,17 +1593,19 @@ button.pdf:hover { text-decoration-thickness: 2px; }
     } else {
       const optsRes = '<option value="">Selecione…</option>' + RESULTADOS.map(r => "<option" + (d.resultado === r ? " selected" : "") + ">" + esc(r) + "</option>").join("") +
         (d.resultado && RESULTADOS.indexOf(d.resultado) < 0 ? "<option selected>" + esc(d.resultado) + "</option>" : "");
-      blocoAt = '<form class="at" id="f-at" novalidate><p class="section-t" style="margin:0">' + (d.atend ? "Atendimento registrado" : "Registrar atendimento") + "</p>" +
+      blocoAt = '<form class="at' + (editaGestor ? " at-gestor" : "") + '" id="f-at" novalidate><p class="section-t" style="margin:0">' + (editaGestor ? (d.atend ? "Corrigir atendimento — Gestor Sistema" : "Registrar atendimento pela fração — Gestor Sistema") : d.atend ? "Atendimento registrado" : "Registrar atendimento") + "</p>" +
+        (editaGestor ? '<p class="nota-gestor">A correção fica no histórico com o seu nome e o valor anterior. Recados de correção já resolvidos por ela são encerrados.</p>' : "") +
         '<div class="f2">' +
         campo("at-data", "Data do atendimento", '<input id="at-data" type="date" min="' + d.envio + '" max="' + HOJE + '" value="' + d.atend + '">', "Entre " + br(d.envio) + " e hoje" + (marca("atend") ? " · " + avisoCampo : ""), marca("atend")) +
         campo("at-res", "Resultado", '<select id="at-res">' + optsRes + "</select>", marca("resultado") ? avisoCampo : "", marca("resultado")) +
         "</div>" +
-        campo("at-gaia", "Nº do GAIA", '<input id="at-gaia" class="mono" inputmode="numeric" placeholder="2026.10.01.362.0001234" value="' + esc(d.gaia) + '">', "Formato aaaa.mm.dd.nnn.nnnnnnn" + (marca("gaia") ? " · " + avisoCampo : ""), marca("gaia")) +
-        campo("at-reds", "Nº do REDS", '<input id="at-reds" class="mono" inputmode="numeric" placeholder="2026-012345678-001" value="' + esc(d.reds) + '">', "Formato aaaa-nnnnnnnnn-nnn" + (marca("reds") ? " · " + avisoCampo : ""), marca("reds")) +
+        campo("at-gaia", "Nº do GAIA", '<input id="at-gaia" class="mono" inputmode="numeric" placeholder="2026.10.01.362.0001234" value="' + esc(d.gaia) + '">', "Formato aaaa.mm.dd.nnn.nnnnnnn" + (editaGestor && !d.gaia ? " · pode ficar em branco (registro sem GAIA)" : "") + (marca("gaia") ? " · " + avisoCampo : ""), marca("gaia")) +
+        campo("at-reds", "Nº do REDS", '<input id="at-reds" class="mono" inputmode="numeric" placeholder="2026-012345678-001" value="' + esc(d.reds) + '">', "Formato aaaa-nnnnnnnnn-nnn" + (editaGestor && !d.reds ? " · pode ficar em branco (registro sem REDS)" : "") + (marca("reds") ? " · " + avisoCampo : ""), marca("reds")) +
         campo("at-obs", "Observação da fração", '<textarea id="at-obs" maxlength="500" placeholder="Ex.: proprietário notificado; retorno em 15 dias.">' + esc(d.obsFracao) + "</textarea>", '<span id="at-obs-n">' + d.obsFracao.length + "</span>/500") +
         '<div class="confirm" id="at-confirm" role="alertdialog" aria-labelledby="at-confirm-t" hidden><p id="at-confirm-t"><b>Ao salvar o atendimento, a demanda será encerrada e sairá da fila de atendimentos.</b> Deseja continuar?</p>' +
         '<div class="actions"><button type="button" class="btn" data-act="conf-nao">Voltar</button><button type="button" class="btn primary" data-act="conf-sim" id="at-conf-sim">Sim, salvar e encerrar</button></div></div>' +
-        '<div class="actions" id="at-acoes"><button type="button" class="btn" data-close>Fechar</button><button type="submit" class="btn primary">Salvar atendimento</button></div></form>';
+        (editaGestor ? '<div class="actions" id="at-acoes"><button type="button" class="btn" data-act="at-cancelar">Cancelar</button><button type="submit" class="btn primary">Salvar correção</button></div></form>'
+          : '<div class="actions" id="at-acoes"><button type="button" class="btn" data-close>Fechar</button><button type="submit" class="btn primary">Salvar atendimento</button></div></form>');
     }
 
     /* --- resposta à SEMAD (analista) --- */
@@ -1593,8 +1632,8 @@ button.pdf:hover { text-decoration-thickness: 2px; }
       fato("Endereço", esc(d.endereco), true) +
       fato("Gerada em", br(d.gerada)) + fato("Enviada à fração", br(d.envio)) +
       fato("Vencimento", br(d.venc) + ' <span class="fine">(envio + ' + PRAZO + " dias)</span>") +
-      fato("Documento", REAL && !d.pdf ? '<span class="muted">PDF ainda não localizado na pasta</span>' : '<button type="button" class="pdf link-btn" data-act="pdf"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6"/></svg>PDF da denúncia</button>') +
-      "</dl>" + blocoPlan + blocoAt + blocoAn +
+      fato("Documento", REAL && !d.pdf ? '<span class="muted">PDF ainda não localizado na pasta</span>' : (d.anexo === "pasta" ? '<button type="button" class="pdf link-btn" data-act="anexos" aria-expanded="false">' : '<button type="button" class="pdf link-btn" data-act="pdf">') + '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6"/></svg>' + (d.anexo === "pasta" ? "Pasta da denúncia — ver arquivos" : "PDF da denúncia") + '</button>') +
+      "</dl>" + '<div id="d-anexos" class="anexos" hidden></div>' + blocoPlan + blocoAt + blocoAn +
       (sistema ? '<section class="bloco excluir"><p class="section-t">Excluir demanda</p>' +
         (st.excluindo ? '<div class="confirm perigo" role="alertdialog" aria-labelledby="ex-t"><p id="ex-t"><b>A demanda sai da lista, do dashboard e dos alertas.</b> Ela fica guardada em “Demandas excluídas” e pode ser restaurada.</p>' +
           campo("ex-motivo", "Motivo", '<select id="ex-motivo"><option value="">Selecione…</option>' + MOTIVOS_EXCLUSAO.map(m => "<option>" + m + "</option>").join("") + "</select>", "") +
@@ -1644,22 +1683,29 @@ button.pdf:hover { text-decoration-thickness: 2px; }
       diff(data, d.envio) < 0 ? "A data não pode ser anterior ao envio à fração (" + br(d.envio) + ")." :
       diff(data, HOJE) > 0 ? "A data não pode ser futura." : "") && ok;
     ok = erro("at-res", res ? "" : "Escolha o resultado do atendimento.") && ok;
-    ok = erro("at-gaia", !gaia ? "O nº do GAIA é obrigatório para fechar o atendimento." :
+    const pelaGestao = ehSistema();
+    ok = erro("at-gaia", !gaia ? (pelaGestao ? (d.gaia ? "O nº do GAIA não pode ser apagado." : "") : "O nº do GAIA é obrigatório para fechar o atendimento.") :
       !/^\d{4}\.\d{2}\.\d{2}\.\d{3}\.\d{7}$/.test(gaia) ? "Confira o número: são 4.2.2.3.7 dígitos separados por ponto." : "") && ok;
-    ok = erro("at-reds", !reds ? "O nº do REDS é obrigatório para fechar o atendimento." :
+    ok = erro("at-reds", !reds ? (pelaGestao ? (d.reds ? "O nº do REDS não pode ser apagado." : "") : "O nº do REDS é obrigatório para fechar o atendimento.") :
       !/^\d{4}-\d{9}-\d{3}$/.test(reds) ? "Confira o número: aaaa-nnnnnnnnn-nnn (ex.: 2026-012345678-001)." :
       data && reds.slice(0, 4) !== data.slice(0, 4) ? "O ano do REDS (" + reds.slice(0, 4) + ") não confere com a data do atendimento." : "") && ok;
     ok = erro("at-obs", res.indexOf("OUTROS") === 0 && !obs ? "Descreva o resultado na observação." : "") && ok;
     if (!ok) { const b = drawer.querySelector(".field.bad input, .field.bad select, .field.bad textarea"); if (b) b.focus(); return; }
 
     // Primeiro registro de atendimento encerra a demanda: pede confirmação na própria tela.
-    if (!d.atend && !st.atConfirmado) {
+    if (!d.atend && !st.atConfirmado && !pelaGestao) {
       document.getElementById("at-confirm").hidden = false;
       document.getElementById("at-acoes").hidden = true;
       const b = document.getElementById("at-conf-sim"); b.scrollIntoView({ block: "center" }); b.focus();
       return;
     }
     st.atConfirmado = false;
+    if (REAL && pelaGestao) {
+      enviar("sisden.corrigirAtendimento", { codigo: d.codigo, versao: d.versao, atend: data, resultado: res, gaia: gaia, reds: reds, obs: obs },
+        r => { if (!r.nadaMudou) st.editAt = false; return r.nadaMudou ? "Nada mudou." : (r.novo ? "Atendimento registrado pelo Gestor Sistema." : "Correção salva.") + (r.fechados ? " " + r.fechados + " recado(s) de correção encerrado(s)." : ""); },
+        { atend: "at-data", resultado: "at-res", gaia: "at-gaia", reds: "at-reds", obs: "at-obs" });
+      return;
+    }
     if (REAL) {
       enviar("sisden.salvarAtendimento", { codigo: d.codigo, versao: d.versao, atend: data, resultado: res, gaia: gaia, reds: reds, obs: obs },
         r => r.nadaMudou ? "Nada mudou." : (r.novo ? "Atendimento salvo." : "Correção salva.") + (r.correcoesAbertas ? " Agora confirme no recado do comando." : ""),
@@ -1676,6 +1722,14 @@ button.pdf:hover { text-decoration-thickness: 2px; }
     if (!mud.length) { toast("Nada mudou."); return; }
     const novo = !d.atend;
     Object.assign(d, { atend: data, resultado: res, gaia: gaia, reds: reds, obsFracao: obs });
+    if (pelaGestao) {
+      st.editAt = false;
+      let fech = 0;
+      d.recados.forEach(function (r) { if (r.tipo === "CORRECAO" && r.status !== "ENCERRADO" && r.campos.length && r.campos.every(c => d[c] !== r.snap[c])) { r.status = "ENCERRADO"; r.encEm = HOJE; r.lidoGestor = true; fech++; } });
+      d.hist.push({ quando: HOJE, quem: quemSou(), hora: hora(), acao: (novo ? "Atendimento registrado pelo Gestor Sistema" : "Atendimento corrigido pelo Gestor Sistema") + " (" + mud.join(", ") + ")" });
+      atualizar((novo ? "Atendimento registrado pelo Gestor Sistema." : "Correção salva.") + (fech ? " " + fech + " recado(s) de correção encerrado(s)." : ""));
+      return;
+    }
     d.hist.push({ quando: HOJE, quem: quemSou(), hora: hora(), acao: (novo ? "Atendimento registrado" : "Atendimento corrigido") + " (" + mud.join(", ") + ")" });
     const pend = d.recados.some(r => r.status === "ABERTO" && r.tipo === "CORRECAO");
     atualizar((novo ? "Atendimento salvo." : "Correção salva.") + (pend ? " Agora confirme no recado do comando." : ""));
@@ -1897,7 +1951,7 @@ button.pdf:hover { text-decoration-thickness: 2px; }
   function fechar() {
     drawer.hidden = true; scrim.hidden = true; drawer.innerHTML = "";
     const prev = st.aberta && app.querySelector('[data-cod="' + st.aberta.codigo + '"]');
-    st.aberta = null; st.novoRec = null; st.excluindo = false;
+    st.aberta = null; st.novoRec = null; st.excluindo = false; st.editAt = false;
     if (prev) prev.focus();
   }
 
@@ -2918,18 +2972,59 @@ button.pdf:hover { text-decoration-thickness: 2px; }
   }
 
   /* ---------- PDF (o arquivo continua privado no Drive) ---------- */
-  function abrirPdf() {
+  function abrirPdf(arquivo) {
     const d = st.aberta;
     if (!REAL) { toast("No protótipo não há PDF. No sistema real, o arquivo abre aqui, direto da pasta do Drive."); return; }
     const w = window.open("", "_blank");
-    if (w) { try { w.document.title = "PDF " + d.codigo; w.document.body.innerHTML = '<p style="font:16px system-ui,sans-serif;padding:24px">Abrindo o PDF da demanda ' + esc(d.codigo) + "…</p>"; } catch (e) { /* janela restrita */ } }
-    api("sisden.pdf", { codigo: d.codigo }).then(function (r) {
+    if (w) { try { w.document.title = "Arquivo " + d.codigo; w.document.body.innerHTML = '<p style="font:16px system-ui,sans-serif;padding:24px">Abrindo o arquivo da demanda ' + esc(d.codigo) + "…</p>"; } catch (e) { /* janela restrita */ } }
+    api("sisden.pdf", { codigo: d.codigo, arquivo: arquivo || "" }).then(function (r) {
       const bin = atob(r.base64), arr = new Uint8Array(bin.length);
       for (let i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
-      const url = URL.createObjectURL(new Blob([arr], { type: r.tipo || "application/pdf" }));
-      if (w && !w.closed) w.location.href = url; else window.open(url, "_blank");
+      const tipo = r.tipo || "application/octet-stream";
+      const url = URL.createObjectURL(new Blob([arr], { type: tipo }));
+      if (/^(application\/pdf|image\/|text\/plain|video\/|audio\/)/.test(tipo)) {
+        if (w && !w.closed) w.location.href = url; else window.open(url, "_blank");
+      } else {
+        // Word, planilha, compactado…: o navegador não mostra, então baixa com o nome original
+        if (w && !w.closed) w.close();
+        const a = document.createElement("a"); a.href = url; a.download = r.nome || "arquivo"; document.body.appendChild(a); a.click(); a.remove();
+        toast("Baixando " + (r.nome || "o arquivo") + ".");
+      }
       setTimeout(function () { URL.revokeObjectURL(url); }, 600000);
     }).catch(function (e) { if (w && !w.closed) w.close(); falha(e); });
+  }
+
+  /* ---------- pasta da denúncia: lista todos os arquivos ---------- */
+  function tamanhoTxt(b) { return b >= 1048576 ? (b / 1048576).toFixed(1).replace(".", ",") + " MB" : Math.max(1, Math.round(b / 1024)) + " KB"; }
+  function tipoTxt(t, nome) {
+    if (/pdf/i.test(t)) return "PDF";
+    if (/^image\//.test(t)) return "Imagem";
+    if (/^video\//.test(t)) return "Vídeo";
+    if (/^audio\//.test(t)) return "Áudio";
+    if (/word|document/i.test(t)) return "Documento";
+    if (/sheet|excel/i.test(t)) return "Planilha";
+    if (/zip|compressed|rar/i.test(t)) return "Compactado";
+    const m = /\.([a-z0-9]{2,4})$/i.exec(nome || ""); return m ? m[1].toUpperCase() : "Arquivo";
+  }
+  function listarAnexos(botao) {
+    const box = document.getElementById("d-anexos"); if (!box) return;
+    if (!box.hidden && box.dataset.cod === st.aberta.codigo) { box.hidden = true; if (botao) botao.setAttribute("aria-expanded", "false"); return; }
+    const cod = st.aberta.codigo;
+    box.dataset.cod = cod; box.hidden = false; if (botao) botao.setAttribute("aria-expanded", "true");
+    box.innerHTML = '<p class="anx-carregando" role="status">Carregando os arquivos da pasta…</p>';
+    api("sisden.anexos", { codigo: cod }).then(function (r) {
+      if (!st.aberta || st.aberta.codigo !== cod) return;
+      const arqs = r.arquivos || [];
+      let grupo = null, h = '<p class="section-t" style="margin:0 0 6px">Arquivos da denúncia <span class="anx-n">' + arqs.length + "</span></p>";
+      if (!arqs.length) h += '<p class="muted">A pasta está vazia.</p>';
+      h += '<ul class="anx-lista">' + arqs.map(function (a) {
+        const cab = a.sub !== grupo ? '<li class="anx-sub">' + (a.sub ? esc(a.sub) : "") + "</li>" : "";
+        grupo = a.sub;
+        return (cab && a.sub ? cab : "") + '<li><button type="button" class="anx" data-act="anexo" data-id="' + esc(a.id) + '">' +
+          '<span class="anx-tipo" data-k="' + esc(tipoTxt(a.tipo, a.nome)) + '">' + esc(tipoTxt(a.tipo, a.nome)) + '</span><span class="anx-nome">' + esc(a.nome) + '</span><span class="anx-tam">' + tamanhoTxt(a.tamanho || 0) + "</span></button></li>";
+      }).join("") + "</ul>";
+      box.innerHTML = h;
+    }).catch(function (e) { box.innerHTML = '<p class="muted">' + esc(e.message || "Não foi possível listar os arquivos.") + "</p>"; falha(e); });
   }
 
   /* ---------- excluídas e usuários ---------- */
@@ -3016,6 +3111,10 @@ button.pdf:hover { text-decoration-thickness: 2px; }
       return;
     }
     if (act === "pdf") { abrirPdf(); return; }
+    if (act === "at-editar") { st.editAt = true; abrir(st.aberta.codigo, "at-data", true); return; }
+    if (act === "at-cancelar") { st.editAt = false; abrir(st.aberta.codigo, null, true); return; }
+    if (act === "anexos") { listarAnexos(b); return; }
+    if (act === "anexo") { abrirPdf(b.getAttribute("data-id")); return; }
     acaoRecado(act, b.getAttribute("data-rec") || b.getAttribute("data-i"));
   });
   scrim.addEventListener("click", fechar);
