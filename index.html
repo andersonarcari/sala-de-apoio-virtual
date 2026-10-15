@@ -876,6 +876,31 @@ form.card.at { padding: 14px 16px; }
 .hist-det[open] summary { margin-bottom: 10px; }
 .head-tags { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
 .head-tags .prazo-txt { display: inline; margin: 0 6px 0 0; }
+/* ===== painel de seis quadros (também são o filtro) ===== */
+.kpis.k6c { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 12px; }
+.kpis.k6c .kpi { text-align: left; font: inherit; color: inherit; cursor: pointer; min-height: 104px; }
+.kpis.k6c .kpi:hover { background: var(--surface-2); }
+.kpi[data-tone="dev"] { --tone: var(--warn); }
+.kpi[data-tone="fim"] { --tone: #5F6368; }
+.kpis.k6c .kpi[aria-pressed="true"] { border-color: var(--fg); box-shadow: inset 0 0 0 2px var(--fg); }
+.kc-atraso .kpi-value { color: var(--late); }
+.kpi.alerta { border-color: var(--warn); background: var(--warn-soft); }
+.kpi.alerta .kpi-value, .kpi.alerta .kpi-label { color: var(--warn); }
+.escopo { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; width: max-content; max-width: 100%; padding: 6px 8px 6px 12px; border-radius: 10px; background: var(--surface-2); font-size: 14px; margin-bottom: -6px; }
+.escopo span { color: var(--muted); }
+.escopo.on { background: var(--accent-soft); border: 1px solid var(--caqui); }
+.tfr .fr-nome, .tfr .fr-n { background: none; border: 0; padding: 4px 6px; margin: -4px -6px; font: inherit; color: inherit; cursor: pointer; border-radius: 6px; font-variant-numeric: tabular-nums; }
+.tfr .fr-nome { text-align: left; font-weight: 500; }
+.tfr .fr-n.late-n { color: var(--late); font-weight: 700; }
+.tfr .fr-nome:hover, .tfr .fr-n:hover { background: var(--surface-2); text-decoration: underline; }
+.tfr .fr-nome[aria-pressed="true"] { font-weight: 700; }
+.tfr tr.sel td { background: var(--accent-soft); }
+.pill.fim { background: #E6E4DF; color: #4A463F; }
+.pill.dev { background: var(--warn); color: #fff; }
+.atr { color: var(--warn); font-weight: 600; }
+.fbar .frow .fsel { min-width: 220px; min-height: 42px; }
+@media (max-width: 980px) { .kpis.k6c { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 520px) { .kpis.k6c { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; } .kpis.k6c .kpi { min-height: 88px; } .fbar .frow .fsel { min-width: 0; flex: 1 1 100%; } }
 .c-anot .anot > span { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; overflow-wrap: anywhere; }
 </style>
 
@@ -1210,17 +1235,15 @@ form.card.at { padding: 14px 16px; }
   }
   function paraConferir(d) { return situacao(d) !== "arquivada" && conferencia(d).length > 0; }
 
+  /** um status só: No prazo · Em atraso · Atendida (com atraso) · Devolvida · Finalizada */
   function pillFor(d) {
-    const s = status(d);
-    if (s === "EM ATRASO") return '<span class="pill late">Em atraso</span><span class="prazo-txt">' + (-faltam(d)) + " dia(s) após o vencimento</span>";
-    if (s === "NO PRAZO") {
-      const f = faltam(d);
-      return '<span class="pill ' + (f <= 10 ? "warn" : "info") + '">' + (f <= 10 ? "Vence em breve" : "No prazo") + '</span><span class="prazo-txt">' + (f === 0 ? "vence hoje" : "faltam " + f + " dia(s)") + "</span>";
-    }
-    if (s === "ATENDIDA") return '<span class="pill ok">Atendida</span><span class="prazo-txt">em ' + br(d.atend) + "</span>";
-    return '<span class="pill okl">Atendida com atraso</span><span class="prazo-txt">em ' + br(d.atend) + "</span>";
+    const c = categoria(d), f = faltam(d);
+    if (c === "finalizadas") return '<span class="pill fim">Finalizada</span><span class="prazo-txt">respondida à SEMAD' + (d.respSemadEm ? " em " + br(d.respSemadEm) : "") + "</span>";
+    if (c === "devolvidas") return '<span class="pill dev">Devolvida</span><span class="prazo-txt">para correção' + (f < 0 ? " · prazo vencido" : "") + "</span>";
+    if (c === "atendidas") return '<span class="pill ok">Atendida</span><span class="prazo-txt">em ' + br(d.atend) + (diff(d.atend, d.venc) > 0 ? ' · <span class="atr">com atraso</span>' : "") + "</span>";
+    if (c === "atraso") return '<span class="pill late">Em atraso</span><span class="prazo-txt">' + (-f) + " dia(s) após o vencimento</span>";
+    return '<span class="pill ' + (f <= 10 ? "warn" : "info") + '">No prazo</span><span class="prazo-txt">' + (f === 0 ? "vence hoje" : "faltam " + f + " dia(s)") + "</span>";
   }
-  function sitTag(d) { const s = situacao(d); return '<span class="sit sit-' + s + '">' + SIT_NOME[s] + (s === "arquivada" && d.respSemadEm ? " · " + br(d.respSemadEm).slice(0, 5) : "") + "</span>"; }
   function prioTag(d) {
     if (d.prioridade === "NORMAL") return "";
     return '<span class="prio prio-' + d.prioridade.toLowerCase() + '" title="Prioridade ' + d.prioridade.toLowerCase() + (d.prioPor === "gestor" ? " — definida pelo comando" : "") + '">' + ICO.flag + d.prioridade + "</span>";
@@ -1238,7 +1261,6 @@ form.card.at { padding: 14px 16px; }
   /* ================= estado ================= */
   const st = { perfil: "fracao", papel: "operador", fracao: "2 GP/3 PELOTÃO", aba: "pendentes", chip: "", busca: "", gFracao: "", aberta: null, tela: "lista",
     rascunho: "", respA: null, editNota: null, editAt: false, confArq: false, devolvendo: false, destaque: {} };
-  function abaPadrao() { return st.perfil === "gestor" ? "respondidas" : "pendentes"; }
 
   const app = document.getElementById("app");
   const drawer = document.getElementById("drawer");
@@ -1250,22 +1272,40 @@ form.card.at { padding: 14px 16px; }
     clearTimeout(toast.t); toast.t = setTimeout(function () { toastEl.hidden = true; }, 3400);
   }
 
-  /* ================= filtros =================
-     Linha 1: situação (abas, cada demanda está em uma só). Linha 2: atalhos que refinam a aba (um por vez).
-     A busca procura em TODAS as situações e mostra a situação de cada resultado. */
-  const ABAS = [["todas", "Todas"], ["pendentes", "Pendentes"], ["devolvidas", "Devolvidas"], ["respondidas", "Respondidas"], ["arquivadas", "Arquivadas"]];
-  const ABA_SIT = { pendentes: "pendente", devolvidas: "devolvida", respondidas: "respondida", arquivadas: "arquivada" };
-  const CHIPS = [["vencidas", "Vencidas", d => status(d) === "EM ATRASO"], ["breve", "Vencem em 10 dias", venceLogo], ["prio", "Prioritárias", prioritaria]];
-  function naAba(d, a) { return a === "todas" || situacao(d) === ABA_SIT[a]; }
+  /* ================= painel e filtro =================
+     Seis cartões, que são também o filtro. Cada demanda está em UM cartão (exceto Recebidas = todas):
+     No prazo + Em atraso + Atendidas + Devolvidas + Finalizadas = Recebidas.
+     O seletor de fração (gestão) muda o escopo dos cartões e da lista; a busca procura em todas. */
+  const CARTOES = [
+    ["recebidas", "Recebidas", "accent", "na base"],
+    ["prazo", "No prazo", "info", "sem atendimento"],
+    ["atraso", "Em atraso", "late", "sem atendimento"],
+    ["atendidas", "Atendidas", "ok", ""],
+    ["devolvidas", "Devolvidas", "dev", "para correção"],
+    ["finalizadas", "Finalizadas", "fim", "respondidas à SEMAD"]
+  ];
+  function categoria(d) {
+    const s = situacao(d);
+    if (s === "arquivada") return "finalizadas";
+    if (s === "devolvida") return "devolvidas";
+    if (s === "respondida") return "atendidas";
+    return status(d) === "EM ATRASO" ? "atraso" : "prazo";
+  }
+  function noCartao(d, c) { return c === "recebidas" || categoria(d) === c; }
+  function contar(l) {
+    const c = { recebidas: l.length, prazo: 0, atraso: 0, atendidas: 0, devolvidas: 0, finalizadas: 0, breve: 0 };
+    l.forEach(function (d) { c[categoria(d)]++; if (venceLogo(d) && categoria(d) === "prazo") c.breve++; });
+    return c;
+  }
   function baseLista() { const b = escopo(); return ehGestao() && st.gFracao ? b.filter(d => d.fracao === st.gFracao) : b; }
   function textoBusca(d) { return (d.codigo + " " + d.tipo + " " + d.municipio + " " + d.natureza + " " + d.endereco + " " + ultimaAnot(d) + " " + d.fracao + " " + d.gaia + " " + d.reds).toUpperCase(); }
-  const ORDEM_SIT = { devolvida: 0, pendente: 1, respondida: 2, arquivada: 3 };
+  const ORDEM_CAT = { devolvidas: 0, atraso: 1, prazo: 2, atendidas: 3, finalizadas: 4 };
   function ordenar(l) {
     return l.sort(function (a, b) {
-      const sa = situacao(a), sb = situacao(b);
-      if (sa !== sb) return ORDEM_SIT[sa] - ORDEM_SIT[sb];
-      if (sa === "arquivada") return a.respSemadEm > b.respSemadEm ? -1 : a.respSemadEm < b.respSemadEm ? 1 : 0;
-      if (sa === "respondida") return a.atend < b.atend ? -1 : a.atend > b.atend ? 1 : 0; // quem espera há mais tempo primeiro
+      const ca = categoria(a), cb = categoria(b);
+      if (ca !== cb) return ORDEM_CAT[ca] - ORDEM_CAT[cb];
+      if (ca === "finalizadas") return a.respSemadEm > b.respSemadEm ? -1 : a.respSemadEm < b.respSemadEm ? 1 : 0;
+      if (ca === "atendidas") return a.atend < b.atend ? -1 : a.atend > b.atend ? 1 : 0; // quem espera há mais tempo primeiro
       if (PRIO_PESO[a.prioridade] !== PRIO_PESO[b.prioridade]) return PRIO_PESO[a.prioridade] - PRIO_PESO[b.prioridade];
       return a.venc < b.venc ? -1 : a.venc > b.venc ? 1 : 0;
     });
@@ -1273,33 +1313,58 @@ form.card.at { padding: 14px 16px; }
   function listaFiltrada() {
     const q = st.busca.trim().toUpperCase();
     if (q) return ordenar(escopo().filter(d => textoBusca(d).indexOf(q) >= 0));
-    const ch = CHIPS.find(c => c[0] === st.chip);
-    return ordenar(baseLista().filter(d => naAba(d, st.aba) && (!ch || ch[2](d))));
+    return ordenar(baseLista().filter(d => noCartao(d, st.aba)));
+  }
+  function abaPadrao() {
+    if (st.perfil === "gestor") return "atendidas";
+    return escopo().some(d => categoria(d) === "atraso") ? "atraso" : "prazo";
+  }
+
+  function cartoesHtml() {
+    const c = contar(baseLista()), buscando = !!st.busca.trim(), gestao = ehGestao();
+    const nomeGeral = st.perfil === "pelotao" ? "todo o " + pelNome(st.usuario.pelotao) : "toda a companhia";
+    const escopoTxt = gestao ? '<div class="escopo' + (st.gFracao ? " on" : "") + '" role="status"><span>Mostrando:</span><b>' + esc(st.gFracao || nomeGeral) + "</b>" +
+      (st.gFracao ? '<button type="button" class="btn sm" data-geral>✕ Ver ' + esc(st.perfil === "pelotao" ? "todo o pelotão" : "toda a companhia") + "</button>" : "") + "</div>" : "";
+    const cards = CARTOES.map(function (k) {
+      const n = c[k[0]], on = !buscando && st.aba === k[0];
+      let foot = k[3];
+      if (k[0] === "prazo") foot += c.breve ? " · " + c.breve + (c.breve === 1 ? " vence" : " vencem") + " em 10 dias" : "";
+      if (k[0] === "atendidas") foot = gestao ? "pelas frações" : "pela fração";
+      if (k[0] === "devolvidas" && n && !gestao) foot = "corrija o atendimento";
+      return '<button type="button" class="kpi kc-' + k[0] + (k[0] === "devolvidas" && n ? " alerta" : "") + '" data-tone="' + k[2] + '" data-aba="' + k[0] + '" aria-pressed="' + on + '">' +
+        '<span class="kpi-label">' + k[1] + '</span><span class="kpi-value">' + n + '</span><span class="kpi-foot">' + foot + "</span></button>";
+    }).join("");
+    return escopoTxt + '<section class="kpis k6c" aria-label="Situação das demandas (clique para filtrar)">' + cards + "</section>";
+  }
+
+  function tabelaFracoes() {
+    const todas = demandasGestao();
+    const cols = CARTOES.map(k => k[0]);
+    const linhas = fracoesGestao().map(function (f) { return { nome: f[0], c: contar(todas.filter(d => d.fracao === f[0])) }; });
+    return '<div class="panel"><div class="panel-head"><h2>Por fração</h2><p>Clique no nome para ver só a fração (de novo, volta ao geral) ou num número para abrir aquela situação.</p></div>' +
+      '<div class="tbl-wrap"><table class="tfr"><thead><tr><th>Fração</th>' + CARTOES.map(k => '<th class="r">' + k[1] + "</th>").join("") + "</tr></thead><tbody>" +
+      linhas.map(function (r) {
+        return '<tr class="fr' + (st.gFracao === r.nome ? " sel" : "") + '"><td><button type="button" class="fr-nome" data-fr="' + esc(r.nome) + '" aria-pressed="' + (st.gFracao === r.nome) + '">' + esc(r.nome) + "</button></td>" +
+          cols.map(function (k) {
+            const n = r.c[k];
+            return '<td class="r">' + (n ? '<button type="button" class="fr-n' + (k === "atraso" ? " late-n" : "") + '" data-fr="' + esc(r.nome) + '" data-aba="' + k + '" aria-label="' + esc(r.nome) + ": " + n + " " + k + '">' + n + "</button>" : '<span class="muted">—</span>') + "</td>";
+          }).join("") + "</tr>";
+      }).join("") + "</tbody></table></div></div>";
   }
 
   function filtrosHtml() {
-    const base = baseLista(), buscando = !!st.busca.trim(), gestao = ehGestao();
-    const daAba = base.filter(d => naAba(d, st.aba));
-    const tabs = '<div class="tabs' + (buscando ? " buscando" : "") + '" role="tablist" aria-label="Situação">' + ABAS.map(function (a) {
-      const n = base.filter(d => naAba(d, a[0])).length, on = !buscando && st.aba === a[0];
-      return '<button type="button" class="tab' + (a[0] === "devolvidas" && n ? " tab-dev" : "") + '" role="tab" data-aba="' + a[0] + '" aria-selected="' + on + '">' + a[1] + ' <span class="n">' + n + "</span></button>";
-    }).join("") + "</div>";
-    const chips = CHIPS.map(function (c) {
-      const n = daAba.filter(c[2]).length, on = !buscando && st.chip === c[0];
-      return '<button type="button" class="fchip" data-chip="' + c[0] + '" aria-pressed="' + on + '"' + (buscando ? " disabled" : "") + ">" + c[1] + ' <span class="n">' + n + "</span></button>";
-    }).join("");
+    const buscando = !!st.busca.trim(), gestao = ehGestao();
     const sel = gestao ? '<label class="sr" for="g-fr">Fração</label><select id="g-fr" class="fsel"><option value="">' + (st.perfil === "pelotao" ? "Todas as frações do pelotão" : "Todas as frações") + "</option>" +
       fracoesGestao().map(f => '<option value="' + esc(f[0]) + '"' + (st.gFracao === f[0] ? " selected" : "") + ">" + esc(f[0]) + "</option>").join("") + "</select>" : "";
     const excl = ehSistema() ? '<button type="button" class="excl-link" data-excl="1">Excluídas (' + (REAL ? st.nExcl || 0 : EXCLUIDAS.length) + ")</button>" : "";
-    return '<section class="toolbar fbar" id="g-filtros">' + tabs +
-      '<div class="frow"><div class="fchips" role="group" aria-label="Atalhos">' + chips + '</div><span class="fsep" aria-hidden="true"></span>' + sel + searchHtml() + excl + "</div>" +
-      (buscando ? '<p class="busca-hint" role="status">Buscando em <b>todas as situações</b>' + (gestao ? " e frações" : "") + '. A situação de cada demanda aparece na linha. <button type="button" class="link-btn" data-limpar-busca>Limpar busca</button></p>' : "") +
+    return '<section class="toolbar fbar" id="g-filtros"><div class="frow">' + sel + searchHtml() + excl + "</div>" +
+      (buscando ? '<p class="busca-hint" role="status">Buscando em <b>todas as situações</b>' + (gestao ? " e frações" : "") + '. <button type="button" class="link-btn" data-limpar-busca>Limpar busca</button></p>' : "") +
       "</section>";
   }
 
   function excluidasHtml() {
     return '<section class="panel" id="g-filtros"><div class="panel-head"><h2>Demandas excluídas</h2><button type="button" class="link-btn" data-excl="0">← voltar às demandas</button></div>' +
-      '<p class="nota" style="margin:0">Saem da lista, do dashboard e dos avisos, mas ficam guardadas com o motivo. Se a SEMAD mandar o mesmo código de novo, ele é barrado. Pode restaurar a qualquer momento.</p>' +
+      '<p class="nota" style="margin:0">Saem da lista, do painel e dos avisos, mas ficam guardadas com o motivo. Se a SEMAD mandar o mesmo código de novo, ele é barrado. Pode restaurar a qualquer momento.</p>' +
       (REAL && !st.exclOk ? '<div class="empty" role="status">Carregando…</div>' : EXCLUIDAS.length ? '<div class="tbl-wrap"><table><thead><tr><th>Código</th><th>Município · fração</th><th>Excluída em</th><th>Motivo</th><th></th></tr></thead><tbody>' +
         EXCLUIDAS.slice().reverse().map(function (x) {
           return '<tr><td class="mono">' + esc(x.d.codigo) + '</td><td>' + esc(x.d.municipio) + '<br><span class="muted">' + esc(x.d.fracao) + '</span></td><td class="num">' + br(x.em) + " às " + x.hora +
@@ -1322,81 +1387,38 @@ form.card.at { padding: 14px 16px; }
     return '<span class="code longo" title="' + esc(c) + '">' + esc(c.slice(0, k + 1)) + "<wbr>" + esc(c.slice(k + 1)) + "</span>";
   }
   function listHtml(lista, gestor) {
-    if (!lista.length) return '<div class="list"><div class="empty">' + (st.busca.trim() ? "Nada encontrado com essa busca." : "Nenhuma demanda nesta situação.") + "</div></div>";
-    const mostrarSit = !!st.busca.trim() || st.aba === "todas";
+    if (!lista.length) return '<div class="list"><div class="empty">' + (st.busca.trim() ? "Nada encontrado com essa busca." : "Nenhuma demanda aqui.") + "</div></div>";
     let h = '<div class="list' + (gestor ? " gestor" : "") + '" role="list">';
     h += '<div class="row headrow" aria-hidden="true"><span>Protocolo · ID</span><span>Natureza / local</span>' + (gestor ? "<span>Fração</span>" : "") +
-      '<span>Última anotação</span><span>Envio · venc.</span><span>Prazo · situação</span></div>';
+      '<span>Última anotação</span><span>Envio · venc.</span><span>Situação</span></div>';
     lista.forEach(function (d) {
-      const novo = notasNovas(d), ua = ultimaAnot(d), s = situacao(d);
+      const novo = notasNovas(d), ua = ultimaAnot(d);
       h += '<button type="button" class="row' + (novo ? " unread" : "") + '" role="listitem" data-cod="' + esc(d.codigo) + '">' +
         '<span class="cell-main">' + codHtml(d.codigo) + '<span class="tipo' + (/\d/.test(d.tipo || "") ? " tipo-id" : "") + '">' + esc(d.tipo) + "</span>" + prioTag(d) + "</span>" +
         '<span class="cell-main c-nat"><b>' + esc(d.natureza) + '</b><span class="cell-sub">' + esc(d.municipio) + '</span><span class="cell-sub">' + esc(d.endereco) + "</span></span>" +
         (gestor ? '<span class="cell-main c-fra"><span class="fra-name">' + esc(d.fracao) + "</span></span>" : "") +
         '<span class="cell-main c-anot">' + (ua ? '<span class="anot">' + ICO.msg + "<span>" + esc(ua) + "</span></span>" : '<span class="anot-vazia">—</span>') + "</span>" +
         '<span class="dates c-dates num"><span>' + br(d.envio) + "</span> · " + br(d.venc) + "</span>" +
-        '<span class="c-status">' + (mostrarSit || s === "devolvida" ? sitTag(d) : "") + pillFor(d) + marcasHtml(d) + "</span></button>";
+        '<span class="c-status">' + pillFor(d) + marcasHtml(d) + "</span></button>";
     });
     return h + "</div>";
   }
 
-  function kpi(alvo, tone, label, v, foot) {
-    const p = alvo.split(":"), on = !st.busca.trim() && st.aba === p[0] && st.chip === (p[1] || "");
-    return '<button type="button" class="kpi" data-tone="' + tone + '" data-kpi="' + alvo + '" aria-pressed="' + on + '">' +
-      '<span class="kpi-label">' + label + '</span><span class="kpi-value">' + v + '</span><span class="kpi-foot">' + foot + "</span></button>";
-  }
-
   function telaFracao() {
-    const minhas = escopo(), n = s => minhas.filter(d => situacao(d) === s).length;
-    const pend = minhas.filter(d => !atendEf(d));
-    const dev = n("devolvida");
     app.innerHTML = abasHtml() +
       '<section class="head"><div><div class="eyebrow">Minhas demandas · prazo de ' + PRAZO + ' dias a partir do envio</div><h1>' + esc(st.fracao) + '</h1></div>' +
-      '<p class="head-note">Registre o atendimento e use as <b>anotações</b> de cada demanda para falar com o Cmt Pelotão e o Gestor Sistema. Todos da fração veem e podem responder.</p></section>' +
-      '<section class="kpis k5" aria-label="Resumo">' +
-      kpi("pendentes:vencidas", "late", "Em atraso", pend.filter(d => status(d) === "EM ATRASO").length, "pendentes que passaram do vencimento") +
-      kpi("pendentes:breve", "warn", "Vencem em 10 dias", pend.filter(venceLogo).length, "atenção à agenda") +
-      kpi("pendentes", "info", "Pendentes", n("pendente"), pend.filter(prioritaria).length + " prioritária(s)") +
-      kpi("devolvidas", dev ? "late" : "accent", "Devolvidas", dev, dev ? "corrija o atendimento" : "nenhuma") +
-      kpi("respondidas", "ok", "Respondidas", n("respondida"), n("arquivada") + " já arquivada(s)") +
-      "</section>" +
-      (dev ? '<section class="banner" role="status">' + ICO.bell + "<div><b>" + (dev === 1 ? "1 demanda devolvida" : dev + " demandas devolvidas") + " pelo Gestor Sistema</b><span>Abra, leia o motivo nas anotações, corrija o atendimento e salve. A demanda volta para o Gestor.</span></div>" +
-        '<button type="button" class="btn primary" data-kpi="devolvidas">Ver agora</button></section>' : "") +
-      filtrosHtml() + listHtml(listaFiltrada(), false);
+      '<p class="head-note">Clique num quadro para ver as demandas. Abra uma demanda para registrar o atendimento ou anotar para o comando.</p></section>' +
+      cartoesHtml() + filtrosHtml() + listHtml(listaFiltrada(), false);
   }
 
   function telaGestor() {
-    const TODAS = demandasGestao(), pelot = st.perfil === "pelotao";
-    const at = TODAS.filter(d => atendEf(d)).length;
-    const eff = TODAS.length ? Math.round((at / TODAS.length) * 1000) / 10 : 0;
-    const cont = function (l) {
-      const c = { total: l.length, pend: 0, atraso: 0, dev: 0, resp: 0, at: 0 };
-      l.forEach(function (d) { const s = situacao(d); if (s === "pendente") c.pend++; if (s === "devolvida") c.dev++; if (s === "respondida") c.resp++; if (status(d) === "EM ATRASO") c.atraso++; if (atendEf(d)) c.at++; });
-      return c;
-    };
-    const linhas = fracoesGestao().map(function (f) { const k = cont(TODAS.filter(d => d.fracao === f[0])); return { nome: f[0], k: k, e: k.total ? k.at / k.total : 0 }; });
-    const tbl = '<div class="tbl-wrap"><table><thead><tr><th>Fração</th><th class="r">Total</th><th class="r">Pendentes</th><th class="r">Em atraso</th><th class="r">Devolvidas</th><th class="r">Respondidas</th><th>Eficiência</th></tr></thead><tbody>' +
-      linhas.map(function (r) {
-        const pct = Math.round(r.e * 1000) / 10, cls = r.e < 0.6 ? "low" : (r.e < 0.75 ? "mid" : "");
-        return '<tr class="fr' + (st.gFracao === r.nome ? " sel" : "") + '" data-fr="' + esc(r.nome) + '" tabindex="0"><td>' + esc(r.nome) + '</td><td class="r">' + r.k.total +
-          '</td><td class="r">' + r.k.pend + '</td><td class="r ' + (r.k.atraso ? "late-n" : "") + '">' + r.k.atraso + '</td><td class="r">' + (r.k.dev || "—") + '</td><td class="r">' + r.k.resp +
-          '</td><td><div class="eff"><div class="eff-bar"><i class="' + cls + '" style="width:' + pct + '%"></i></div><span class="num">' + pct.toFixed(1).replace(".", ",") + "%</span></div></td></tr>";
-      }).join("") + "</tbody></table></div>";
-    const pend = pelot ? [] : PENDENCIAS;
-    const c = cont(TODAS);
+    const pelot = st.perfil === "pelotao", pend = pelot ? [] : PENDENCIAS;
     app.innerHTML = abasHtml() +
       '<section class="head"><div><div class="eyebrow">' + (pelot ? "Comando do pelotão · " + esc(st.usuario.nome) : "Gestão · todas as frações") + "</div><h1>" + (pelot ? pelNome(st.usuario.pelotao) : "1ª Companhia") + "</h1></div>" +
-      '<p class="head-note">Clique numa fração para ver só as demandas dela. Abra uma demanda para anotar, definir a prioridade ou registrar o atendimento.' + (pelot ? " Arquivar após a resposta à SEMAD e devolver à fração são do Gestor Sistema." : "") + "</p></section>" +
-      '<section class="kpis k5" aria-label="Resumo">' +
-      '<div class="kpi" data-tone="accent"><span class="kpi-label">Recebidas</span><span class="kpi-value">' + c.total + '</span><span class="kpi-foot">na base</span></div>' +
-      '<div class="kpi" data-tone="info"><span class="kpi-label">Pendentes</span><span class="kpi-value">' + c.pend + '</span><span class="kpi-foot">' + c.dev + " devolvida(s)</span></div>" +
-      '<div class="kpi" data-tone="late"><span class="kpi-label">Em atraso</span><span class="kpi-value">' + c.atraso + '</span><span class="kpi-foot">sem atendimento</span></div>' +
-      '<div class="kpi" data-tone="ok"><span class="kpi-label">Respondidas</span><span class="kpi-value">' + c.resp + '</span><span class="kpi-foot">a responder à SEMAD</span></div>' +
-      '<div class="kpi" data-tone="info"><span class="kpi-label">Eficiência</span><span class="kpi-value">' + String(eff).replace(".", ",") + '%</span><span class="kpi-foot">atendidas ÷ recebidas</span></div>' +
-      "</section>" +
-      '<section class="' + (pend.length ? "grid2" : "") + '"><div class="panel"><div class="panel-head"><h2>Por fração</h2><p>' + (st.gFracao ? 'Filtrando: <b>' + esc(st.gFracao) + '</b> · <button type="button" class="link-btn" id="limpa-fr" style="color:var(--accent)">ver todas</button>' : "ordem do organograma") + "</p></div>" + tbl + "</div>" +
-      (pend.length ? '<div class="panel"><div class="panel-head"><h2>Entrada da SEMAD</h2><p>linhas que não entraram sozinhas</p></div><div class="alerts">' +
-        pend.map(p => '<div class="alert" data-tone="' + p.tone + '"><b>' + esc(p.titulo) + "</b><p>" + esc(p.texto) + "</p></div>").join("") + "</div></div>" : "") + "</section>" +
+      '<p class="head-note">Clique num quadro para ver as demandas daquela situação. Escolha uma fração na tabela ou no filtro para ver só ela.' + (pelot ? " Finalizar e devolver à fração são do Gestor Sistema." : "") + "</p></section>" +
+      cartoesHtml() + tabelaFracoes() +
+      (pend.length ? '<section class="panel"><div class="panel-head"><h2>Entrada da SEMAD</h2><p>linhas que não entraram sozinhas</p></div><div class="alerts">' +
+        pend.map(p => '<div class="alert" data-tone="' + p.tone + '"><b>' + esc(p.titulo) + "</b><p>" + esc(p.texto) + "</p></div>").join("") + "</div></section>" : "") +
       (st.verExcluidas && ehSistema() ? excluidasHtml() : filtrosHtml() + listHtml(listaFiltrada(), true));
   }
 
@@ -1493,21 +1515,21 @@ form.card.at { padding: 14px 16px; }
     const conf = s !== "arquivada" ? conferencia(d) : [];
     const confHtml = conf.length ? '<div class="conf-box">' + ICO.warn + "<div><b>Conferência automática</b>" + conf.map(p => "<span>" + esc(p.msg) + "</span>").join("") + (sistema && s === "respondida" ? '<span class="muted">Corrija pelo lápis ou devolva à fração (Administração).</span>' : "") + "</div></div>" : "";
     const alt = (d.altMostrar || (ehGestao() && d.alterado)) && s === "respondida" ? '<p class="alt-nota">' + ICO.note + "Atendimento alterado pela fração em " + quando(d.altMostrar || d.alterado) + ". Veja o antes e o depois no histórico.</p>" : "";
-    const pill = s === "arquivada" ? '<span class="pill ok">Arquivada</span>' : s === "respondida" ? '<span class="pill ok">Respondida</span>' : s === "devolvida" ? '<span class="pill late">Devolvida — corrigir</span>' : '<span class="pill info">Aguardando registro</span>';
+    const pill = s === "arquivada" ? '<span class="pill fim">Finalizada</span>' : s === "respondida" ? '<span class="pill ok">Atendida</span>' : s === "devolvida" ? '<span class="pill dev">Devolvida — corrigir</span>' : '<span class="pill info">Aguardando registro</span>';
     if (!editando) {
       return '<section class="card" aria-labelledby="c-at"><div class="card-h"><h3 class="card-t" id="c-at">' + ICO_CHECK + "Atendimento</h3><div class=\"card-hr\">" + pill +
         (s === "respondida" ? '<button type="button" class="btn sm" data-act="at-editar" aria-label="Editar atendimento">' + ICO.note + "Editar</button>" : "") + "</div></div>" +
         '<dl class="facts">' + fato("Data do atendimento", br(d.atend)) + fato("Resultado", esc(d.resultado || "—")) +
         fato("Nº GAIA", d.gaia ? '<span class="mono">' + esc(d.gaia) + "</span>" : "—", true) + fato("Nº REDS", d.reds ? '<span class="mono">' + esc(d.reds) + "</span>" : "—", true) +
         fato("Observação", esc(d.obsFracao || "—"), true) + (d.legado ? fato("Origem", "Migrado da planilha antiga — os campos não passaram pela validação do SISDEN", true) : "") + "</dl>" +
-        alt + confHtml + (s === "arquivada" ? '<p class="lock">Demanda arquivada (respondida à SEMAD em ' + br(d.respSemadEm) + "). O atendimento não pode mais ser alterado.</p>" : "") + "</section>";
+        alt + confHtml + (s === "arquivada" ? '<p class="lock">Demanda finalizada (respondida à SEMAD em ' + br(d.respSemadEm) + "). O atendimento não pode mais ser alterado.</p>" : "") + "</section>";
     }
     const optsRes = '<option value="">Selecione…</option>' + RESULTADOS.map(r => "<option" + (d.resultado === r ? " selected" : "") + ">" + esc(r) + "</option>").join("") +
       (d.resultado && RESULTADOS.indexOf(d.resultado) < 0 ? "<option selected>" + esc(d.resultado) + "</option>" : "");
     const brancoOk = sistema;
     return '<form class="card at" id="f-at" novalidate aria-labelledby="c-at"><div class="card-h"><h3 class="card-t" id="c-at">' + ICO_CHECK + "Atendimento</h3><div class=\"card-hr\">" + pill + "</div></div>" +
       (s === "respondida" ? '<p class="nota-gestor">Você está alterando um atendimento já respondido. O histórico guarda o valor antigo e o novo' + (ehFracaoPerfil() ? "; o Gestor Sistema vê a marca “atendimento alterado”." : ".") + "</p>" : "") +
-      (s === "devolvida" ? '<p class="nota-gestor">Corrija o que o Gestor Sistema apontou e salve: a demanda volta para Respondidas. Se estiver tudo certo, salve sem mudar.</p>' : "") +
+      (s === "devolvida" ? '<p class="nota-gestor">Corrija o que o Gestor Sistema apontou e salve: a demanda volta para Atendidas. Se estiver tudo certo, salve sem mudar.</p>' : "") +
       '<div class="f2">' +
       campo("at-data", "Data do atendimento", '<input id="at-data" type="date" min="' + d.envio + '" max="' + HOJE + '" value="' + d.atend + '">', "Entre " + br(d.envio) + " e hoje") +
       campo("at-res", "Resultado", '<select id="at-res">' + optsRes + "</select>", "") + "</div>" +
@@ -1515,7 +1537,7 @@ form.card.at { padding: 14px 16px; }
       campo("at-reds", "Nº do REDS", '<input id="at-reds" class="mono" inputmode="numeric" placeholder="2026-012345678-001" value="' + esc(d.reds) + '">', "Formato aaaa-nnnnnnnnn-nnn" + (brancoOk && !d.reds ? " · pode ficar em branco (registro sem REDS)" : "")) +
       campo("at-obs", "Observação", '<textarea id="at-obs" maxlength="500" placeholder="Ex.: proprietário notificado; retorno em 15 dias.">' + esc(d.obsFracao) + "</textarea>", '<span id="at-obs-n">' + (d.obsFracao || "").length + "</span>/500") +
       confHtml +
-      '<div class="confirm" id="at-confirm" role="alertdialog" aria-labelledby="at-confirm-t" hidden><p id="at-confirm-t"><b>Ao salvar, a demanda sai de Pendentes e vai para Respondidas.</b> Deseja continuar?</p>' +
+      '<div class="confirm" id="at-confirm" role="alertdialog" aria-labelledby="at-confirm-t" hidden><p id="at-confirm-t"><b>Ao salvar, a demanda vai para Atendidas.</b> Deseja continuar?</p>' +
       '<div class="actions"><button type="button" class="btn" data-act="conf-nao">Voltar</button><button type="button" class="btn primary" data-act="conf-sim" id="at-conf-sim">Sim, salvar</button></div></div>' +
       '<div class="actions" id="at-acoes">' + (s === "respondida" ? '<button type="button" class="btn" data-act="at-cancelar">Cancelar</button>' : "") +
       '<button type="submit" class="btn primary">' + (s === "devolvida" ? "Salvar e reenviar ao Gestor" : s === "respondida" ? "Salvar alteração" : "Salvar atendimento") + "</button></div></form>";
@@ -1526,12 +1548,12 @@ form.card.at { padding: 14px 16px; }
     if (!ehSistema()) return "";
     const s = situacao(d);
     let semad;
-    if (s === "arquivada") semad = '<div class="adm"><div class="admh"><p class="admt">Resposta à SEMAD</p><button type="button" class="btn sm" data-act="adm-desarq">Desarquivar</button></div>' +
-      '<p class="hint">Respondida à SEMAD em ' + br(d.respSemadEm) + '. Desarquivar volta a demanda para Respondidas (a fração não é afetada).</p></div>';
-    else if (s === "respondida") semad = '<div class="adm"><div class="admh"><p class="admt">Resposta à SEMAD</p>' + (st.confArq ? "" : '<button type="button" class="btn sm ok-btn" data-act="adm-arq">Respondida à SEMAD · Arquivar</button>') + "</div>" +
-      (st.confArq ? '<div class="confirm" role="alertdialog" aria-labelledby="arq-t"><p id="arq-t"><b>Confirmar a resposta à SEMAD com a data de hoje (' + br(HOJE) + ")?</b> A demanda vai para Arquivadas.</p>" +
-        '<div class="actions"><button type="button" class="btn" data-act="adm-arq-nao">Cancelar</button><button type="button" class="btn primary" data-act="adm-arq-sim" id="arq-sim">Sim, arquivar</button></div></div>'
-        : '<p class="hint">Grava a data de hoje e a demanda vai para Arquivadas. Pede confirmação.</p>') + "</div>";
+    if (s === "arquivada") semad = '<div class="adm"><div class="admh"><p class="admt">Resposta à SEMAD</p><button type="button" class="btn sm" data-act="adm-desarq">Reabrir</button></div>' +
+      '<p class="hint">Finalizada: respondida à SEMAD em ' + br(d.respSemadEm) + '. Reabrir volta a demanda para Atendidas (a fração não é afetada).</p></div>';
+    else if (s === "respondida") semad = '<div class="adm"><div class="admh"><p class="admt">Resposta à SEMAD</p>' + (st.confArq ? "" : '<button type="button" class="btn sm ok-btn" data-act="adm-arq">Respondida à SEMAD · Finalizar</button>') + "</div>" +
+      (st.confArq ? '<div class="confirm" role="alertdialog" aria-labelledby="arq-t"><p id="arq-t"><b>Confirmar a resposta à SEMAD com a data de hoje (' + br(HOJE) + ")?</b> A demanda vai para Finalizadas.</p>" +
+        '<div class="actions"><button type="button" class="btn" data-act="adm-arq-nao">Cancelar</button><button type="button" class="btn primary" data-act="adm-arq-sim" id="arq-sim">Sim, finalizar</button></div></div>'
+        : '<p class="hint">Grava a data de hoje e a demanda vai para Finalizadas. Pede confirmação.</p>') + "</div>";
     else semad = '<div class="adm"><p class="admt">Resposta à SEMAD</p><p class="hint">' + (s === "devolvida" ? "Aguardando a fração corrigir o atendimento devolvido." : "Disponível depois que o atendimento for registrado.") + "</p></div>";
     const antigo = d.sitAnalista && d.sitAnalista !== "RESPONDIDA SEMAD" ? '<p class="hint">Situação na planilha antiga: ' + esc((SIT_ANALISTA.find(x => x[0] === d.sitAnalista) || [0, d.sitAnalista])[1]) + "</p>" : "";
     const obsAn = d.obsAnalista ? '<p class="hint">Observação do analista: ' + esc(d.obsAnalista) + "</p>" : "";
@@ -1540,7 +1562,7 @@ form.card.at { padding: 14px 16px; }
       dev = st.devolvendo
         ? '<div class="adm adm-dev"><p class="admt">Devolver à fração</p>' +
           campo("dev-mot", 'Motivo da devolução <span class="req">*</span>', '<textarea id="dev-mot" rows="3" maxlength="500" placeholder="Ex.: o ano do REDS está errado; confira o número no sistema e corrija."></textarea>', "") +
-          '<ul class="dev-lista"><li>A demanda volta para a fração (' + esc(d.fracao) + "), marcada como <b>Devolvida</b>.</li><li>Os dados lançados ficam no formulário, para a fração só corrigir.</li>" +
+          '<ul class="dev-lista"><li>A demanda volta para a fração (' + esc(d.fracao) + "), no quadro <b>Devolvidas</b>.</li><li>Os dados lançados ficam no formulário, para a fração só corrigir.</li>" +
           "<li>O motivo vira uma anotação sua, e a fração pode responder.</li><li>O prazo original continua valendo.</li></ul>" +
           '<div class="actions"><button type="button" class="btn sm" data-act="adm-dev-nao">Cancelar</button><button type="button" class="btn sm warn-btn" data-act="adm-dev-sim">Devolver à fração</button></div></div>'
         : '<div class="adm"><div class="admh"><p class="admt">Devolver à fração</p><button type="button" class="btn sm" data-act="adm-dev">' + ICO_DEV + "Devolver…</button></div><p class=\"hint\">Para a fração corrigir o atendimento. Exige o motivo.</p></div>";
@@ -1564,7 +1586,7 @@ form.card.at { padding: 14px 16px; }
     }
     st.aberta = d;
     const s = situacao(d);
-    const tags = pillFor(d) + prioTag(d) + (s === "respondida" ? '<span class="pill info">SEMAD: a responder</span>' : s === "arquivada" ? '<span class="pill ok">Respondida à SEMAD em ' + br(d.respSemadEm) + "</span>" : s === "devolvida" ? '<span class="pill late">Devolvida</span>' : "");
+    const tags = pillFor(d) + prioTag(d);
     const devBanner = s === "devolvida" && d.devolvida ? '<div class="dev-banner" role="status">' + ICO_DEV + "<div><b>Devolvida pelo Gestor Sistema em " + quando(d.devolvida.em) + "</b><span>" + esc(d.devolvida.motivo) + '</span><span class="hint">' +
       (ehFracaoPerfil() || st.perfil === "pelotao" ? "Corrija no Atendimento abaixo e salve: a demanda volta para o Gestor." : "Aguardando a fração corrigir o atendimento.") + "</span></div></div>" : "";
     const histAberto = drawer.querySelector("#d-histdet") && drawer.querySelector("#d-histdet").open && st.aberta === d;
@@ -1621,7 +1643,7 @@ form.card.at { padding: 14px 16px; }
       function (r) {
         if (r.nadaMudou) return "Nada mudou.";
         st.editAt = false;
-        return r.voltou ? "Atendimento reenviado. A demanda voltou para o Gestor Sistema." : r.novo ? "Atendimento salvo. A demanda foi para Respondidas." : "Atendimento alterado.";
+        return r.voltou ? "Atendimento reenviado. A demanda voltou para o Gestor Sistema." : r.novo ? "Atendimento salvo. A demanda foi para Atendidas." : "Atendimento alterado.";
       },
       { atend: "at-data", resultado: "at-res", gaia: "at-gaia", reds: "at-reds", obs: "at-obs" });
   }
@@ -2238,7 +2260,7 @@ form.card.at { padding: 14px 16px; }
     const go = e.target.closest("[data-go]");
     if (go || e.target.id === "dp-ver-atraso") {
       esconderTip(); st.tela = "lista";
-      st.aba = "pendentes"; st.chip = "vencidas"; st.busca = "";
+      st.aba = "atraso"; st.busca = "";
       if (ehGestao()) st.gFracao = dash.escopo.indexOf("F:") === 0 ? dash.escopo.slice(2) : "";
       render(); const g = document.getElementById("g-filtros") || app.querySelector(".toolbar"); if (g) g.scrollIntoView({ block: "start" });
       return true;
@@ -2931,19 +2953,17 @@ form.card.at { padding: 14px 16px; }
     const rs = e.target.closest("[data-restaurar]");
     if (rs) { restaurarDemanda(rs.getAttribute("data-restaurar")); return; }
     const ab = e.target.closest("[data-aba]");
-    if (ab) { st.aba = ab.getAttribute("data-aba"); st.chip = ""; st.busca = ""; render(); return; }
-    const ch = e.target.closest("[data-chip]");
-    if (ch) { const k = ch.getAttribute("data-chip"); st.chip = st.chip === k ? "" : k; render(); return; }
-    const kp = e.target.closest("[data-kpi]");
-    if (kp) {
-      const p = kp.getAttribute("data-kpi").split(":"); st.aba = p[0]; st.chip = p[1] || ""; st.busca = ""; render();
-      const g = document.getElementById("g-filtros"); if (g && kp.closest(".banner")) g.scrollIntoView({ block: "start", behavior: "smooth" });
+    if (ab) {
+      if (ab.hasAttribute("data-fr")) st.gFracao = ab.getAttribute("data-fr");
+      st.aba = ab.getAttribute("data-aba"); st.busca = ""; render();
+      if (ab.closest(".tfr")) { const g = document.getElementById("g-filtros"); if (g) g.scrollIntoView({ block: "start", behavior: "smooth" }); }
       return;
     }
+    if (e.target.closest("[data-geral]")) { st.gFracao = ""; render(); return; }
     if (e.target.closest("[data-limpar-busca]")) { st.busca = ""; render(); const b = document.getElementById("busca"); if (b) b.focus(); return; }
     const r = e.target.closest(".row[data-cod]");
     if (r) { abrir(r.getAttribute("data-cod")); return; }
-    const fr = e.target.closest("tr.fr");
+    const fr = e.target.closest(".fr-nome");
     if (fr) { const n = fr.getAttribute("data-fr"); st.gFracao = st.gFracao === n ? "" : n; render(); return; }
     if (e.target.id === "limpa-fr") { st.gFracao = ""; render(); }
   });
@@ -2978,8 +2998,8 @@ form.card.at { padding: 14px 16px; }
     if (act === "nt-ed-sim") { salvarEdicaoNota(id); return; }
     if (act === "adm-arq") { st.confArq = true; abrir(cod, "arq-sim", true); return; }
     if (act === "adm-arq-nao") { st.confArq = false; abrir(cod, null, true); return; }
-    if (act === "adm-arq-sim") { enviar("sisden.arquivar", { codigo: cod, versao: st.aberta.versao }, r => r.nadaMudou ? "Já estava arquivada." : "Respondida à SEMAD em " + br(HOJE) + ". Demanda arquivada."); return; }
-    if (act === "adm-desarq") { enviar("sisden.desarquivar", { codigo: cod, versao: st.aberta.versao }, r => r.nadaMudou ? "Nada mudou." : "Demanda desarquivada: voltou para Respondidas."); return; }
+    if (act === "adm-arq-sim") { enviar("sisden.arquivar", { codigo: cod, versao: st.aberta.versao }, r => r.nadaMudou ? "Já estava finalizada." : "Respondida à SEMAD em " + br(HOJE) + ". Demanda finalizada."); return; }
+    if (act === "adm-desarq") { enviar("sisden.desarquivar", { codigo: cod, versao: st.aberta.versao }, r => r.nadaMudou ? "Nada mudou." : "Demanda reaberta: voltou para Atendidas."); return; }
     if (act === "adm-dev") { st.devolvendo = true; abrir(cod, "dev-mot", true); return; }
     if (act === "adm-dev-nao") { st.devolvendo = false; abrir(cod, null, true); return; }
     if (act === "adm-dev-sim") { devolver(); return; }
@@ -2989,7 +3009,7 @@ form.card.at { padding: 14px 16px; }
 
   function trocar(p, papel, manterUsuario) {
     if (!manterUsuario) { st.usuario = usuDefault(p === "gestor" ? "gestor" : p === "pelotao" ? "pelotao" : papel === "cmt" ? "cmt" : "fracao"); if (st.usuario.fracao) st.fracao = st.usuario.fracao; }
-    st.perfil = p; st.papel = papel || "operador"; st.aba = abaPadrao(); st.chip = ""; st.tela = "lista"; st.verExcluidas = false; dash.escopo = ""; st.busca = ""; st.gFracao = ""; uf.form = null; uf.confirmar = null;
+    st.perfil = p; st.papel = papel || "operador"; st.tela = "lista"; st.verExcluidas = false; dash.escopo = ""; st.busca = ""; st.gFracao = ""; uf.form = null; uf.confirmar = null; st.aba = abaPadrao();
     if (!drawer.hidden) fechar(); pav.hidden = true; render();
   }
   document.getElementById("ver-fracao").addEventListener("click", function () { trocar("fracao", "operador"); });
