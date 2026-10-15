@@ -775,6 +775,108 @@ button.pdf:hover { text-decoration-thickness: 2px; }
 .anx-sub { margin-top: 6px; font-size: 12px; font-weight: 600; color: #6b665c; }
 .anx-carregando { margin: 0; color: #6b665c; }
 @media (max-width: 520px) { .anx { grid-template-columns: 1fr auto; } .anx-tipo { grid-column: 1 / -1; } }
+
+/* ===== redesenho: filtros por situação + marcas na linha ===== */
+.sr { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.fbar { display: grid; gap: 10px; }
+.tabs { display: flex; flex-wrap: wrap; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: var(--surface); }
+.tab { flex: 1 1 auto; display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: 46px; padding: 10px 16px; border: 0; background: none; font: inherit; font-size: 15px; font-weight: 600; color: var(--fg); cursor: pointer; }
+.tab + .tab { border-left: 1px solid var(--line); }
+.tab .n { font-size: 13px; font-weight: 600; color: var(--muted); font-variant-numeric: tabular-nums; }
+.tab:hover { background: var(--surface-2); }
+.tab[aria-selected="true"] { background: var(--fg); color: var(--bg); }
+.tab[aria-selected="true"] .n { color: inherit; opacity: .75; }
+.tab.tab-dev:not([aria-selected="true"]) { color: var(--late); }
+.tab.tab-dev:not([aria-selected="true"]) .n { background: var(--late); color: #fff; border-radius: 10px; padding: 0 7px; }
+.tabs.buscando .tab { opacity: .55; }
+.frow { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.fchips { display: flex; flex-wrap: wrap; gap: 8px; }
+.fchip { display: inline-flex; align-items: center; gap: 8px; min-height: 38px; padding: 6px 14px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); font: inherit; font-size: 14px; font-weight: 600; color: var(--fg); cursor: pointer; }
+.fchip .n { font-size: 12.5px; color: var(--muted); }
+.fchip[aria-pressed="true"] { background: var(--late-soft); border-color: color-mix(in srgb, var(--late) 45%, var(--line)); color: var(--late); }
+.fchip:disabled { opacity: .5; cursor: default; }
+.fsep { width: 1px; height: 26px; background: var(--line); margin: 0 2px; }
+.fsel { min-height: 38px; padding: 6px 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); font: inherit; font-size: 14px; max-width: 100%; }
+.fbar .search { margin-left: 0; flex: 1 1 240px; max-width: none; }
+.excl-link { margin-left: auto; background: none; border: 0; padding: 6px 2px; font: inherit; font-size: 13.5px; font-weight: 600; color: var(--muted); text-decoration: underline; text-underline-offset: 2px; cursor: pointer; }
+.busca-hint { margin: 0; font-size: 13.5px; color: var(--muted); }
+.busca-hint .link-btn { color: var(--accent); }
+.sit { display: inline-block; margin: 0 0 4px; padding: 1px 8px; border-radius: 4px; font-size: 11.5px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; background: var(--surface-2); color: var(--muted); }
+.sit-devolvida { background: var(--late); color: #fff; }
+.sit-respondida { background: var(--ok-soft); color: var(--ok); }
+.sit-pendente { background: var(--info-soft); color: var(--info); }
+.c-status .sit { display: table; }
+.mk { display: flex; align-items: center; gap: 5px; width: max-content; max-width: 100%; margin-top: 5px; padding: 1px 7px; border-radius: 4px; font-size: 11.5px; font-weight: 600; }
+.mk svg { width: 12px; height: 12px; flex: none; }
+.mk-nota { background: #D9362B; color: #fff; }
+.mk-alt { background: var(--info-soft); color: var(--info); }
+.mk-conf { background: var(--warn-soft); color: var(--warn); }
+@media (max-width: 760px) { .fsep { display: none; } .c-status .sit, .mk { margin-left: auto; } .excl-link { margin-left: 0; } .tab { flex: 1 1 40%; padding: 8px 12px; font-size: 14px; min-height: 42px; } .tab + .tab { border-left: 0; } .tabs { gap: 1px; background: var(--line); } .tab { background: var(--surface); } }
+
+/* ===== redesenho: modal da demanda em cartões ===== */
+.drawer-body { gap: 14px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; display: grid; gap: 12px; min-width: 0; }
+.card-h { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.card-hr { display: flex; align-items: center; gap: 8px; }
+.card-t { margin: 0; display: flex; align-items: center; gap: 8px; font-family: var(--f-body); font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.card-t svg { width: 16px; height: 16px; }
+.card-n { font-size: 11px; background: var(--surface-2); border-radius: 10px; padding: 1px 7px; letter-spacing: 0; }
+.card .btn.sm svg { width: 14px; height: 14px; margin-right: 6px; vertical-align: -2px; }
+.prio-f .lbl { font-size: 13px; font-weight: 600; }
+.notas { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.an { border: 1px solid var(--line); border-left: 3px solid var(--line); border-radius: 8px; padding: 10px 12px; display: grid; gap: 4px; background: var(--bg); }
+.an[data-lado="gestor"] { border-left-color: var(--caqui); }
+.an[data-lado="gestao"] { border-left-color: var(--info); }
+.an[data-lado="fracao"] { border-left-color: var(--ok); }
+.an.legado { border-left-color: var(--muted); border-style: dashed; }
+.an.nova { background: color-mix(in srgb, #D9362B 7%, var(--surface)); border-color: color-mix(in srgb, #D9362B 35%, var(--line)); }
+.nota-h { display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: baseline; font-size: 13px; }
+.nota-h span { color: var(--muted); font-size: 12.5px; }
+.nova-b { margin-left: auto; padding: 0 7px; border-radius: 4px; background: #D9362B; color: #fff !important; font-size: 11px !important; font-weight: 700; letter-spacing: .06em; }
+.nota-t { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; font-size: 14.5px; }
+.nota-q { margin: 0; padding: 4px 8px; border-left: 2px solid var(--line); color: var(--muted); font-size: 13px; font-style: italic; overflow-wrap: anywhere; }
+.nota-a { display: flex; gap: 14px; }
+.nota-a .link-btn { font-size: 13px; color: var(--accent); }
+.nota-vazia { margin: 0; font-size: 13.5px; }
+.nota-nova { display: grid; gap: 8px; border-top: 1px solid var(--line); padding-top: 12px; }
+.nota-nova .field textarea { min-height: 64px; }
+.resp-a { display: flex; gap: 10px; align-items: baseline; justify-content: space-between; padding: 6px 10px; border-radius: 6px; background: var(--surface-2); font-size: 13px; }
+.resp-a span { min-width: 0; overflow-wrap: anywhere; }
+.resp-a .link-btn { color: var(--accent); flex: none; }
+form.card.at { padding: 14px 16px; }
+.conf-box { display: flex; gap: 10px; align-items: flex-start; padding: 10px 12px; border-radius: 8px; background: var(--warn-soft); color: var(--warn); font-size: 13.5px; }
+.conf-box svg { width: 18px; height: 18px; flex: none; margin-top: 1px; }
+.conf-box div { display: grid; gap: 2px; }
+.conf-box span { color: var(--fg); }
+.alt-nota { margin: 0; display: flex; gap: 8px; align-items: center; padding: 8px 10px; border-radius: 8px; background: var(--info-soft); color: var(--info); font-size: 13.5px; }
+.alt-nota svg { width: 15px; height: 15px; flex: none; }
+.card-adm { border-color: var(--caqui); box-shadow: inset 0 3px 0 var(--caqui); }
+.card-adm > .card-h .hint { font-size: 12px; color: var(--muted); }
+.adm { display: grid; gap: 6px; padding-top: 12px; border-top: 1px solid var(--line); }
+.card-adm > .adm:first-of-type { border-top: 0; padding-top: 0; }
+.admh { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.admt { margin: 0; font-size: 14.5px; font-weight: 700; }
+.perigo-t { color: var(--late); }
+.adm .hint, .card-adm > .hint { margin: 0; font-size: 12.5px; color: var(--muted); }
+.adm-dev { background: var(--warn-soft); border: 1px solid color-mix(in srgb, var(--warn) 45%, var(--line)); border-radius: 10px; padding: 12px 14px !important; }
+.dev-lista { margin: 0; padding-left: 18px; font-size: 13px; display: grid; gap: 2px; }
+.req { color: var(--late); }
+.btn.ok-btn { background: var(--ok); border-color: var(--ok); color: #fff; }
+.btn.warn-btn { background: var(--warn); border-color: var(--warn); color: #fff; }
+.dev-banner { display: flex; gap: 12px; align-items: flex-start; padding: 12px 14px; border: 2px solid var(--late); border-radius: 10px; background: var(--surface); }
+.dev-banner > svg { width: 22px; height: 22px; color: var(--late); flex: none; }
+.dev-banner > div { display: grid; gap: 3px; min-width: 0; }
+.dev-banner b { color: var(--late); }
+.dev-banner span { overflow-wrap: anywhere; }
+.dev-banner .hint { font-size: 12.5px; color: var(--muted); }
+.hist-det summary { cursor: pointer; list-style: none; display: flex; align-items: center; gap: 8px; }
+.hist-det summary::-webkit-details-marker { display: none; }
+.hist-det summary::before { content: "▸"; font-size: 12px; }
+.hist-det[open] summary::before { content: "▾"; }
+.hist-det[open] summary { margin-bottom: 10px; }
+.head-tags { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.head-tags .prazo-txt { display: inline; margin: 0 6px 0 0; }
+.c-anot .anot > span { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; overflow-wrap: anywhere; }
 </style>
 
 <header class="masthead">
@@ -1010,49 +1112,41 @@ button.pdf:hover { text-decoration-thickness: 2px; }
     }
   });
 
-  /* recados de exemplo */
-  let recSeq = 1;
-  function novoRecado(d, tipo, campos, texto, quando) {
-    const r = { id: recSeq++, tipo: tipo, campos: campos || [], texto: texto, status: "ABERTO", de: "Gestor 1ª Cia", em: quando || HOJE,
-      snap: {}, resposta: "", respEm: "", respData: "", encEm: "", lidoGestor: true, vistos: [], respPor: "" };
-    r.campos.forEach(function (c) { r.snap[c] = d[c]; });
-    d.recados.push(r);
-    d.hist.push({ quando: r.em, quem: "Gestor 1ª Cia", acao: "Recado enviado: " + TIPOS_REC[tipo].toLowerCase() });
-    return r;
+  /* ================= anotações de exemplo (protótipo) ================= */
+  let notaSeq = 1;
+  function notaDemo(d, texto, autor, email, lado, quando, extra) {
+    const n = Object.assign({ id: notaSeq++, texto: texto, autor: autor, email: email, lado: lado, gestor: /Gestor/.test(autor), em: quando, editada: "", respostaA: null,
+      vistaFr: lado === "fracao", vistaGe: lado !== "fracao" }, extra || {});
+    d.notas.push(n);
+    return n;
   }
   if (!REAL) (function semear() {
+    DEMANDAS.forEach(function (d) {
+      d.notas = []; d.devolvida = null; d.alterado = "";
+      if (d.anotacao) { notaDemo(d, d.anotacao, "Equipe " + d.fracao + " (Básico)", "", "fracao", addDays(d.envio, 2) + " 08:00", { vistaGe: true }); d.anotacao = ""; }
+    });
     const minhas = DEMANDAS.filter(d => d.fracao === "2 GP/3 PELOTÃO");
     const atendidas = minhas.filter(d => d.atend && d.reds);
     const pend = minhas.filter(d => !d.atend);
-    const outra = DEMANDAS.find(d => d.fracao === "1 PELOTÃO" && d.reds);
-    if (atendidas[0] && outra) {
-      atendidas[0].reds = outra.reds;
-      novoRecado(atendidas[0], "CORRECAO", ["reds"], "O nº do REDS informado é o mesmo da demanda " + outra.codigo + " (" + outra.municipio + "). Confira e corrija.", addDays(HOJE, -3));
-    }
-    if (atendidas[1]) novoRecado(atendidas[1], "RETORNO", [], "Denunciante informa que a supressão de vegetação continuou depois da fiscalização. Retornar ao local e registrar a nova constatação.", addDays(HOJE, -1));
+    const G = ["Sgt Anderson (Gestor Sistema)", "gestor.1cia@exemplo.com"], P = ["Maj Monteiro (Cmt 3º Pelotão)", "monteiro.pel3@exemplo.com"], B = ["2gp3pel@exemplo.com (Básico · 2 GP/3 PELOTÃO)", "2gp3pel@exemplo.com"];
     if (pend[0]) {
       pend[0].prioridade = "URGENTE"; pend[0].prioPor = "gestor";
-      pend[0].avisos.push({ texto: "Prioridade definida como URGENTE pela 1ª Cia", em: HOJE, ciente: false, cientePor: "", cienteEm: "" });
-      novoRecado(pend[0], "RECADO", [], "Demanda com repercussão na imprensa local. O Comando pede atendimento ainda nesta semana.", HOJE);
+      const n = notaDemo(pend[0], "Demanda com repercussão na imprensa local. O Comando pede atendimento ainda nesta semana.", G[0], G[1], "gestao", addDays(HOJE, -1) + " 09:12", { vistaFr: false });
+      notaDemo(pend[0], "Ciente. Equipe do Sgt Valdiney vai na quinta.", B[0], B[1], "fracao", HOJE + " 08:40", { respostaA: n.id, vistaGe: false });
     }
-    if (atendidas[2]) {
-      const r = novoRecado(atendidas[2], "RECADO", [], "Anexar ao GAIA as fotos do auto de constatação.", addDays(HOJE, -12));
-      r.status = "ENCERRADO"; r.vistos.push({ quem: "2gp3pel@exemplo.com (usuário básico)", em: addDays(HOJE, -12), hora: "08:14" }); r.respPor = "1º Sgt Duarte (SubCmt Fração)"; r.resposta = "Fotos anexadas."; r.respEm = addDays(HOJE, -11); r.encEm = addDays(HOJE, -11);
+    if (atendidas[0]) {
+      const d = atendidas[0]; d.sitAnalista = ""; d.respSemadEm = "";
+      d.devolvida = { em: addDays(HOJE, -2) + " 16:05", motivo: "O ano do REDS não confere com a data do atendimento. Confira no sistema e corrija.", por: G[0] };
+      notaDemo(d, "Devolvida à fração: " + d.devolvida.motivo, G[0], G[1], "gestao", d.devolvida.em, { vistaFr: false });
+      d.hist.push({ quando: addDays(HOJE, -2), hora: "16:05", quem: G[0], acao: "Devolvida à 2 GP/3 PELOTÃO: “" + d.devolvida.motivo + "”" });
     }
+    if (atendidas[1]) { atendidas[1].sitAnalista = ""; atendidas[1].respSemadEm = ""; notaDemo(atendidas[1], "Fotos do auto de constatação anexadas ao GAIA.", B[0], B[1], "fracao", addDays(HOJE, -3) + " 14:20", { vistaGe: false }); }
     const g1 = DEMANDAS.filter(d => d.fracao === "2 GP/5 PELOTÃO" && d.atend && d.gaia);
-    if (g1[0]) {
-      const r = novoRecado(g1[0], "CORRECAO", ["gaia"], "O nº do GAIA está incompleto. Confira no sistema e corrija.", addDays(HOJE, -4));
-      g1[0].gaia = g1[0].gaia.replace(/(\d{7})$/, function (m) { return String(Number(m) + 7).padStart(7, "0"); });
-      r.status = "RESPONDIDO"; r.vistos.push({ quem: "2gp5pel@exemplo.com (usuário básico)", em: addDays(HOJE, -3), hora: "10:47" }); r.respPor = "1º Ten Araújo (Cmt Fração)"; r.lidoGestor = false; r.resposta = "Corrigido conforme o GAIA."; r.respEm = addDays(HOJE, -1);
-      g1[0].hist.push({ quando: r.respEm, quem: "Fração 2 GP/5 PELOTÃO", acao: "Respondeu ao recado: correção informada" });
-    }
+    if (g1[0]) { g1[0].sitAnalista = ""; g1[0].respSemadEm = ""; g1[0].alterado = addDays(HOJE, -1) + " 10:47"; g1[0].hist.push({ quando: addDays(HOJE, -1), hora: "10:47", quem: "2gp5pel@exemplo.com (usuário básico)", acao: "Atendimento alterado (GAIA)" }); }
     const g2 = DEMANDAS.filter(d => d.fracao === "1 PELOTÃO" && d.atend);
-    if (g2[1]) novoRecado(g2[1], "RETORNO", [], "Nova denúncia para o mesmo endereço. Verificar reincidência.", addDays(HOJE, -3));
-    if (g2[2] && g2[2].reds) { g2[2].reds = "2025" + g2[2].reds.slice(4); g2[2].legado = true; }
-    /* coerência dos dados de exemplo: demanda com recado em curso ainda não foi respondida à SEMAD */
-    DEMANDAS.forEach(function (d) {
-      if (d.recados.some(r => r.status !== "ENCERRADO" || !r.lidoGestor)) { d.sitAnalista = ""; d.respSemadEm = ""; }
-    });
+    if (g2[2] && g2[2].reds) { g2[2].reds = "2025" + g2[2].reds.slice(4); g2[2].legado = true; g2[2].sitAnalista = ""; g2[2].respSemadEm = ""; }
+    const p3 = DEMANDAS.filter(d => d.fracao === "1 GP/3 PELOTÃO" && !d.atend);
+    if (p3[0]) notaDemo(p3[0], "Acesso só pela estrada de terra; levar a 4x4.", P[0], P[1], "gestao", HOJE + " 07:55", { vistaFr: false });
   })();
 
   const PENDENCIAS = [
@@ -1061,73 +1155,43 @@ button.pdf:hover { text-decoration-thickness: 2px; }
   ];
   if (REAL) { FRACOES.length = 0; PENDENCIAS.length = 0; }
 
-  /* ================= regras ================= */
+  /* ================= regras =================
+     Situação (uma só): pendente → respondida → arquivada (respondida à SEMAD).
+     O gestor pode devolver uma respondida à fração (devolvida); ao salvar de novo, volta a respondida.
+     Devolvida conta como sem atendimento para o prazo (o prazo original continua valendo). */
+  function situacao(d) {
+    if (d.situacao) return d.situacao;
+    if (d.sitAnalista === "RESPONDIDA SEMAD") return "arquivada";
+    if (d.devolvida) return "devolvida";
+    return d.atend ? "respondida" : "pendente";
+  }
+  const SIT_NOME = { pendente: "Pendente", devolvida: "Devolvida", respondida: "Respondida", arquivada: "Arquivada" };
+  function atendEf(d) { return situacao(d) === "devolvida" ? "" : d.atend; }
   function status(d) {
-    if (d.atend) return diff(d.atend, d.venc) <= 0 ? "ATENDIDA" : "ATENDIDA COM ATRASO";
+    const at = atendEf(d);
+    if (at) return diff(at, d.venc) <= 0 ? "ATENDIDA" : "ATENDIDA COM ATRASO";
     return diff(HOJE, d.venc) > 0 ? "EM ATRASO" : "NO PRAZO";
   }
   function faltam(d) { return diff(d.venc, HOJE); }
-  function venceLogo(d) { return !d.atend && faltam(d) >= 0 && faltam(d) <= 10; }
-  function abertos(d) { return d.recados.filter(r => r.status === "ABERTO").length; }
-  function paraConferir(d) { return d.recados.filter(r => r.status === "RESPONDIDO").length; }
-  function naoLidos(d, gestor) {
-    if (gestor) return d.recados.filter(r => !r.lidoGestor).length;
-    return abertos(d) + d.avisos.filter(a => !a.ciente).length;
-  }
+  function venceLogo(d) { return !atendEf(d) && faltam(d) >= 0 && faltam(d) <= 10; }
+  function prioritaria(d) { return !atendEf(d) && d.prioridade !== "NORMAL"; }
+  function encerrada(d) { return situacao(d) === "arquivada"; }
   function escopo() { return ehGestao() ? demandasGestao() : DEMANDAS.filter(d => d.fracao === st.fracao); }
-  /** Recado aberto há mais de 2 dias sem ciente/resposta do comando da fração. */
-  function semCiente(d) { return d.recados.some(r => r.status === "ABERTO" && diff(HOJE, r.em) > 2); }
-  function aResponderSemad(d) { return !!d.atend && d.sitAnalista !== "RESPONDIDA SEMAD"; }
-  function semadHtml(d) {
-    if (!d.atend) return "";
-    if (d.sitAnalista === "RESPONDIDA SEMAD") return '<span class="semad ok">SEMAD: respondida em ' + br(d.respSemadEm).slice(0, 5) + "</span>";
-    if (d.sitAnalista === "NÃO LOCALIZADA NO GAIA") return '<span class="semad late">SEMAD: não localizada no GAIA</span>';
-    return '<span class="semad wait">SEMAD: a responder</span>';
-  }
-  function prioritaria(d) { return !d.atend && d.prioridade !== "NORMAL"; }
 
-  /* ---- ciclo de vida da demanda (visão do gestor) ----
-     Com a fração (sem atendimento) → A responder à SEMAD (atendida) → Encerrada (respondida à SEMAD).
-     Encerrada é demanda morta: não entra em alerta, conferência, cobrança de ciente nem leitura. */
-  function encerrada(d) { return !!d.atend && d.sitAnalista === "RESPONDIDA SEMAD"; }
-  function aguardaQuest(d) { return !encerrada(d) && abertos(d) > 0; }
-  function prontaSemad(d) { return aResponderSemad(d) && !conferencia(d).length && !abertos(d) && !paraConferir(d); }
-  const ETAPAS = [
-    ["andamento", "Em andamento", "Tudo o que ainda não foi respondido à SEMAD — com a fração ou com a 1ª Cia."],
-    ["fracao", "Com a fração", "Sem atendimento registrado. A cobrança é de prazo e de recados."],
-    ["semad", "A responder à SEMAD", "Atendidas pela fração. Falta conferir e responder à SEMAD."],
-    ["encerradas", "Encerradas", "Respondidas à SEMAD. Saem de todos os alertas, conferências e cobranças de ciente."]
-  ];
-  function naEtapa(d, e) {
-    if (e === "encerradas") return encerrada(d);
-    if (e === "fracao") return !d.atend;
-    if (e === "semad") return aResponderSemad(d);
-    return !encerrada(d);
+  /* anotações: "nova" = ainda não vista pelo lado de quem está olhando (fração ou gestão) */
+  function notaNova(n) { return REAL ? !!n.nova : (ehGestao() ? !n.vistaGe : !n.vistaFr); }
+  function notaMinha(n) { return REAL ? !!n.minha : !!st.usuario && n.email === st.usuario.email; }
+  function notasNovas(d) { return (d.notas || []).filter(notaNova).length; }
+  function ultimaAnot(d) { const l = d.notas || []; return l.length ? l[l.length - 1].texto : d.anotacao || ""; }
+  function minhaAssinatura() {
+    const u = st.usuario;
+    if (u.papel === "GESTOR") return u.nome + " (Gestor Sistema)";
+    if (u.papel === "CMT_PEL") return u.nome + " (Cmt " + pelNome(u.pelotao) + ")";
+    if (u.papel === "BASICO") return (u.nome || u.email) + " (Básico · " + u.fracao + ")";
+    return u.nome + " (" + PAPEIS[u.papel].sigla + ")";
   }
-  const PONTOS = {
-    atraso: ["Em atraso", d => status(d) === "EM ATRASO"],
-    breve: ["Vencem em 10 dias", venceLogo],
-    prioridade: ["Prioritárias", prioritaria],
-    questionamento: ["Aguardando resposta do questionamento", aguardaQuest],
-    semciente: ["Sem ciente > 2 dias", d => !encerrada(d) && semCiente(d)],
-    conferir: ["Respostas para conferir", d => !encerrada(d) && paraConferir(d) > 0],
-    inconsist: ["Inconsistências", d => aResponderSemad(d) && conferencia(d).length > 0],
-    pronta: ["Prontas para responder", prontaSemad],
-    novos: ["Respostas novas", d => !encerrada(d) && naoLidos(d, true) > 0],
-    noprazo: ["Atendidas no prazo", d => status(d) === "ATENDIDA"],
-    comatraso: ["Atendidas com atraso", d => status(d) === "ATENDIDA COM ATRASO"]
-  };
-  const PONTOS_ETAPA = {
-    andamento: ["atraso", "breve", "prioridade", "questionamento", "semciente", "conferir", "inconsist", "pronta"],
-    fracao: ["atraso", "breve", "prioridade", "questionamento", "semciente"],
-    semad: ["pronta", "conferir", "inconsist", "questionamento", "semciente"],
-    encerradas: ["noprazo", "comatraso"]
-  };
 
-  /** Conferência automática dos números informados pela fração. */
-  /** Conferência automática dos números informados pela fração.
-      No SISDEN, REDS, GAIA e resultado são obrigatórios e validados ao salvar; aqui sobra só o que o
-      formulário não consegue barrar (REDS repetido) e as falhas dos registros migrados da planilha antiga. */
+  /** Conferência automática dos números informados (o que o formulário não barra: REDS repetido e registros migrados). */
   function conferencia(d) {
     const p = [];
     if (!d.atend) return p;
@@ -1144,6 +1208,7 @@ button.pdf:hover { text-decoration-thickness: 2px; }
     }
     return p;
   }
+  function paraConferir(d) { return situacao(d) !== "arquivada" && conferencia(d).length > 0; }
 
   function pillFor(d) {
     const s = status(d);
@@ -1155,20 +1220,25 @@ button.pdf:hover { text-decoration-thickness: 2px; }
     if (s === "ATENDIDA") return '<span class="pill ok">Atendida</span><span class="prazo-txt">em ' + br(d.atend) + "</span>";
     return '<span class="pill okl">Atendida com atraso</span><span class="prazo-txt">em ' + br(d.atend) + "</span>";
   }
+  function sitTag(d) { const s = situacao(d); return '<span class="sit sit-' + s + '">' + SIT_NOME[s] + (s === "arquivada" && d.respSemadEm ? " · " + br(d.respSemadEm).slice(0, 5) : "") + "</span>"; }
   function prioTag(d) {
     if (d.prioridade === "NORMAL") return "";
-    return '<span class="prio prio-' + d.prioridade.toLowerCase() + '" title="Prioridade ' + d.prioridade.toLowerCase() + (d.prioPor === "gestor" ? " — definida pela 1ª Cia" : "") + '">' + ICO.flag + d.prioridade + "</span>";
+    return '<span class="prio prio-' + d.prioridade.toLowerCase() + '" title="Prioridade ' + d.prioridade.toLowerCase() + (d.prioPor === "gestor" ? " — definida pelo comando" : "") + '">' + ICO.flag + d.prioridade + "</span>";
   }
-  function recBadge(d, gestor) {
-    const a = abertos(d), c = paraConferir(d);
+  /** marcas pequenas na linha (substituem os antigos filtros e painéis) */
+  function marcasHtml(d) {
     let h = "";
-    if (a) h += '<span class="recb' + (gestor ? " recb-wait" : "") + '">' + ICO.msg + a + (gestor ? " aguardando" : " recado" + (a > 1 ? "s" : "")) + "</span>";
-    if (gestor && c) h += '<span class="recb">' + ICO.msg + c + " para conferir</span>";
+    const n = notasNovas(d);
+    if (n) h += '<span class="mk mk-nota">' + ICO.msg + (n > 1 ? n + " anotações novas" : "anotação nova") + "</span>";
+    if (ehGestao() && d.alterado) h += '<span class="mk mk-alt">' + ICO.note + "atendimento alterado</span>";
+    if (paraConferir(d)) h += '<span class="mk mk-conf">⚠ conferir</span>';
     return h;
   }
 
   /* ================= estado ================= */
-  const st = { perfil: "fracao", papel: "operador", fracao: "2 GP/3 PELOTÃO", filtro: "pendentes", busca: "", gFracao: "", aberta: null, novoRec: null, etapa: "andamento", gFiltro: "", tela: "lista" };
+  const st = { perfil: "fracao", papel: "operador", fracao: "2 GP/3 PELOTÃO", aba: "pendentes", chip: "", busca: "", gFracao: "", aberta: null, tela: "lista",
+    rascunho: "", respA: null, editNota: null, editAt: false, confArq: false, devolvendo: false, destaque: {} };
+  function abaPadrao() { return st.perfil === "gestor" ? "respondidas" : "pendentes"; }
 
   const app = document.getElementById("app");
   const drawer = document.getElementById("drawer");
@@ -1180,95 +1250,56 @@ button.pdf:hover { text-decoration-thickness: 2px; }
     clearTimeout(toast.t); toast.t = setTimeout(function () { toastEl.hidden = true; }, 3400);
   }
 
-  function filtrar(lista) {
-    const q = st.busca.trim().toUpperCase();
-    return lista.filter(function (d) {
-      const s = status(d);
-      switch (st.filtro) {
-        case "pendentes": if (d.atend) return false; break;
-        case "atraso": if (s !== "EM ATRASO") return false; break;
-        case "breve": if (!venceLogo(d)) return false; break;
-        case "prioridade": if (!prioritaria(d)) return false; break;
-        case "recado": if (!abertos(d)) return false; break;
-        case "novos": if (!naoLidos(d, ehGestao())) return false; break;
-        case "semciente": if (!semCiente(d)) return false; break;
-        case "semad": if (!aResponderSemad(d)) return false; break;
-        case "conferir": if (!paraConferir(d)) return false; break;
-        case "inconsist": if (!conferencia(d).length) return false; break;
-        case "atendidas": if (!d.atend) return false; break;
-      }
-      if (q && (d.codigo + " " + d.tipo + " " + d.municipio + " " + d.natureza + " " + d.endereco + " " + d.anotacao).toUpperCase().indexOf(q) < 0) return false;
-      return true;
-    }).sort(function (a, b) {
-      if (!a.atend && !b.atend) {
-        if (PRIO_PESO[a.prioridade] !== PRIO_PESO[b.prioridade]) return PRIO_PESO[a.prioridade] - PRIO_PESO[b.prioridade];
-        return a.venc < b.venc ? -1 : 1;
-      }
-      if (a.atend && b.atend) return a.atend > b.atend ? -1 : 1;
-      return a.atend ? 1 : -1;
+  /* ================= filtros =================
+     Linha 1: situação (abas, cada demanda está em uma só). Linha 2: atalhos que refinam a aba (um por vez).
+     A busca procura em TODAS as situações e mostra a situação de cada resultado. */
+  const ABAS = [["todas", "Todas"], ["pendentes", "Pendentes"], ["devolvidas", "Devolvidas"], ["respondidas", "Respondidas"], ["arquivadas", "Arquivadas"]];
+  const ABA_SIT = { pendentes: "pendente", devolvidas: "devolvida", respondidas: "respondida", arquivadas: "arquivada" };
+  const CHIPS = [["vencidas", "Vencidas", d => status(d) === "EM ATRASO"], ["breve", "Vencem em 10 dias", venceLogo], ["prio", "Prioritárias", prioritaria]];
+  function naAba(d, a) { return a === "todas" || situacao(d) === ABA_SIT[a]; }
+  function baseLista() { const b = escopo(); return ehGestao() && st.gFracao ? b.filter(d => d.fracao === st.gFracao) : b; }
+  function textoBusca(d) { return (d.codigo + " " + d.tipo + " " + d.municipio + " " + d.natureza + " " + d.endereco + " " + ultimaAnot(d) + " " + d.fracao + " " + d.gaia + " " + d.reds).toUpperCase(); }
+  const ORDEM_SIT = { devolvida: 0, pendente: 1, respondida: 2, arquivada: 3 };
+  function ordenar(l) {
+    return l.sort(function (a, b) {
+      const sa = situacao(a), sb = situacao(b);
+      if (sa !== sb) return ORDEM_SIT[sa] - ORDEM_SIT[sb];
+      if (sa === "arquivada") return a.respSemadEm > b.respSemadEm ? -1 : a.respSemadEm < b.respSemadEm ? 1 : 0;
+      if (sa === "respondida") return a.atend < b.atend ? -1 : a.atend > b.atend ? 1 : 0; // quem espera há mais tempo primeiro
+      if (PRIO_PESO[a.prioridade] !== PRIO_PESO[b.prioridade]) return PRIO_PESO[a.prioridade] - PRIO_PESO[b.prioridade];
+      return a.venc < b.venc ? -1 : a.venc > b.venc ? 1 : 0;
     });
   }
-
-  function contagens(lista) {
-    return {
-      total: lista.length,
-      pendentes: lista.filter(d => !d.atend).length,
-      atraso: lista.filter(d => status(d) === "EM ATRASO").length,
-      breve: lista.filter(venceLogo).length,
-      prioridade: lista.filter(prioritaria).length,
-      recado: lista.filter(d => abertos(d)).length,
-      conferir: lista.filter(d => paraConferir(d)).length,
-      semciente: lista.filter(semCiente).length,
-      semad: lista.filter(aResponderSemad).length,
-      inconsist: lista.filter(d => conferencia(d).length).length,
-      atendidas: lista.filter(d => d.atend).length,
-      noPrazoAt: lista.filter(d => status(d) === "ATENDIDA").length,
-      comAtraso: lista.filter(d => status(d) === "ATENDIDA COM ATRASO").length
-    };
-  }
-
-  function filtrarGestor(base) {
+  function listaFiltrada() {
     const q = st.busca.trim().toUpperCase();
-    const pt = st.gFiltro && PONTOS[st.gFiltro];
-    return base.filter(function (d) {
-      if (!naEtapa(d, st.etapa)) return false;
-      if (pt && !pt[1](d)) return false;
-      if (q && (d.codigo + " " + d.tipo + " " + d.municipio + " " + d.natureza + " " + d.endereco + " " + d.anotacao + " " + d.fracao).toUpperCase().indexOf(q) < 0) return false;
-      return true;
-    }).sort(function (a, b) {
-      if (st.etapa === "encerradas") return a.respSemadEm > b.respSemadEm ? -1 : 1;
-      if (st.etapa === "semad" || (a.atend && b.atend)) return a.atend < b.atend ? -1 : 1; // quem espera há mais tempo primeiro
-      if (!a.atend && !b.atend) {
-        if (PRIO_PESO[a.prioridade] !== PRIO_PESO[b.prioridade]) return PRIO_PESO[a.prioridade] - PRIO_PESO[b.prioridade];
-        return a.venc < b.venc ? -1 : 1;
-      }
-      return a.atend ? 1 : -1;
-    });
+    if (q) return ordenar(escopo().filter(d => textoBusca(d).indexOf(q) >= 0));
+    const ch = CHIPS.find(c => c[0] === st.chip);
+    return ordenar(baseLista().filter(d => naAba(d, st.aba) && (!ch || ch[2](d))));
   }
 
-  function gestorFiltrosHtml(base) {
-    const et = ETAPAS.find(e => e[0] === st.etapa);
-    const tabs = '<div class="etapas" role="group" aria-label="Etapa da demanda">' + ETAPAS.map(function (e) {
-      const n = base.filter(d => naEtapa(d, e[0])).length;
-      return '<button type="button" class="etapa" data-etapa="' + e[0] + '" aria-pressed="' + (st.etapa === e[0]) + '"><span>' + e[1] + '</span><span class="c">' + n + "</span></button>";
+  function filtrosHtml() {
+    const base = baseLista(), buscando = !!st.busca.trim(), gestao = ehGestao();
+    const daAba = base.filter(d => naAba(d, st.aba));
+    const tabs = '<div class="tabs' + (buscando ? " buscando" : "") + '" role="tablist" aria-label="Situação">' + ABAS.map(function (a) {
+      const n = base.filter(d => naAba(d, a[0])).length, on = !buscando && st.aba === a[0];
+      return '<button type="button" class="tab' + (a[0] === "devolvidas" && n ? " tab-dev" : "") + '" role="tab" data-aba="' + a[0] + '" aria-selected="' + on + '">' + a[1] + ' <span class="n">' + n + "</span></button>";
     }).join("") + "</div>";
-    const daEtapa = base.filter(d => naEtapa(d, st.etapa));
-    let lista = PONTOS_ETAPA[st.etapa].slice();
-    if (st.etapa === "andamento" && (st.gFiltro === "novos" || daEtapa.some(PONTOS.novos[1]))) lista.unshift("novos");
-    const chips = '<div class="chips" role="group" aria-label="Pontos de atenção">' +
-      '<button type="button" class="chip" data-p="" aria-pressed="' + (!st.gFiltro) + '">Todas <span class="c">' + daEtapa.length + "</span></button>" +
-      lista.map(function (k) {
-        const n = daEtapa.filter(PONTOS[k][1]).length, on = st.gFiltro === k;
-        return '<button type="button" class="chip' + (n ? "" : " zero") + '" data-p="' + k + '" aria-pressed="' + on + '"' + (!n && !on ? " disabled" : "") + ">" + PONTOS[k][0] + ' <span class="c">' + n + "</span></button>";
-      }).join("") + "</div>";
-    return '<section class="toolbar g-toolbar" id="g-filtros">' + tabs +
-      '<div class="pontos"><span class="pontos-lbl">' + esc(et[2]) + "</span>" + chips + "</div>" +
-      '<div class="g-busca">' + searchHtml() + (ehSistema() ? '<button type="button" class="link-btn ver-excl" data-excl="1">Demandas excluídas (' + (REAL ? st.nExcl || 0 : EXCLUIDAS.length) + ")</button>" : "") + "</div></section>";
+    const chips = CHIPS.map(function (c) {
+      const n = daAba.filter(c[2]).length, on = !buscando && st.chip === c[0];
+      return '<button type="button" class="fchip" data-chip="' + c[0] + '" aria-pressed="' + on + '"' + (buscando ? " disabled" : "") + ">" + c[1] + ' <span class="n">' + n + "</span></button>";
+    }).join("");
+    const sel = gestao ? '<label class="sr" for="g-fr">Fração</label><select id="g-fr" class="fsel"><option value="">' + (st.perfil === "pelotao" ? "Todas as frações do pelotão" : "Todas as frações") + "</option>" +
+      fracoesGestao().map(f => '<option value="' + esc(f[0]) + '"' + (st.gFracao === f[0] ? " selected" : "") + ">" + esc(f[0]) + "</option>").join("") + "</select>" : "";
+    const excl = ehSistema() ? '<button type="button" class="excl-link" data-excl="1">Excluídas (' + (REAL ? st.nExcl || 0 : EXCLUIDAS.length) + ")</button>" : "";
+    return '<section class="toolbar fbar" id="g-filtros">' + tabs +
+      '<div class="frow"><div class="fchips" role="group" aria-label="Atalhos">' + chips + '</div><span class="fsep" aria-hidden="true"></span>' + sel + searchHtml() + excl + "</div>" +
+      (buscando ? '<p class="busca-hint" role="status">Buscando em <b>todas as situações</b>' + (gestao ? " e frações" : "") + '. A situação de cada demanda aparece na linha. <button type="button" class="link-btn" data-limpar-busca>Limpar busca</button></p>' : "") +
+      "</section>";
   }
 
   function excluidasHtml() {
     return '<section class="panel" id="g-filtros"><div class="panel-head"><h2>Demandas excluídas</h2><button type="button" class="link-btn" data-excl="0">← voltar às demandas</button></div>' +
-      '<p class="nota" style="margin:0">Saem da lista, do dashboard e dos alertas, mas ficam guardadas com o motivo. Se a SEMAD mandar o mesmo código de novo, ele é barrado. Pode restaurar a qualquer momento.</p>' +
+      '<p class="nota" style="margin:0">Saem da lista, do dashboard e dos avisos, mas ficam guardadas com o motivo. Se a SEMAD mandar o mesmo código de novo, ele é barrado. Pode restaurar a qualquer momento.</p>' +
       (REAL && !st.exclOk ? '<div class="empty" role="status">Carregando…</div>' : EXCLUIDAS.length ? '<div class="tbl-wrap"><table><thead><tr><th>Código</th><th>Município · fração</th><th>Excluída em</th><th>Motivo</th><th></th></tr></thead><tbody>' +
         EXCLUIDAS.slice().reverse().map(function (x) {
           return '<tr><td class="mono">' + esc(x.d.codigo) + '</td><td>' + esc(x.d.municipio) + '<br><span class="muted">' + esc(x.d.fracao) + '</span></td><td class="num">' + br(x.em) + " às " + x.hora +
@@ -1277,21 +1308,9 @@ button.pdf:hover { text-decoration-thickness: 2px; }
   }
 
   /* ================= telas ================= */
-  function chipsHtml(c, gestor) {
-    const ops = gestor
-      ? [["pendentes", "Pendentes", c.pendentes], ["atraso", "Em atraso", c.atraso], ["breve", "Vencem em 10 dias", c.breve], ["prioridade", "Prioritárias", c.prioridade],
-         ["recado", "Aguardando a fração", c.recado], ["semciente", "Sem ciente > 2 dias", c.semciente], ["conferir", "Respostas para conferir", c.conferir], ["inconsist", "Inconsistências", c.inconsist], ["semad", "A responder à SEMAD", c.semad],
-         ["atendidas", "Atendidas", c.atendidas], ["todas", "Todas", c.total]]
-      : [["pendentes", "Pendentes", c.pendentes], ["atraso", "Em atraso", c.atraso], ["breve", "Vencem em 10 dias", c.breve], ["prioridade", "Prioritárias", c.prioridade],
-         ["recado", "Recados e Anotações", c.recado], ["atendidas", "Atendidas", c.atendidas], ["todas", "Todas", c.total]];
-    return '<div class="chips" role="group" aria-label="Filtrar demandas">' + ops.map(function (o) {
-      return '<button type="button" class="chip" data-f="' + o[0] + '" aria-pressed="' + (st.filtro === o[0]) + '">' + o[1] + ' <span class="c">' + o[2] + "</span></button>";
-    }).join("") + "</div>";
-  }
-
   function searchHtml() {
     return '<div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>' +
-      '<input id="busca" type="search" placeholder="Buscar código, município, anotação…" aria-label="Buscar" value="' + esc(st.busca) + '"></div>';
+      '<input id="busca" type="search" placeholder="Buscar protocolo, ID (DEN 1480), município, REDS…" aria-label="Buscar em todas as demandas" value="' + esc(st.busca) + '"></div>';
   }
 
   /** protocolos novos da SEMAD (2026.09.01.503.0000535) cabem numa linha (coluna mais larga); o número curto
@@ -1300,125 +1319,85 @@ button.pdf:hover { text-decoration-thickness: 2px; }
     c = String(c || "");
     const k = c.lastIndexOf(".");
     if (c.length <= 12 || k < 0) return '<span class="code">' + esc(c) + "</span>";
-    // uma linha só; em telas estreitas pode quebrar no último ponto
     return '<span class="code longo" title="' + esc(c) + '">' + esc(c.slice(0, k + 1)) + "<wbr>" + esc(c.slice(k + 1)) + "</span>";
   }
   function listHtml(lista, gestor) {
-    if (!lista.length) return '<div class="list"><div class="empty">Nenhuma demanda neste filtro.</div></div>';
+    if (!lista.length) return '<div class="list"><div class="empty">' + (st.busca.trim() ? "Nada encontrado com essa busca." : "Nenhuma demanda nesta situação.") + "</div></div>";
+    const mostrarSit = !!st.busca.trim() || st.aba === "todas";
     let h = '<div class="list' + (gestor ? " gestor" : "") + '" role="list">';
-    h += '<div class="row headrow" aria-hidden="true"><span>Código · prioridade</span><span>Natureza / local</span>' + (gestor ? "<span>Fração</span>" : "") +
-      '<span>Anotação do pelotão</span><span>Envio · venc.</span><span>Prazo · recados</span></div>';
+    h += '<div class="row headrow" aria-hidden="true"><span>Protocolo · ID</span><span>Natureza / local</span>' + (gestor ? "<span>Fração</span>" : "") +
+      '<span>Última anotação</span><span>Envio · venc.</span><span>Prazo · situação</span></div>';
     lista.forEach(function (d) {
-      const novo = naoLidos(d, gestor);
+      const novo = notasNovas(d), ua = ultimaAnot(d), s = situacao(d);
       h += '<button type="button" class="row' + (novo ? " unread" : "") + '" role="listitem" data-cod="' + esc(d.codigo) + '">' +
         '<span class="cell-main">' + codHtml(d.codigo) + '<span class="tipo' + (/\d/.test(d.tipo || "") ? " tipo-id" : "") + '">' + esc(d.tipo) + "</span>" + prioTag(d) + "</span>" +
         '<span class="cell-main c-nat"><b>' + esc(d.natureza) + '</b><span class="cell-sub">' + esc(d.municipio) + '</span><span class="cell-sub">' + esc(d.endereco) + "</span></span>" +
         (gestor ? '<span class="cell-main c-fra"><span class="fra-name">' + esc(d.fracao) + "</span></span>" : "") +
-        '<span class="cell-main c-anot">' + (d.anotacao ? '<span class="anot">' + ICO.note + "<span>" + esc(d.anotacao) + "</span></span>" : '<span class="anot-vazia">—</span>') + "</span>" +
+        '<span class="cell-main c-anot">' + (ua ? '<span class="anot">' + ICO.msg + "<span>" + esc(ua) + "</span></span>" : '<span class="anot-vazia">—</span>') + "</span>" +
         '<span class="dates c-dates num"><span>' + br(d.envio) + "</span> · " + br(d.venc) + "</span>" +
-        '<span class="c-status">' + pillFor(d) + (gestor ? semadHtml(d) : "") + recBadge(d, gestor) + (novo ? '<span class="novo">NOVO</span>' : "") + "</span></button>";
+        '<span class="c-status">' + (mostrarSit || s === "devolvida" ? sitTag(d) : "") + pillFor(d) + marcasHtml(d) + "</span></button>";
     });
     return h + "</div>";
   }
 
-  function kpi(f, tone, label, v, foot) {
-    return '<button type="button" class="kpi" data-tone="' + tone + '" data-f="' + f + '" aria-pressed="' + (st.filtro === f) + '">' +
+  function kpi(alvo, tone, label, v, foot) {
+    const p = alvo.split(":"), on = !st.busca.trim() && st.aba === p[0] && st.chip === (p[1] || "");
+    return '<button type="button" class="kpi" data-tone="' + tone + '" data-kpi="' + alvo + '" aria-pressed="' + on + '">' +
       '<span class="kpi-label">' + label + '</span><span class="kpi-value">' + v + '</span><span class="kpi-foot">' + foot + "</span></button>";
   }
 
-  /** Faixa de destaque: recados/avisos aguardando o ciente do comando da fração (ou respostas novas, para o gestor). */
-  function bannerHtml(gestor) {
-    const lista = escopo();
-    if (gestor) {
-      const n = lista.reduce((t, d) => t + (encerrada(d) ? 0 : d.recados.filter(r => !r.lidoGestor).length), 0);
-      if (!n) return "";
-      return '<section class="banner" role="status">' + ICO.bell + "<div><b>Novidades das frações</b><span>" + n +
-        " resposta(s) nova(s). Ao abrir a demanda, a resposta é marcada como lida.</span></div>" +
-        '<button type="button" class="btn primary" data-etapa="andamento" data-p="novos">Ver agora</button></section>';
-    }
-    const recs = lista.reduce((t, d) => t + abertos(d), 0);
-    const prios = lista.reduce((t, d) => t + d.avisos.filter(a => !a.ciente).length, 0);
-    if (!recs && !prios) return "";
-    const partes = [];
-    if (recs) partes.push(recs + " recado(s)");
-    if (prios) partes.push(prios + " alteração(ões) de prioridade");
-    return '<section class="banner" role="status">' + ICO.bell + "<div><b>" + (souComando() ? "Aguardando o seu ciente" : "Aguardando ciente do comando da fração") + "</b><span>" +
-      partes.join(" e ") + " do comando. " + (souComando()
-        ? "Abra cada demanda, leia e dê o ciente ou responda. O destaque só sai depois disso."
-        : "Todos podem ler; o ciente é dado pelo Comandante ou Subcomandante Fração.") + "</span></div>" +
-      '<button type="button" class="btn primary" data-f="novos">Ver agora</button></section>';
-  }
-
   function telaFracao() {
-    const minhas = DEMANDAS.filter(d => d.fracao === st.fracao);
-    const c = contagens(minhas);
-    const lista = filtrar(minhas);
+    const minhas = escopo(), n = s => minhas.filter(d => situacao(d) === s).length;
+    const pend = minhas.filter(d => !atendEf(d));
+    const dev = n("devolvida");
     app.innerHTML = abasHtml() +
       '<section class="head"><div><div class="eyebrow">Minhas demandas · prazo de ' + PRAZO + ' dias a partir do envio</div><h1>' + esc(st.fracao) + '</h1></div>' +
-      '<p class="head-note">' + (souComando() ? "Você entrou como <b>" + esc(st.usuario.nome) + ", " + PAPEIS[st.usuario.papel].nome + "</b>: além de operar, dá o ciente e responde aos recados do comando." : "Você entrou pela <b>conta da fração</b>: registre atendimentos e anotações. Os recados da 1ª Cia são respondidos pelo Comandante ou Subcomandante Fração.") + "</p></section>" +
+      '<p class="head-note">Registre o atendimento e use as <b>anotações</b> de cada demanda para falar com o Cmt Pelotão e o Gestor Sistema. Todos da fração veem e podem responder.</p></section>' +
       '<section class="kpis k5" aria-label="Resumo">' +
-      kpi("atraso", "late", "Em atraso", c.atraso, "passaram do vencimento") +
-      kpi("breve", "warn", "Vencem em 10 dias", c.breve, "atenção à agenda") +
-      kpi("pendentes", "info", "Pendentes", c.pendentes, c.prioridade + " prioritária(s)") +
-      kpi("recado", "accent", "Recados e Anotações", c.recado, c.recado ? (souComando() ? "aguardando o seu ciente" : "aguardando ciente do Cmt/SubCmt Fração") : "nenhum pendente") +
-      kpi("atendidas", "ok", "Atendidas", c.atendidas, c.comAtraso + " com atraso") +
+      kpi("pendentes:vencidas", "late", "Em atraso", pend.filter(d => status(d) === "EM ATRASO").length, "pendentes que passaram do vencimento") +
+      kpi("pendentes:breve", "warn", "Vencem em 10 dias", pend.filter(venceLogo).length, "atenção à agenda") +
+      kpi("pendentes", "info", "Pendentes", n("pendente"), pend.filter(prioritaria).length + " prioritária(s)") +
+      kpi("devolvidas", dev ? "late" : "accent", "Devolvidas", dev, dev ? "corrija o atendimento" : "nenhuma") +
+      kpi("respondidas", "ok", "Respondidas", n("respondida"), n("arquivada") + " já arquivada(s)") +
       "</section>" +
-      bannerHtml(false) +
-      '<section class="toolbar">' + chipsHtml(c, false) + searchHtml() + "</section>" +
-      listHtml(lista, false);
+      (dev ? '<section class="banner" role="status">' + ICO.bell + "<div><b>" + (dev === 1 ? "1 demanda devolvida" : dev + " demandas devolvidas") + " pelo Gestor Sistema</b><span>Abra, leia o motivo nas anotações, corrija o atendimento e salve. A demanda volta para o Gestor.</span></div>" +
+        '<button type="button" class="btn primary" data-kpi="devolvidas">Ver agora</button></section>' : "") +
+      filtrosHtml() + listHtml(listaFiltrada(), false);
   }
 
   function telaGestor() {
     const TODAS = demandasGestao(), pelot = st.perfil === "pelotao";
-    const c = contagens(TODAS);
-    const eff = c.total ? Math.round((c.atendidas / c.total) * 1000) / 10 : 0;
-
-    const linhas = fracoesGestao().map(function (f) {
-      const l = TODAS.filter(d => d.fracao === f[0]);
-      const k = contagens(l);
-      return { nome: f[0], k: k, e: k.total ? (k.atendidas / k.total) : 0 };
-    });
-    const tbl = '<div class="tbl-wrap"><table><thead><tr><th>Fração</th><th class="r">Total</th><th class="r">Em atraso</th><th class="r">Recados</th><th class="r">Atendidas</th><th>Eficiência</th></tr></thead><tbody>' +
+    const at = TODAS.filter(d => atendEf(d)).length;
+    const eff = TODAS.length ? Math.round((at / TODAS.length) * 1000) / 10 : 0;
+    const cont = function (l) {
+      const c = { total: l.length, pend: 0, atraso: 0, dev: 0, resp: 0, at: 0 };
+      l.forEach(function (d) { const s = situacao(d); if (s === "pendente") c.pend++; if (s === "devolvida") c.dev++; if (s === "respondida") c.resp++; if (status(d) === "EM ATRASO") c.atraso++; if (atendEf(d)) c.at++; });
+      return c;
+    };
+    const linhas = fracoesGestao().map(function (f) { const k = cont(TODAS.filter(d => d.fracao === f[0])); return { nome: f[0], k: k, e: k.total ? k.at / k.total : 0 }; });
+    const tbl = '<div class="tbl-wrap"><table><thead><tr><th>Fração</th><th class="r">Total</th><th class="r">Pendentes</th><th class="r">Em atraso</th><th class="r">Devolvidas</th><th class="r">Respondidas</th><th>Eficiência</th></tr></thead><tbody>' +
       linhas.map(function (r) {
-        const pct = Math.round(r.e * 1000) / 10;
-        const cls = r.e < 0.6 ? "low" : (r.e < 0.75 ? "mid" : "");
+        const pct = Math.round(r.e * 1000) / 10, cls = r.e < 0.6 ? "low" : (r.e < 0.75 ? "mid" : "");
         return '<tr class="fr' + (st.gFracao === r.nome ? " sel" : "") + '" data-fr="' + esc(r.nome) + '" tabindex="0"><td>' + esc(r.nome) + '</td><td class="r">' + r.k.total +
-          '</td><td class="r ' + (r.k.atraso ? "late-n" : "") + '">' + r.k.atraso + '</td><td class="r">' + (r.k.recado + r.k.conferir || "—") + '</td><td class="r">' + r.k.atendidas +
+          '</td><td class="r">' + r.k.pend + '</td><td class="r ' + (r.k.atraso ? "late-n" : "") + '">' + r.k.atraso + '</td><td class="r">' + (r.k.dev || "—") + '</td><td class="r">' + r.k.resp +
           '</td><td><div class="eff"><div class="eff-bar"><i class="' + cls + '" style="width:' + pct + '%"></i></div><span class="num">' + pct.toFixed(1).replace(".", ",") + "%</span></div></td></tr>";
       }).join("") + "</tbody></table></div>";
-
-    const vivas = TODAS;
-    const nP = k => vivas.filter(PONTOS[k][1]).length;
-    const acoes = [
-      ["andamento", "conferir", "info", "Respostas para conferir", "resposta(s) da fração aguardando a sua conferência."],
-      ["andamento", "questionamento", "warn", "Aguardando resposta do questionamento", "demanda(s) com recado enviado e ainda sem ciente ou resposta da fração."],
-      ["andamento", "semciente", "late", "Sem ciente há mais de 2 dias", "demanda(s) com questionamento parado no comando da fração."],
-      ["semad", "inconsist", "late", "Inconsistências a corrigir", "atendimento(s) com REDS, GAIA ou resultado faltando ou suspeito, ainda não respondidos à SEMAD."],
-      ["semad", "pronta", "ok", "Prontas para responder à SEMAD", "demanda(s) atendida(s), sem pendência com a fração."]
-    ].filter(a => !(pelot && a[1] === "pronta")).map(function (a) {
-      const n = nP(a[1]);
-      return '<button type="button" class="alert alert-btn' + (n ? "" : " zero") + '" data-tone="' + a[2] + '" data-etapa="' + a[0] + '" data-p="' + a[1] + '"><b>' + a[3] + ' <span class="alert-n">' + n + "</span></b><p>" + (n ? a[4] : "Nada pendente.") + "</p></button>";
-    }).join("");
-    const alerts = acoes + (pelot ? [] : PENDENCIAS).map(function (p) {
-      return '<div class="alert" data-tone="' + p.tone + '"><b>' + esc(p.titulo) + "</b><p>" + esc(p.texto) + "</p></div>";
-    }).join("");
-
-    const base = st.gFracao ? TODAS.filter(d => d.fracao === st.gFracao) : TODAS;
-
+    const pend = pelot ? [] : PENDENCIAS;
+    const c = cont(TODAS);
     app.innerHTML = abasHtml() +
       '<section class="head"><div><div class="eyebrow">' + (pelot ? "Comando do pelotão · " + esc(st.usuario.nome) : "Gestão · todas as frações") + "</div><h1>" + (pelot ? pelNome(st.usuario.pelotao) : "1ª Companhia") + "</h1></div>" +
-      '<p class="head-note">Clique em uma fração para ver só as demandas dela. Abra uma demanda para definir prioridade, quem vai atender ou enviar um recado à fração.' + (pelot ? " A resposta à SEMAD continua com o Gestor Sistema." : "") + "</p></section>" +
-      '<section class="kpis k5" aria-label="Resumo da companhia">' +
-      '<div class="kpi" data-tone="accent"><span class="kpi-label">Recebidas</span><span class="kpi-value">' + c.total + '</span><span class="kpi-foot">últimos 6 meses</span></div>' +
-      '<div class="kpi" data-tone="ok"><span class="kpi-label">Atendidas no prazo</span><span class="kpi-value">' + c.noPrazoAt + '</span><span class="kpi-foot">até o vencimento</span></div>' +
-      '<div class="kpi" data-tone="warn"><span class="kpi-label">Atendidas com atraso</span><span class="kpi-value">' + c.comAtraso + '</span><span class="kpi-foot">após o vencimento</span></div>' +
+      '<p class="head-note">Clique numa fração para ver só as demandas dela. Abra uma demanda para anotar, definir a prioridade ou registrar o atendimento.' + (pelot ? " Arquivar após a resposta à SEMAD e devolver à fração são do Gestor Sistema." : "") + "</p></section>" +
+      '<section class="kpis k5" aria-label="Resumo">' +
+      '<div class="kpi" data-tone="accent"><span class="kpi-label">Recebidas</span><span class="kpi-value">' + c.total + '</span><span class="kpi-foot">na base</span></div>' +
+      '<div class="kpi" data-tone="info"><span class="kpi-label">Pendentes</span><span class="kpi-value">' + c.pend + '</span><span class="kpi-foot">' + c.dev + " devolvida(s)</span></div>" +
       '<div class="kpi" data-tone="late"><span class="kpi-label">Em atraso</span><span class="kpi-value">' + c.atraso + '</span><span class="kpi-foot">sem atendimento</span></div>' +
+      '<div class="kpi" data-tone="ok"><span class="kpi-label">Respondidas</span><span class="kpi-value">' + c.resp + '</span><span class="kpi-foot">a responder à SEMAD</span></div>' +
       '<div class="kpi" data-tone="info"><span class="kpi-label">Eficiência</span><span class="kpi-value">' + String(eff).replace(".", ",") + '%</span><span class="kpi-foot">atendidas ÷ recebidas</span></div>' +
       "</section>" +
-      '<section class="grid2"><div class="panel"><div class="panel-head"><h2>Por fração</h2><p>' + (st.gFracao ? 'Filtrando: <b>' + esc(st.gFracao) + '</b> · <button type="button" class="link-btn" id="limpa-fr" style="color:var(--accent)">ver todas</button>' : "ordem do organograma") + "</p></div>" + tbl + "</div>" +
-      '<div class="panel"><div class="panel-head"><h2>Precisa de atenção</h2><p>só demandas ainda não respondidas à SEMAD</p></div><div class="alerts">' + alerts + "</div></div></section>" +
-      bannerHtml(true) +
-      (st.verExcluidas && ehSistema() ? excluidasHtml() : gestorFiltrosHtml(base) + listHtml(filtrarGestor(base), true));
+      '<section class="' + (pend.length ? "grid2" : "") + '"><div class="panel"><div class="panel-head"><h2>Por fração</h2><p>' + (st.gFracao ? 'Filtrando: <b>' + esc(st.gFracao) + '</b> · <button type="button" class="link-btn" id="limpa-fr" style="color:var(--accent)">ver todas</button>' : "ordem do organograma") + "</p></div>" + tbl + "</div>" +
+      (pend.length ? '<div class="panel"><div class="panel-head"><h2>Entrada da SEMAD</h2><p>linhas que não entraram sozinhas</p></div><div class="alerts">' +
+        pend.map(p => '<div class="alert" data-tone="' + p.tone + '"><b>' + esc(p.titulo) + "</b><p>" + esc(p.texto) + "</p></div>").join("") + "</div></div>" : "") + "</section>" +
+      (st.verExcluidas && ehSistema() ? excluidasHtml() : filtrosHtml() + listHtml(listaFiltrada(), true));
   }
 
   function render() {
@@ -1434,10 +1413,11 @@ button.pdf:hover { text-decoration-thickness: 2px; }
     const foco = document.activeElement && document.activeElement.id === "busca";
     if (st.tela === "usuarios" && st.perfil === "gestor") telaUsuarios(); else if (st.tela === "dash") telaDash(); else if (st.perfil === "fracao") telaFracao(); else telaGestor();
     atualizarSino();
-    if (foco) { const b = document.getElementById("busca"); b.focus(); b.setSelectionRange(b.value.length, b.value.length); }
+    if (foco) { const b = document.getElementById("busca"); if (b) { b.focus(); b.setSelectionRange(b.value.length, b.value.length); } }
   }
 
-  /* ================= gaveta ================= */
+  /* ================= gaveta (modal da demanda) =================
+     Cabeçalho · Dados da denúncia · Anotações (com prioridade) · Atendimento · Administração (só Gestor Sistema) · Histórico */
   function fato(t, v, wide) { return '<div class="' + (wide ? "wide" : "") + '"><dt>' + t + "</dt><dd>" + v + "</dd></div>"; }
   function campo(id, label, ctrl, hint, extraCls) {
     return '<div class="field' + (extraCls ? " " + extraCls : "") + '" id="w-' + id + '"><label for="' + id + '">' + label + "</label>" + ctrl +
@@ -1449,346 +1429,225 @@ button.pdf:hover { text-decoration-thickness: 2px; }
     if (e) { e.hidden = !msg; e.textContent = msg || ""; }
     return !msg;
   }
-  function statusRec(r, gestor) {
-    if (r.status === "ABERTO") return '<span class="pill warn">' + (gestor ? "Aguardando resposta" : souComando() ? "Aguardando o seu ciente" : "Aguardando ciente") + "</span>";
-    if (r.status === "RESPONDIDO") return '<span class="pill info">' + (gestor ? "Respondido — conferir" : "Enviado ao comando") + "</span>";
-    return '<span class="pill ok">Encerrado</span>';
-  }
-
-  function leituraHtml(r) {
-    let h = r.vistos.length
-      ? '<p class="rec-lido vis">Visualizado por ' + r.vistos.map(v => esc(v.quem) + " em " + br(v.em) + " às " + v.hora).join("; ") + "</p>"
-      : '<p class="rec-lido">Ainda não visualizado pela fração</p>';
-    if (r.status === "ABERTO") {
-      const dias = diff(HOJE, r.em);
-      h += '<p class="rec-lido ' + (dias > 2 ? "late" : "") + '">Sem ciente do comando da fração' + (dias ? " há " + dias + " dia(s)" : " (enviado hoje)") + "</p>";
-    } else if (r.respPor) {
-      h += '<p class="rec-lido ok">✓ ' + (r.tipo === "RECADO" ? "Ciente" : "Respondido") + " por " + esc(r.respPor) + " em " + br(r.respEm) + "</p>";
-    }
-    return h;
-  }
-
-  function recadoHtml(d, r, gestor) {
-    let h = '<article class="recado" data-st="' + r.status + '"><div class="rec-head"><b>' + TIPOS_REC[r.tipo] + "</b>" + statusRec(r, gestor) + "</div>" +
-      '<p class="rec-txt">' + esc(r.texto) + "</p>" +
-      (r.campos.length ? '<p class="rec-meta">Campos apontados: ' + r.campos.map(c => CAMPOS_COR[c]).join(", ") + "</p>" : "") +
-      '<p class="rec-meta">' + esc(r.de) + " · " + br(r.em) + "</p>" +
-      (gestor ? leituraHtml(r) : "");
-    if (r.resposta || r.respData) {
-      h += '<div class="rec-resp"><span class="rec-meta">' + (r.tipo === "RECADO" ? "Ciente" : "Resposta") + " de " + esc(r.respPor || "fração") + " · " + br(r.respEm) + "</span>" +
-        (r.respData ? "<p>Retorno ao local em " + br(r.respData) + "</p>" : "") + (r.resposta ? "<p>" + esc(r.resposta) + "</p>" : "") + "</div>";
-    }
-    const id = r.id;
-    if (!gestor && r.status === "ABERTO" && !souComando()) {
-      h += '<p class="rec-hint">' + ICO.warn + "Aguardando ciente do Comandante ou do Subcomandante da fração." +
-        (r.tipo === "CORRECAO" ? " Você já pode corrigir os dados no formulário de atendimento." : "") + "</p>";
-    }
-    if (!gestor && r.status === "ABERTO" && souComando()) {
-      h += '<div class="rec-form">' +
-        (r.tipo === "RETORNO" ? campo("r-data-" + id, "Data do retorno ao local", '<input id="r-data-' + id + '" type="date" min="' + d.envio + '" max="' + HOJE + '">', "") : "") +
-        (r.tipo === "CORRECAO" ? '<p class="rec-hint">' + ICO.warn + "Corrija o(s) campo(s) no formulário de atendimento abaixo, salve, e depois confirme aqui.</p>" : "") +
-        campo("r-txt-" + id, r.tipo === "RECADO" ? "Comentário (opcional)" : "Resposta ao comando", '<textarea id="r-txt-' + id + '" maxlength="500" rows="2"></textarea>', "") +
-        '<div class="actions"><button type="button" class="btn primary" data-act="responder" data-rec="' + id + '">' +
-        (r.tipo === "CORRECAO" ? "Dar ciente e informar correção" : r.tipo === "RETORNO" ? "Dar ciente e registrar retorno" : "Dar ciente") + "</button></div></div>";
-    }
-    if (gestor && r.status === "RESPONDIDO") {
-      h += '<div class="rec-form">' + campo("r-dev-" + id, "Motivo, se for devolver", '<textarea id="r-dev-' + id + '" maxlength="500" rows="2" placeholder="Ex.: o REDS continua errado; confira o ano."></textarea>', "") +
-        '<div class="actions"><button type="button" class="btn" data-act="devolver" data-rec="' + id + '">Devolver à fração</button>' +
-        '<button type="button" class="btn primary" data-act="encerrar" data-rec="' + id + '">Concluir</button></div></div>';
-    }
-    return h + "</article>";
-  }
-
   function histHtml(d) {
     if (REAL && !d.histOk) return '<li class="h-leitura"><div>Carregando o histórico…</div></li>';
-    return d.hist.slice().reverse().map(h => '<li class="' + (/^Leu |^Visualizou/.test(h.acao) ? "h-leitura" : /^Deu ciente/.test(h.acao) ? "h-ciente" : "") + '"><div>' + esc(h.acao) + '</div><div class="when">' + br(h.quando) + (h.hora ? " às " + h.hora : "") + " · " + esc(h.quem) + "</div></li>").join("");
+    return d.hist.slice().reverse().map(h => '<li class="' + (/^Leu |^Visualizou/.test(h.acao) ? "h-leitura" : "") + '"><div>' + esc(h.acao) + '</div><div class="when">' + br(h.quando) + (h.hora ? " às " + h.hora : "") + " · " + esc(h.quem) + "</div></li>").join("");
   }
+  function quando(dh) { return dh ? br(dh.slice(0, 10)) + (dh.length > 10 ? " às " + dh.slice(11, 16) : "") : ""; }
+  function tipoNome(d) {
+    const t = String(d.tipo || "");
+    if (!/\d/.test(t)) return esc(t);
+    return (/^DEN/i.test(t) ? "Denúncia · " : /^REQ/i.test(t) ? "Requisição · " : "") + esc(t);
+  }
+  const ICO_CHECK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>';
+  const ICO_ESCUDO = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6z"/></svg>';
+  const ICO_DEV = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 14 4 9l5-5"/><path d="M4 9h11a5 5 0 0 1 0 10h-3"/></svg>';
+  const ICO_DOC = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6"/></svg>';
+
+  function cardDados(d) {
+    const doc = REAL && !d.pdf ? '<span class="muted">PDF ainda não localizado na pasta</span>'
+      : (d.anexo === "pasta" ? '<button type="button" class="pdf link-btn" data-act="anexos" aria-expanded="false">' : '<button type="button" class="pdf link-btn" data-act="pdf">') +
+        '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6"/></svg>' + (d.anexo === "pasta" ? "Pasta da denúncia — ver arquivos" : "PDF da denúncia") + "</button>";
+    return '<section class="card" aria-labelledby="c-dados"><div class="card-h"><h3 class="card-t" id="c-dados">' + ICO_DOC + "Dados da denúncia</h3></div>" +
+      '<dl class="facts">' + fato("Natureza", esc(d.natureza)) + fato("Município", esc(d.municipio)) + fato("Endereço", esc(d.endereco || "—"), true) +
+      fato("Gerada em", br(d.gerada)) + fato("Enviada à fração", br(d.envio)) +
+      fato("Vencimento", br(d.venc) + ' <span class="fine">(envio + ' + PRAZO + " dias)</span>") + fato("Fração", esc(d.fracao)) +
+      fato("Documento", doc, true) + "</dl>" + '<div id="d-anexos" class="anexos" hidden></div></section>';
+  }
+
+  function cardAnotacoes(d) {
+    const gestor = ehGestao(), travada = !gestor && d.prioPor === "gestor";
+    const seg = '<div class="seg-prio" role="radiogroup" aria-label="Prioridade">' + PRIOS.map(function (p) {
+      return '<label class="sp sp-' + p.toLowerCase() + '"><input type="radio" name="prio" value="' + p + '"' + (d.prioridade === p ? " checked" : "") + (travada ? " disabled" : "") + "><span>" + p.charAt(0) + p.slice(1).toLowerCase() + "</span></label>";
+    }).join("") + "</div>";
+    const prioHint = travada ? "Definida pelo comando. Só o comando pode alterar." : d.prioPor === "gestor" ? "Definida pelo comando." : d.prioPor === "fracao" ? "Definida pela fração." : "Normal até alguém alterar.";
+    const notas = d.notas || [], porId = {};
+    notas.forEach(n => { porId[n.id] = n; });
+    let lista = "";
+    if (d.anotacao) lista += '<li class="an legado"><div class="nota-h"><b>Anotação da planilha antiga</b></div><p class="nota-t">' + esc(d.anotacao) + "</p></li>";
+    lista += notas.map(function (n) {
+      const nova = !!st.destaque[n.id], minha = notaMinha(n), q = n.respostaA && porId[n.respostaA];
+      const lado = n.lado === "fracao" ? "fracao" : n.gestor ? "gestor" : "gestao";
+      if (st.editNota === n.id) {
+        return '<li class="an editando" data-lado="' + lado + '"><div class="nota-h"><b>' + esc(n.autor) + "</b><span>editando</span></div>" +
+          campo("ne-txt", "Texto da anotação", '<textarea id="ne-txt" rows="3" maxlength="1000">' + esc(n.texto) + "</textarea>", "") +
+          '<div class="actions"><button type="button" class="btn sm" data-act="nt-ed-nao">Cancelar</button><button type="button" class="btn sm primary" data-act="nt-ed-sim" data-id="' + n.id + '">Salvar</button></div></li>';
+      }
+      return '<li class="an' + (nova ? " nova" : "") + '" data-lado="' + lado + '"><div class="nota-h"><b>' + esc(n.autor) + "</b><span>" + quando(n.em) + (n.editada ? ' · <i title="editada em ' + quando(n.editada) + '">editada</i>' : "") + "</span>" + (nova ? '<span class="nova-b">NOVA</span>' : "") + "</div>" +
+        (q ? '<p class="nota-q">Em resposta a ' + esc(q.autor.replace(/ \(.*$/, "")) + ": “" + esc(q.texto.length > 140 ? q.texto.slice(0, 139) + "…" : q.texto) + "”</p>" : n.respostaA ? '<p class="nota-q">Em resposta a uma anotação</p>' : "") +
+        '<p class="nota-t">' + esc(n.texto) + "</p>" +
+        '<div class="nota-a"><button type="button" class="link-btn" data-act="nt-resp" data-id="' + n.id + '">Responder</button>' + (minha ? '<button type="button" class="link-btn" data-act="nt-ed" data-id="' + n.id + '">Editar</button>' : "") + "</div></li>";
+    }).join("");
+    const resp = st.respA && porId[st.respA];
+    return '<section class="card" aria-labelledby="c-anot"><div class="card-h"><h3 class="card-t" id="c-anot">' + ICO.msg + "Anotações" + ((notas.length + (d.anotacao ? 1 : 0)) ? ' <span class="card-n">' + (notas.length + (d.anotacao ? 1 : 0)) + "</span>" : "") + "</h3></div>" +
+      '<div class="field prio-f"><span class="lbl">Prioridade</span>' + seg + '<span class="hint">' + prioHint + "</span></div>" +
+      (lista ? '<ol class="notas">' + lista + "</ol>" : '<p class="muted nota-vazia">Nenhuma anotação ainda. Use para combinar quem vai atender, avisar o comando ou tirar dúvidas.</p>') +
+      '<div class="nota-nova">' + (resp ? '<div class="resp-a"><span>Respondendo a <b>' + esc(resp.autor.replace(/ \(.*$/, "")) + "</b>: “" + esc(resp.texto.length > 90 ? resp.texto.slice(0, 89) + "…" : resp.texto) + '”</span><button type="button" class="link-btn" data-act="nt-resp-nao">cancelar</button></div>' : "") +
+      campo("nt-txt", resp ? "Sua resposta" : "Nova anotação", '<textarea id="nt-txt" rows="2" maxlength="1000" placeholder="Ex.: Sgt Valdiney e Sd Moura vão ao local na quinta.">' + esc(st.rascunho) + "</textarea>", "Todos desta demanda veem: fração, Cmt Pelotão e Gestor Sistema.") +
+      '<div class="actions"><button type="button" class="btn primary" data-act="nt-anotar">' + (resp ? "Responder" : "Anotar") + "</button></div></div></section>";
+  }
+
+  function cardAtendimento(d) {
+    const s = situacao(d), sistema = ehSistema();
+    const editando = s === "pendente" || s === "devolvida" || (s === "respondida" && st.editAt);
+    const conf = s !== "arquivada" ? conferencia(d) : [];
+    const confHtml = conf.length ? '<div class="conf-box">' + ICO.warn + "<div><b>Conferência automática</b>" + conf.map(p => "<span>" + esc(p.msg) + "</span>").join("") + (sistema && s === "respondida" ? '<span class="muted">Corrija pelo lápis ou devolva à fração (Administração).</span>' : "") + "</div></div>" : "";
+    const alt = (d.altMostrar || (ehGestao() && d.alterado)) && s === "respondida" ? '<p class="alt-nota">' + ICO.note + "Atendimento alterado pela fração em " + quando(d.altMostrar || d.alterado) + ". Veja o antes e o depois no histórico.</p>" : "";
+    const pill = s === "arquivada" ? '<span class="pill ok">Arquivada</span>' : s === "respondida" ? '<span class="pill ok">Respondida</span>' : s === "devolvida" ? '<span class="pill late">Devolvida — corrigir</span>' : '<span class="pill info">Aguardando registro</span>';
+    if (!editando) {
+      return '<section class="card" aria-labelledby="c-at"><div class="card-h"><h3 class="card-t" id="c-at">' + ICO_CHECK + "Atendimento</h3><div class=\"card-hr\">" + pill +
+        (s === "respondida" ? '<button type="button" class="btn sm" data-act="at-editar" aria-label="Editar atendimento">' + ICO.note + "Editar</button>" : "") + "</div></div>" +
+        '<dl class="facts">' + fato("Data do atendimento", br(d.atend)) + fato("Resultado", esc(d.resultado || "—")) +
+        fato("Nº GAIA", d.gaia ? '<span class="mono">' + esc(d.gaia) + "</span>" : "—", true) + fato("Nº REDS", d.reds ? '<span class="mono">' + esc(d.reds) + "</span>" : "—", true) +
+        fato("Observação", esc(d.obsFracao || "—"), true) + (d.legado ? fato("Origem", "Migrado da planilha antiga — os campos não passaram pela validação do SISDEN", true) : "") + "</dl>" +
+        alt + confHtml + (s === "arquivada" ? '<p class="lock">Demanda arquivada (respondida à SEMAD em ' + br(d.respSemadEm) + "). O atendimento não pode mais ser alterado.</p>" : "") + "</section>";
+    }
+    const optsRes = '<option value="">Selecione…</option>' + RESULTADOS.map(r => "<option" + (d.resultado === r ? " selected" : "") + ">" + esc(r) + "</option>").join("") +
+      (d.resultado && RESULTADOS.indexOf(d.resultado) < 0 ? "<option selected>" + esc(d.resultado) + "</option>" : "");
+    const brancoOk = sistema;
+    return '<form class="card at" id="f-at" novalidate aria-labelledby="c-at"><div class="card-h"><h3 class="card-t" id="c-at">' + ICO_CHECK + "Atendimento</h3><div class=\"card-hr\">" + pill + "</div></div>" +
+      (s === "respondida" ? '<p class="nota-gestor">Você está alterando um atendimento já respondido. O histórico guarda o valor antigo e o novo' + (ehFracaoPerfil() ? "; o Gestor Sistema vê a marca “atendimento alterado”." : ".") + "</p>" : "") +
+      (s === "devolvida" ? '<p class="nota-gestor">Corrija o que o Gestor Sistema apontou e salve: a demanda volta para Respondidas. Se estiver tudo certo, salve sem mudar.</p>' : "") +
+      '<div class="f2">' +
+      campo("at-data", "Data do atendimento", '<input id="at-data" type="date" min="' + d.envio + '" max="' + HOJE + '" value="' + d.atend + '">', "Entre " + br(d.envio) + " e hoje") +
+      campo("at-res", "Resultado", '<select id="at-res">' + optsRes + "</select>", "") + "</div>" +
+      campo("at-gaia", "Nº do GAIA", '<input id="at-gaia" class="mono" inputmode="numeric" placeholder="2026.10.01.362.0001234" value="' + esc(d.gaia) + '">', "Formato aaaa.mm.dd.nnn.nnnnnnn" + (brancoOk && !d.gaia ? " · pode ficar em branco (registro sem GAIA)" : "")) +
+      campo("at-reds", "Nº do REDS", '<input id="at-reds" class="mono" inputmode="numeric" placeholder="2026-012345678-001" value="' + esc(d.reds) + '">', "Formato aaaa-nnnnnnnnn-nnn" + (brancoOk && !d.reds ? " · pode ficar em branco (registro sem REDS)" : "")) +
+      campo("at-obs", "Observação", '<textarea id="at-obs" maxlength="500" placeholder="Ex.: proprietário notificado; retorno em 15 dias.">' + esc(d.obsFracao) + "</textarea>", '<span id="at-obs-n">' + (d.obsFracao || "").length + "</span>/500") +
+      confHtml +
+      '<div class="confirm" id="at-confirm" role="alertdialog" aria-labelledby="at-confirm-t" hidden><p id="at-confirm-t"><b>Ao salvar, a demanda sai de Pendentes e vai para Respondidas.</b> Deseja continuar?</p>' +
+      '<div class="actions"><button type="button" class="btn" data-act="conf-nao">Voltar</button><button type="button" class="btn primary" data-act="conf-sim" id="at-conf-sim">Sim, salvar</button></div></div>' +
+      '<div class="actions" id="at-acoes">' + (s === "respondida" ? '<button type="button" class="btn" data-act="at-cancelar">Cancelar</button>' : "") +
+      '<button type="submit" class="btn primary">' + (s === "devolvida" ? "Salvar e reenviar ao Gestor" : s === "respondida" ? "Salvar alteração" : "Salvar atendimento") + "</button></div></form>";
+  }
+  function ehFracaoPerfil() { return st.perfil === "fracao"; }
+
+  function cardAdmin(d) {
+    if (!ehSistema()) return "";
+    const s = situacao(d);
+    let semad;
+    if (s === "arquivada") semad = '<div class="adm"><div class="admh"><p class="admt">Resposta à SEMAD</p><button type="button" class="btn sm" data-act="adm-desarq">Desarquivar</button></div>' +
+      '<p class="hint">Respondida à SEMAD em ' + br(d.respSemadEm) + '. Desarquivar volta a demanda para Respondidas (a fração não é afetada).</p></div>';
+    else if (s === "respondida") semad = '<div class="adm"><div class="admh"><p class="admt">Resposta à SEMAD</p>' + (st.confArq ? "" : '<button type="button" class="btn sm ok-btn" data-act="adm-arq">Respondida à SEMAD · Arquivar</button>') + "</div>" +
+      (st.confArq ? '<div class="confirm" role="alertdialog" aria-labelledby="arq-t"><p id="arq-t"><b>Confirmar a resposta à SEMAD com a data de hoje (' + br(HOJE) + ")?</b> A demanda vai para Arquivadas.</p>" +
+        '<div class="actions"><button type="button" class="btn" data-act="adm-arq-nao">Cancelar</button><button type="button" class="btn primary" data-act="adm-arq-sim" id="arq-sim">Sim, arquivar</button></div></div>'
+        : '<p class="hint">Grava a data de hoje e a demanda vai para Arquivadas. Pede confirmação.</p>') + "</div>";
+    else semad = '<div class="adm"><p class="admt">Resposta à SEMAD</p><p class="hint">' + (s === "devolvida" ? "Aguardando a fração corrigir o atendimento devolvido." : "Disponível depois que o atendimento for registrado.") + "</p></div>";
+    const antigo = d.sitAnalista && d.sitAnalista !== "RESPONDIDA SEMAD" ? '<p class="hint">Situação na planilha antiga: ' + esc((SIT_ANALISTA.find(x => x[0] === d.sitAnalista) || [0, d.sitAnalista])[1]) + "</p>" : "";
+    const obsAn = d.obsAnalista ? '<p class="hint">Observação do analista: ' + esc(d.obsAnalista) + "</p>" : "";
+    let dev = "";
+    if (s === "respondida") {
+      dev = st.devolvendo
+        ? '<div class="adm adm-dev"><p class="admt">Devolver à fração</p>' +
+          campo("dev-mot", 'Motivo da devolução <span class="req">*</span>', '<textarea id="dev-mot" rows="3" maxlength="500" placeholder="Ex.: o ano do REDS está errado; confira o número no sistema e corrija."></textarea>', "") +
+          '<ul class="dev-lista"><li>A demanda volta para a fração (' + esc(d.fracao) + "), marcada como <b>Devolvida</b>.</li><li>Os dados lançados ficam no formulário, para a fração só corrigir.</li>" +
+          "<li>O motivo vira uma anotação sua, e a fração pode responder.</li><li>O prazo original continua valendo.</li></ul>" +
+          '<div class="actions"><button type="button" class="btn sm" data-act="adm-dev-nao">Cancelar</button><button type="button" class="btn sm warn-btn" data-act="adm-dev-sim">Devolver à fração</button></div></div>'
+        : '<div class="adm"><div class="admh"><p class="admt">Devolver à fração</p><button type="button" class="btn sm" data-act="adm-dev">' + ICO_DEV + "Devolver…</button></div><p class=\"hint\">Para a fração corrigir o atendimento. Exige o motivo.</p></div>";
+    }
+    const exc = '<div class="adm"><div class="admh"><p class="admt perigo-t">Excluir demanda</p>' + (st.excluindo ? "" : '<button type="button" class="btn sm danger-out" data-act="ex-abrir">Excluir…</button>') + "</div>" +
+      (st.excluindo ? '<div class="confirm perigo" role="alertdialog" aria-labelledby="ex-t"><p id="ex-t"><b>A demanda sai da lista, do dashboard e dos avisos.</b> Ela fica guardada em “Excluídas” e pode ser restaurada.</p>' +
+        campo("ex-motivo", "Motivo", '<select id="ex-motivo"><option value="">Selecione…</option>' + MOTIVOS_EXCLUSAO.map(m => "<option>" + m + "</option>").join("") + "</select>", "") +
+        campo("ex-detalhe", "Detalhe", '<input id="ex-detalhe" maxlength="300" placeholder="Ex.: Nova Lima é atendida pela 2ª Cia">', "Obrigatório em “Outro motivo”.") +
+        '<div class="actions"><button type="button" class="btn" data-act="ex-nao">Cancelar</button><button type="button" class="btn danger" data-act="ex-sim">Excluir demanda</button></div></div>'
+        : '<p class="hint">Quando a SEMAD envia por engano, por exemplo município de outra companhia.</p>') + "</div>";
+    return '<section class="card card-adm" aria-labelledby="c-adm"><div class="card-h"><h3 class="card-t" id="c-adm">' + ICO_ESCUDO + 'Administração</h3><span class="hint">Só o Gestor Sistema vê</span></div>' +
+      semad + antigo + obsAn + dev + exc + "</section>";
+  }
+
   function abrir(codigo, rolarPara, semDetalhe) {
     const d = DEMANDAS.find(x => x.codigo === codigo);
     if (!d) return;
-    if (!st.aberta || st.aberta.codigo !== codigo) st.editAt = false;
+    if (!st.aberta || st.aberta.codigo !== codigo) {
+      Object.assign(st, { editAt: false, confArq: false, devolvendo: false, excluindo: false, editNota: null, respA: null, rascunho: "", destaque: {} });
+      d.altMostrar = "";
+    }
     st.aberta = d;
-    const gestor = ehGestao(), sistema = ehSistema();
-    let leu = false;
-    d.recados.forEach(function (r) {
-      if (gestor && !r.lidoGestor) {
-        r.lidoGestor = true; leu = true;
-        d.hist.push({ quando: HOJE, hora: hora(), quem: quemSou(), acao: "Leu a resposta da fração (" + TIPOS_REC[r.tipo].toLowerCase() + ")" });
-      }
-      if (!gestor && r.status === "ABERTO") {
-        const eu = quemSou();
-        if (!r.vistos.some(v => v.quem === eu)) {
-          const v = { quem: eu, em: HOJE, hora: hora() };
-          r.vistos.push(v);
-          d.hist.push({ quando: HOJE, hora: v.hora, quem: eu, acao: "Visualizou o recado do comando (" + TIPOS_REC[r.tipo].toLowerCase() + ")" });
-        }
-      }
-    });
-    const avisosNovos = gestor ? [] : d.avisos.filter(a => !a.ciente);
-    if (leu) { const f = st.filtro; render(); st.filtro = f; }
-    const correcoesAbertas = {};
-    d.recados.forEach(r => { if (r.status === "ABERTO" && r.tipo === "CORRECAO") r.campos.forEach(c => { correcoesAbertas[c] = true; }); });
-    const marca = function (c) { return correcoesAbertas[c] ? "flag" : ""; };
-    const avisoCampo = '<span class="flag-note">O comando pediu correção deste campo</span>';
-
-    const blocoAvisos = avisosNovos.map(function (a) {
-      return '<div class="aviso-prio">' + ICO.flag + "<span>" + esc(a.texto) + " em " + br(a.em) + "</span>" +
-        (souComando() ? '<button type="button" class="btn sm" data-act="ciente-aviso" data-i="' + d.avisos.indexOf(a) + '">Dar ciente</button>'
-          : '<em class="aguarda">aguarda ciente do Cmt/SubCmt Fração</em>') + "</div>";
-    }).join("");
-
-    /* --- recados --- */
-    const recs = d.recados.slice().sort((a, b) => (a.status === "ENCERRADO") - (b.status === "ENCERRADO") || (a.em < b.em ? 1 : -1));
-    let blocoRec = "";
-    if (recs.length || gestor) {
-      blocoRec = '<section class="bloco"><p class="section-t">' + ICO.msg + (gestor ? "Recados para a fração" : "Recados e Anotações") + "</p>" +
-        (recs.length ? '<div class="recados">' + recs.map(r => recadoHtml(d, r, gestor)).join("") + "</div>" : "");
-      if (gestor && encerrada(d)) {
-        blocoRec += '<p class="lock">Demanda encerrada (respondida à SEMAD em ' + br(d.respSemadEm) + "). Para enviar um novo recado, altere antes a situação da resposta à SEMAD.</p>";
-      } else if (gestor) {
-        const nr = st.novoRec || { tipo: "RECADO", campos: [], texto: "" };
-        blocoRec += '<form class="at" id="f-rec" novalidate><p class="section-t" style="margin:0">Novo recado para ' + esc(d.fracao) + "</p>" +
-          campo("nr-tipo", "Tipo", '<select id="nr-tipo">' + Object.keys(TIPOS_REC).map(k => '<option value="' + k + '"' + (nr.tipo === k ? " selected" : "") + ">" + TIPOS_REC[k] + "</option>").join("") + "</select>", "") +
-          '<fieldset class="campos-cor" id="nr-campos"' + (nr.tipo === "CORRECAO" ? "" : " hidden") + '><legend>Campos a corrigir</legend>' +
-          Object.keys(CAMPOS_COR).map(k => '<label><input type="checkbox" value="' + k + '"' + (nr.campos.indexOf(k) >= 0 ? " checked" : "") + "> " + CAMPOS_COR[k] + "</label>").join("") +
-          '<span class="err" id="e-nr-campos" hidden></span></fieldset>' +
-          campo("nr-txt", "Mensagem", '<textarea id="nr-txt" maxlength="500" rows="3" placeholder="Ex.: retornar ao local e verificar se houve nova supressão.">' + esc(nr.texto) + "</textarea>", "A fração vê o recado em destaque e precisa responder.") +
-          '<div class="actions"><button type="submit" class="btn primary">Enviar à fração</button></div></form>';
-      }
-      blocoRec += "</section>";
-    }
-
-    /* --- planejamento: prioridade + anotação --- */
-    const travada = !gestor && d.prioPor === "gestor";
-    const anotEditavel = !gestor || st.perfil === "pelotao";
-    const segPrio = '<div class="seg-prio" role="radiogroup" aria-label="Prioridade">' + PRIOS.map(function (p) {
-      return '<label class="sp sp-' + p.toLowerCase() + '"><input type="radio" name="prio" value="' + p + '"' + (d.prioridade === p ? " checked" : "") + (travada ? " disabled" : "") + "><span>" + p.charAt(0) + p.slice(1).toLowerCase() + "</span></label>";
-    }).join("") + "</div>";
-    const blocoPlan = '<form class="at" id="f-plan" novalidate><p class="section-t" style="margin:0">' + ICO.flag + "Prioridade e anotação</p>" +
-      '<div class="field"><span class="lbl">Prioridade</span>' + segPrio +
-      '<span class="hint">' + (travada ? "Definida pelo comando (1ª Cia ou Cmt Pelotão). Só o comando pode alterar." : (d.prioPor === "gestor" ? "Definida pelo comando." : d.prioPor === "fracao" ? "Definida pela fração." : "Normal até alguém alterar.")) + "</span></div>" +
-      (!anotEditavel
-        ? '<div class="field"><span class="lbl">Anotação do pelotão</span><p class="anot-ro">' + (d.anotacao ? esc(d.anotacao) : "Sem anotação.") + "</p></div>"
-        : campo("pl-anot", "Anotação do pelotão", '<input id="pl-anot" maxlength="120" placeholder="Ex.: Sgt Fulano — vistoria na quinta" value="' + esc(d.anotacao) + '">', (st.perfil === "pelotao" ? "Quem vai atender ou outra orientação do Cmt Pelotão. A fração e o gestor veem." : "Quem vai atender, quem está com a denúncia ou outra informação interna. O Cmt Pelotão e o gestor também veem."))) +
-      '<div class="actions"><button type="submit" class="btn primary">Salvar</button></div></form>';
-
-    /* --- atendimento --- */
-    let blocoAt;
-    const editaGestor = sistema && st.editAt;
-    if (gestor && !editaGestor) {
-      const conf = conferencia(d);
-      blocoAt = '<section class="bloco"><div class="sec-head"><p class="section-t" style="margin:0">Atendimento (preenchido pela fração)</p>' +
-        (sistema ? '<button type="button" class="btn sm" data-act="at-editar">' + ICO.note + (d.atend ? "Corrigir dados" : "Registrar pela fração") + "</button>" : "") + '</div><dl class="facts">' +
-        fato("Data do atendimento", br(d.atend)) + fato("Resultado", esc(d.resultado || "—")) +
-        fato("Nº GAIA", d.gaia ? '<span class="mono">' + esc(d.gaia) + "</span>" : "—", true) +
-        fato("Nº REDS", d.reds ? '<span class="mono">' + esc(d.reds) + "</span>" : "—", true) +
-        fato("Observação da fração", esc(d.obsFracao || "—"), true) +
-        (d.legado ? fato("Origem", "Migrado da planilha antiga — os campos não passaram pela validação do SISDEN", true) : "") + "</dl>" +
-        (encerrada(d) ? '<div class="conf"><p class="section-t" style="margin:0">Conferência automática</p><p class="conf-ok">Não se aplica: a demanda já foi respondida à SEMAD.</p></div>' :
-        d.atend ? '<div class="conf"><p class="section-t" style="margin:0">Conferência automática</p>' +
-          (conf.length
-            ? conf.map(p => '<div class="conf-item">' + ICO.warn + "<span>" + esc(p.msg) + '</span><button type="button" class="btn sm" data-act="pedir" data-campo="' + p.campo + '" data-msg="' + esc(p.msg) + '">Pedir correção</button></div>').join("")
-            : '<p class="conf-ok">Nenhuma inconsistência encontrada nos números.</p>') + "</div>" : "") +
-        "</section>";
-    } else {
-      const optsRes = '<option value="">Selecione…</option>' + RESULTADOS.map(r => "<option" + (d.resultado === r ? " selected" : "") + ">" + esc(r) + "</option>").join("") +
-        (d.resultado && RESULTADOS.indexOf(d.resultado) < 0 ? "<option selected>" + esc(d.resultado) + "</option>" : "");
-      blocoAt = '<form class="at' + (editaGestor ? " at-gestor" : "") + '" id="f-at" novalidate><p class="section-t" style="margin:0">' + (editaGestor ? (d.atend ? "Corrigir atendimento — Gestor Sistema" : "Registrar atendimento pela fração — Gestor Sistema") : d.atend ? "Atendimento registrado" : "Registrar atendimento") + "</p>" +
-        (editaGestor ? '<p class="nota-gestor">A correção fica no histórico com o seu nome e o valor anterior. Recados de correção já resolvidos por ela são encerrados.</p>' : "") +
-        '<div class="f2">' +
-        campo("at-data", "Data do atendimento", '<input id="at-data" type="date" min="' + d.envio + '" max="' + HOJE + '" value="' + d.atend + '">', "Entre " + br(d.envio) + " e hoje" + (marca("atend") ? " · " + avisoCampo : ""), marca("atend")) +
-        campo("at-res", "Resultado", '<select id="at-res">' + optsRes + "</select>", marca("resultado") ? avisoCampo : "", marca("resultado")) +
-        "</div>" +
-        campo("at-gaia", "Nº do GAIA", '<input id="at-gaia" class="mono" inputmode="numeric" placeholder="2026.10.01.362.0001234" value="' + esc(d.gaia) + '">', "Formato aaaa.mm.dd.nnn.nnnnnnn" + (editaGestor && !d.gaia ? " · pode ficar em branco (registro sem GAIA)" : "") + (marca("gaia") ? " · " + avisoCampo : ""), marca("gaia")) +
-        campo("at-reds", "Nº do REDS", '<input id="at-reds" class="mono" inputmode="numeric" placeholder="2026-012345678-001" value="' + esc(d.reds) + '">', "Formato aaaa-nnnnnnnnn-nnn" + (editaGestor && !d.reds ? " · pode ficar em branco (registro sem REDS)" : "") + (marca("reds") ? " · " + avisoCampo : ""), marca("reds")) +
-        campo("at-obs", "Observação da fração", '<textarea id="at-obs" maxlength="500" placeholder="Ex.: proprietário notificado; retorno em 15 dias.">' + esc(d.obsFracao) + "</textarea>", '<span id="at-obs-n">' + d.obsFracao.length + "</span>/500") +
-        '<div class="confirm" id="at-confirm" role="alertdialog" aria-labelledby="at-confirm-t" hidden><p id="at-confirm-t"><b>Ao salvar o atendimento, a demanda será encerrada e sairá da fila de atendimentos.</b> Deseja continuar?</p>' +
-        '<div class="actions"><button type="button" class="btn" data-act="conf-nao">Voltar</button><button type="button" class="btn primary" data-act="conf-sim" id="at-conf-sim">Sim, salvar e encerrar</button></div></div>' +
-        (editaGestor ? '<div class="actions" id="at-acoes"><button type="button" class="btn" data-act="at-cancelar">Cancelar</button><button type="submit" class="btn primary">Salvar correção</button></div></form>'
-          : '<div class="actions" id="at-acoes"><button type="button" class="btn" data-close>Fechar</button><button type="submit" class="btn primary">Salvar atendimento</button></div></form>');
-    }
-
-    /* --- resposta à SEMAD (analista) --- */
-    const optsSit = '<option value="">A responder</option>' + SIT_ANALISTA.map(r => '<option value="' + r[0] + '"' + (d.sitAnalista === r[0] ? " selected" : "") + ">" + r[1] + "</option>").join("");
-    const blocoAn = !gestor ? "" : !sistema ? (!d.atend ? "" : '<section class="bloco"><p class="section-t">Resposta à SEMAD</p><p class="lock">' +
-      (d.sitAnalista === "RESPONDIDA SEMAD" ? "Respondida à SEMAD em " + br(d.respSemadEm) + "." : d.sitAnalista ? (SIT_ANALISTA.find(x => x[0] === d.sitAnalista) || [0, d.sitAnalista])[1] + "." : "Ainda não respondida.") +
-      " Quem registra a resposta é o Gestor Sistema.</p></section>") : (!d.atend
-      ? '<section class="bloco"><p class="section-t">Resposta à SEMAD</p><p class="lock">Disponível depois que a fração registrar o atendimento.</p></section>'
-      : '<form class="at" id="f-an" novalidate><p class="section-t" style="margin:0">Resposta à SEMAD</p>' +
-        '<div class="f2">' + campo("an-sit", "Situação", '<select id="an-sit">' + optsSit + "</select>", "") +
-        campo("an-data", "Data da resposta", '<input id="an-data" type="date" min="' + d.atend + '" max="' + HOJE + '" value="' + d.respSemadEm + '"' + (d.sitAnalista === "RESPONDIDA SEMAD" ? "" : " disabled") + ">", "Obrigatória quando respondida") + "</div>" +
-        campo("an-obs", "Observação do analista", '<textarea id="an-obs" maxlength="500">' + esc(d.obsAnalista) + "</textarea>", "Uso interno da 1ª Cia. Para falar com a fração, use um recado.") +
-        '<div class="actions"><button type="submit" class="btn primary">Salvar</button></div></form>');
-
+    const s = situacao(d);
+    const tags = pillFor(d) + prioTag(d) + (s === "respondida" ? '<span class="pill info">SEMAD: a responder</span>' : s === "arquivada" ? '<span class="pill ok">Respondida à SEMAD em ' + br(d.respSemadEm) + "</span>" : s === "devolvida" ? '<span class="pill late">Devolvida</span>' : "");
+    const devBanner = s === "devolvida" && d.devolvida ? '<div class="dev-banner" role="status">' + ICO_DEV + "<div><b>Devolvida pelo Gestor Sistema em " + quando(d.devolvida.em) + "</b><span>" + esc(d.devolvida.motivo) + '</span><span class="hint">' +
+      (ehFracaoPerfil() || st.perfil === "pelotao" ? "Corrija no Atendimento abaixo e salve: a demanda volta para o Gestor." : "Aguardando a fração corrigir o atendimento.") + "</span></div></div>" : "";
+    const histAberto = drawer.querySelector("#d-histdet") && drawer.querySelector("#d-histdet").open && st.aberta === d;
     drawer.innerHTML =
-      '<div class="drawer-head"><div class="drawer-top"><div><div class="eyebrow">' + esc(d.tipo) + " · " + esc(d.fracao) + '</div><h2 class="drawer-title" id="d-title">' + esc(d.codigo) + '</h2></div><button type="button" class="x" data-close aria-label="Fechar">×</button></div>' +
-      '<div class="head-tags">' + pillFor(d) + prioTag(d) + (d.atend ? (d.sitAnalista === "RESPONDIDA SEMAD"
-        ? '<span class="pill ok">Respondida à SEMAD em ' + br(d.respSemadEm) + "</span>"
-        : '<span class="pill info">Aguardando resposta à SEMAD</span>') : "") + "</div></div>" +
-      '<div class="drawer-body" id="d-body">' +
-      blocoAvisos + blocoRec +
-      '<dl class="facts">' +
-      fato("Natureza", esc(d.natureza)) + fato("Município", esc(d.municipio)) +
-      fato("Endereço", esc(d.endereco), true) +
-      fato("Gerada em", br(d.gerada)) + fato("Enviada à fração", br(d.envio)) +
-      fato("Vencimento", br(d.venc) + ' <span class="fine">(envio + ' + PRAZO + " dias)</span>") +
-      fato("Documento", REAL && !d.pdf ? '<span class="muted">PDF ainda não localizado na pasta</span>' : (d.anexo === "pasta" ? '<button type="button" class="pdf link-btn" data-act="anexos" aria-expanded="false">' : '<button type="button" class="pdf link-btn" data-act="pdf">') + '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6"/></svg>' + (d.anexo === "pasta" ? "Pasta da denúncia — ver arquivos" : "PDF da denúncia") + '</button>') +
-      "</dl>" + '<div id="d-anexos" class="anexos" hidden></div>' + blocoPlan + blocoAt + blocoAn +
-      (sistema ? '<section class="bloco excluir"><p class="section-t">Excluir demanda</p>' +
-        (st.excluindo ? '<div class="confirm perigo" role="alertdialog" aria-labelledby="ex-t"><p id="ex-t"><b>A demanda sai da lista, do dashboard e dos alertas.</b> Ela fica guardada em “Demandas excluídas” e pode ser restaurada.</p>' +
-          campo("ex-motivo", "Motivo", '<select id="ex-motivo"><option value="">Selecione…</option>' + MOTIVOS_EXCLUSAO.map(m => "<option>" + m + "</option>").join("") + "</select>", "") +
-          campo("ex-detalhe", "Detalhe", '<input id="ex-detalhe" maxlength="300" placeholder="Ex.: Nova Lima é atendida pela 2ª Cia">', "Obrigatório em “Outro motivo”.") +
-          '<div class="actions"><button type="button" class="btn" data-act="ex-nao">Cancelar</button><button type="button" class="btn danger" data-act="ex-sim">Excluir demanda</button></div></div>'
-          : '<p class="lock">Use quando a SEMAD enviar uma demanda por engano, por exemplo de município de outra companhia.</p><div class="actions" style="justify-content:flex-start"><button type="button" class="btn danger-out" data-act="ex-abrir">Excluir demanda…</button></div>') +
-        "</section>" : "") +
-      '<section class="bloco"><p class="section-t">Histórico</p><ol class="timeline" id="d-hist">' + histHtml(d) + "</ol></section></div>";
+      '<div class="drawer-head"><div class="drawer-top"><div><div class="eyebrow">' + tipoNome(d) + " · " + esc(d.fracao) + '</div><h2 class="drawer-title" id="d-title">' + esc(d.codigo) + '</h2></div><button type="button" class="x" data-close aria-label="Fechar">×</button></div>' +
+      '<div class="head-tags">' + tags + "</div>" + devBanner + "</div>" +
+      '<div class="drawer-body" id="d-body">' + cardDados(d) + cardAnotacoes(d) + cardAtendimento(d) + cardAdmin(d) +
+      '<details class="card hist-det" id="d-histdet"' + (histAberto ? " open" : "") + '><summary class="card-t">Histórico</summary><ol class="timeline" id="d-hist">' + histHtml(d) + "</ol></details></div>";
 
     if (drawer.hidden) { drawer.hidden = false; scrim.hidden = false; drawer.querySelector(".x").focus(); }
-
     const fa = document.getElementById("f-at");
     if (fa) {
-      fa.addEventListener("submit", salvarFracao);
+      fa.addEventListener("submit", salvarAtendimento);
       document.getElementById("at-obs").addEventListener("input", e => { document.getElementById("at-obs-n").textContent = e.target.value.length; });
     }
-    document.getElementById("f-plan").addEventListener("submit", salvarPlano);
-    const fn = document.getElementById("f-an");
-    if (fn) {
-      fn.addEventListener("submit", salvarAnalista);
-      document.getElementById("an-sit").addEventListener("change", function (e) {
-        const dt = document.getElementById("an-data"), resp = e.target.value === "RESPONDIDA SEMAD";
-        dt.disabled = !resp; if (resp && !dt.value) dt.value = HOJE; if (!resp) dt.value = "";
-      });
-    }
-    const fr = document.getElementById("f-rec");
-    if (fr) {
-      fr.addEventListener("submit", enviarRecado);
-      document.getElementById("nr-tipo").addEventListener("change", e => { document.getElementById("nr-campos").hidden = e.target.value !== "CORRECAO"; });
-    }
+    const nt = document.getElementById("nt-txt");
+    if (nt) nt.addEventListener("input", e => { st.rascunho = e.target.value; });
+    drawer.querySelectorAll('input[name="prio"]').forEach(function (r) { r.addEventListener("change", salvarPrioridade); });
     if (rolarPara) { const el = document.getElementById(rolarPara); if (el) { el.scrollIntoView({ block: "center" }); el.focus(); } }
-    if (REAL && !semDetalhe) detalhe(d);
+    if (!semDetalhe) detalhe(d);
   }
 
-  function atualizar(msg) { const cod = st.aberta.codigo; render(); abrir(cod); toast(msg); }
+  function atualizar(msg) { const cod = st.aberta.codigo; render(); abrir(cod, null, true); if (msg) toast(msg); }
 
-  function salvarFracao(ev) {
+  function salvarAtendimento(ev) {
     ev.preventDefault();
-    const d = st.aberta;
+    const d = st.aberta, s = situacao(d);
     const data = document.getElementById("at-data").value;
     const res = document.getElementById("at-res").value;
     const gaia = document.getElementById("at-gaia").value.trim();
     const reds = document.getElementById("at-reds").value.trim();
     const obs = document.getElementById("at-obs").value.trim();
+    const sistema = ehSistema();
     let ok = true;
     ok = erro("at-data", !data ? "Informe a data em que a demanda foi atendida." :
       diff(data, d.envio) < 0 ? "A data não pode ser anterior ao envio à fração (" + br(d.envio) + ")." :
       diff(data, HOJE) > 0 ? "A data não pode ser futura." : "") && ok;
     ok = erro("at-res", res ? "" : "Escolha o resultado do atendimento.") && ok;
-    const pelaGestao = ehSistema();
-    ok = erro("at-gaia", !gaia ? (pelaGestao ? (d.gaia ? "O nº do GAIA não pode ser apagado." : "") : "O nº do GAIA é obrigatório para fechar o atendimento.") :
+    ok = erro("at-gaia", !gaia ? (d.gaia ? "O nº do GAIA não pode ser apagado." : sistema ? "" : "O nº do GAIA é obrigatório para fechar o atendimento.") :
       !/^\d{4}\.\d{2}\.\d{2}\.\d{3}\.\d{7}$/.test(gaia) ? "Confira o número: são 4.2.2.3.7 dígitos separados por ponto." : "") && ok;
-    ok = erro("at-reds", !reds ? (pelaGestao ? (d.reds ? "O nº do REDS não pode ser apagado." : "") : "O nº do REDS é obrigatório para fechar o atendimento.") :
+    ok = erro("at-reds", !reds ? (d.reds ? "O nº do REDS não pode ser apagado." : sistema ? "" : "O nº do REDS é obrigatório para fechar o atendimento.") :
       !/^\d{4}-\d{9}-\d{3}$/.test(reds) ? "Confira o número: aaaa-nnnnnnnnn-nnn (ex.: 2026-012345678-001)." :
       data && reds.slice(0, 4) !== data.slice(0, 4) ? "O ano do REDS (" + reds.slice(0, 4) + ") não confere com a data do atendimento." : "") && ok;
     ok = erro("at-obs", res.indexOf("OUTROS") === 0 && !obs ? "Descreva o resultado na observação." : "") && ok;
     if (!ok) { const b = drawer.querySelector(".field.bad input, .field.bad select, .field.bad textarea"); if (b) b.focus(); return; }
-
-    // Primeiro registro de atendimento encerra a demanda: pede confirmação na própria tela.
-    if (!d.atend && !st.atConfirmado && !pelaGestao) {
+    if (s === "pendente" && !st.atConfirmado && !sistema) {
       document.getElementById("at-confirm").hidden = false;
       document.getElementById("at-acoes").hidden = true;
       const b = document.getElementById("at-conf-sim"); b.scrollIntoView({ block: "center" }); b.focus();
       return;
     }
     st.atConfirmado = false;
-    if (REAL && pelaGestao) {
-      enviar("sisden.corrigirAtendimento", { codigo: d.codigo, versao: d.versao, atend: data, resultado: res, gaia: gaia, reds: reds, obs: obs },
-        r => { if (!r.nadaMudou) st.editAt = false; return r.nadaMudou ? "Nada mudou." : (r.novo ? "Atendimento registrado pelo Gestor Sistema." : "Correção salva.") + (r.fechados ? " " + r.fechados + " recado(s) de correção encerrado(s)." : ""); },
-        { atend: "at-data", resultado: "at-res", gaia: "at-gaia", reds: "at-reds", obs: "at-obs" });
-      return;
-    }
-    if (REAL) {
-      enviar("sisden.salvarAtendimento", { codigo: d.codigo, versao: d.versao, atend: data, resultado: res, gaia: gaia, reds: reds, obs: obs },
-        r => r.nadaMudou ? "Nada mudou." : (r.novo ? "Atendimento salvo." : "Correção salva.") + (r.correcoesAbertas ? " Agora confirme no recado do comando." : ""),
-        { atend: "at-data", resultado: "at-res", gaia: "at-gaia", reds: "at-reds", obs: "at-obs" });
-      return;
-    }
-
-    const mud = [];
-    if (d.atend !== data) mud.push("data " + br(data));
-    if (d.resultado !== res) mud.push("resultado");
-    if (d.gaia !== gaia) mud.push("GAIA");
-    if (d.reds !== reds) mud.push("REDS");
-    if (d.obsFracao !== obs) mud.push("observação");
-    if (!mud.length) { toast("Nada mudou."); return; }
-    const novo = !d.atend;
-    Object.assign(d, { atend: data, resultado: res, gaia: gaia, reds: reds, obsFracao: obs });
-    if (pelaGestao) {
-      st.editAt = false;
-      let fech = 0;
-      d.recados.forEach(function (r) { if (r.tipo === "CORRECAO" && r.status !== "ENCERRADO" && r.campos.length && r.campos.every(c => d[c] !== r.snap[c])) { r.status = "ENCERRADO"; r.encEm = HOJE; r.lidoGestor = true; fech++; } });
-      d.hist.push({ quando: HOJE, quem: quemSou(), hora: hora(), acao: (novo ? "Atendimento registrado pelo Gestor Sistema" : "Atendimento corrigido pelo Gestor Sistema") + " (" + mud.join(", ") + ")" });
-      atualizar((novo ? "Atendimento registrado pelo Gestor Sistema." : "Correção salva.") + (fech ? " " + fech + " recado(s) de correção encerrado(s)." : ""));
-      return;
-    }
-    d.hist.push({ quando: HOJE, quem: quemSou(), hora: hora(), acao: (novo ? "Atendimento registrado" : "Atendimento corrigido") + " (" + mud.join(", ") + ")" });
-    const pend = d.recados.some(r => r.status === "ABERTO" && r.tipo === "CORRECAO");
-    atualizar((novo ? "Atendimento salvo." : "Correção salva.") + (pend ? " Agora confirme no recado do comando." : ""));
+    enviar("sisden.salvarAtendimento", { codigo: d.codigo, versao: d.versao, atend: data, resultado: res, gaia: gaia, reds: reds, obs: obs },
+      function (r) {
+        if (r.nadaMudou) return "Nada mudou.";
+        st.editAt = false;
+        return r.voltou ? "Atendimento reenviado. A demanda voltou para o Gestor Sistema." : r.novo ? "Atendimento salvo. A demanda foi para Respondidas." : "Atendimento alterado.";
+      },
+      { atend: "at-data", resultado: "at-res", gaia: "at-gaia", reds: "at-reds", obs: "at-obs" });
   }
 
-  function salvarPlano(ev) {
-    ev.preventDefault();
-    const d = st.aberta, gestor = ehGestao();
-    const sel = drawer.querySelector('input[name="prio"]:checked');
-    const prio = sel ? sel.value : d.prioridade;
-    const anotEl = document.getElementById("pl-anot");
-    const anot = anotEl ? anotEl.value.trim() : d.anotacao;
-    if (REAL) {
-      enviar("sisden.salvarPlano", { codigo: d.codigo, versao: d.versao, prioridade: prio, anotacao: anotEl ? anot : undefined },
-        r => r.nadaMudou ? "Nada mudou." : "Prioridade e anotação salvas.", { anotacao: "pl-anot" });
-      return;
-    }
-    const mud = [];
-    if (prio !== d.prioridade && !(d.prioPor === "gestor" && !gestor)) {
-      mud.push("prioridade " + prio.toLowerCase());
-      d.prioridade = prio; d.prioPor = prio === "NORMAL" ? "" : (gestor ? "gestor" : "fracao");
-      if (gestor) d.avisos.push({ texto: "Prioridade alterada para " + prio + " por " + remetente(), em: HOJE, ciente: false, cientePor: "", cienteEm: "" });
-    }
-    if (anot !== d.anotacao) { mud.push("anotação"); d.anotacao = anot; if (st.perfil === "pelotao" && anot) d.avisos.push({ texto: "Anotação do Cmt Pelotão: “" + anot + "”", em: HOJE, ciente: false, cientePor: "", cienteEm: "" }); }
-    if (!mud.length) { toast("Nada mudou."); return; }
-    d.hist.push({ quando: HOJE, hora: hora(), quem: quemSou(), acao: "Alterou " + mud.join(" e ") + (anot && mud.indexOf("anotação") >= 0 ? ": “" + anot + "”" : "") });
-    atualizar("Prioridade e anotação salvas.");
+  function salvarPrioridade(ev) {
+    const d = st.aberta, prio = ev.target.value;
+    if (prio === d.prioridade) return;
+    enviar("sisden.salvarPlano", { codigo: d.codigo, versao: d.versao, prioridade: prio }, r => r.nadaMudou ? "Nada mudou." : "Prioridade: " + prio.toLowerCase() + ".");
   }
 
-  function salvarAnalista(ev) {
-    ev.preventDefault();
-    const d = st.aberta;
-    const sit = document.getElementById("an-sit").value, obs = document.getElementById("an-obs").value.trim();
-    const dt = sit === "RESPONDIDA SEMAD" ? document.getElementById("an-data").value : "";
-    if (sit === "RESPONDIDA SEMAD" && !erro("an-data", !dt ? "Informe a data em que a resposta foi enviada à SEMAD." :
-      diff(dt, d.atend) < 0 ? "A resposta não pode ser anterior ao atendimento (" + br(d.atend) + ")." :
-      diff(dt, HOJE) > 0 ? "A data não pode ser futura." : "")) return;
-    if (REAL) {
-      enviar("sisden.salvarSemad", { codigo: d.codigo, versao: d.versao, situacao: sit, data: dt, obs: obs },
-        r => r.nadaMudou ? "Nada mudou." : sit === "RESPONDIDA SEMAD" ? "Respondida à SEMAD. Demanda encerrada" + (r.fechados ? " e " + r.fechados + " recado(s) em curso fechado(s)." : ".") : "Situação salva.",
-        { data: "an-data", obs: "an-obs" });
-      return;
-    }
-    if (sit === d.sitAnalista && dt === d.respSemadEm && obs === d.obsAnalista) { toast("Nada mudou."); return; }
-    const label = (SIT_ANALISTA.find(s => s[0] === sit) || [sit, "a responder"])[1];
-    d.sitAnalista = sit; d.respSemadEm = dt; d.obsAnalista = obs;
-    d.hist.push({ quando: HOJE, hora: hora(), quem: quemSou(), acao: sit === "RESPONDIDA SEMAD" ? "Respondida à SEMAD em " + br(dt) : "Situação junto à SEMAD: " + label.toLowerCase() });
-    let fechados = 0;
-    if (sit === "RESPONDIDA SEMAD") {
-      d.recados.forEach(function (r) {
-        r.lidoGestor = true;
-        if (r.status !== "ENCERRADO") { r.status = "ENCERRADO"; r.encEm = HOJE; fechados++; }
-      });
-      d.avisos.forEach(function (a) { if (!a.ciente) { a.ciente = true; a.cientePor = "Encerrado com a demanda"; a.cienteEm = HOJE; } });
-      if (fechados) d.hist.push({ quando: HOJE, hora: hora(), quem: "Sistema", acao: fechados + " recado(s) em curso encerrado(s) automaticamente ao responder à SEMAD" });
-    }
-    atualizar(sit === "RESPONDIDA SEMAD" ? "Respondida à SEMAD. Demanda encerrada" + (fechados ? " e " + fechados + " recado(s) em curso fechado(s)." : ".") : "Situação salva.");
+  function anotar() {
+    const d = st.aberta, el = document.getElementById("nt-txt"), txt = (el ? el.value : "").trim();
+    if (!erro("nt-txt", !txt ? "Escreva a anotação." : txt.length > 1000 ? "Máximo de 1000 caracteres." : "")) { if (el) el.focus(); return; }
+    const resp = st.respA;
+    enviar("sisden.anotar", { codigo: d.codigo, texto: txt, respostaA: resp || "" }, function () { st.rascunho = ""; st.respA = null; return resp ? "Resposta registrada." : "Anotação registrada."; }, { texto: "nt-txt" });
   }
-
+  function salvarEdicaoNota(id) {
+    const el = document.getElementById("ne-txt"), txt = (el ? el.value : "").trim();
+    if (!erro("ne-txt", !txt ? "A anotação não pode ficar vazia." : "")) return;
+    enviar("sisden.editarAnotacao", { id: id, texto: txt }, function (r) { st.editNota = null; return r.nadaMudou ? "Nada mudou." : "Anotação editada."; }, { texto: "ne-txt" });
+  }
+  function devolver() {
+    const d = st.aberta, mot = (document.getElementById("dev-mot") || {}).value || "";
+    if (!erro("dev-mot", mot.trim() ? "" : "Explique à fração o que precisa ser corrigido.")) { document.getElementById("dev-mot").focus(); return; }
+    enviar("sisden.devolver", { codigo: d.codigo, versao: d.versao, motivo: mot.trim() }, function () { st.devolvendo = false; return "Demanda devolvida à " + d.fracao + "."; }, { motivo: "dev-mot" });
+  }
 
   function excluirDemanda() {
     const d = st.aberta;
@@ -1802,7 +1661,7 @@ button.pdf:hover { text-decoration-thickness: 2px; }
         ocupado(false);
         const k = DEMANDAS.indexOf(d); if (k >= 0) DEMANDAS.splice(k, 1);
         st.nExcl = (st.nExcl || 0) + 1; st.exclOk = false; st.excluindo = false; fechar(); render();
-        toast("Demanda " + d.codigo + " excluída. Ela fica em “Demandas excluídas” e pode ser restaurada.");
+        toast("Demanda " + d.codigo + " excluída. Ela fica em “Excluídas” e pode ser restaurada.");
       }).catch(e => { ocupado(false); falha(e, { motivo: "ex-motivo", detalhe: "ex-detalhe" }); });
       return;
     }
@@ -1810,7 +1669,7 @@ button.pdf:hover { text-decoration-thickness: 2px; }
     DEMANDAS.splice(DEMANDAS.indexOf(d), 1);
     EXCLUIDAS.push({ d: d, em: HOJE, hora: hora(), por: st.usuario.nome, motivo: m });
     st.excluindo = false; fechar(); render();
-    toast("Demanda " + d.codigo + " excluída. Ela fica em “Demandas excluídas” e pode ser restaurada.");
+    toast("Demanda " + d.codigo + " excluída. Ela fica em “Excluídas” e pode ser restaurada.");
   }
   function restaurarDemanda(cod) {
     if (REAL) {
@@ -1828,120 +1687,111 @@ button.pdf:hover { text-decoration-thickness: 2px; }
     render(); toast("Demanda " + cod + " restaurada.");
   }
 
-  function enviarRecado(ev) {
-    ev.preventDefault();
-    const d = st.aberta;
-    const tipo = document.getElementById("nr-tipo").value;
-    const campos = tipo === "CORRECAO" ? Array.from(drawer.querySelectorAll("#nr-campos input:checked")).map(i => i.value) : [];
-    const txt = document.getElementById("nr-txt").value.trim();
-    let ok = erro("nr-txt", txt ? "" : "Escreva a mensagem para a fração.");
-    const ec = document.getElementById("e-nr-campos");
-    const faltaCampo = tipo === "CORRECAO" && !campos.length;
-    ec.hidden = !faltaCampo; ec.textContent = faltaCampo ? "Marque pelo menos um campo a corrigir." : "";
-    if (!ok || faltaCampo) return;
-    if (REAL) {
-      enviar("sisden.enviarRecado", { codigo: d.codigo, tipo: tipo, campos: campos, texto: txt }, () => { st.novoRec = null; return "Recado enviado para " + d.fracao + "."; },
-        { texto: "nr-txt" });
-      return;
+  /* ================= protótipo: o "servidor" roda aqui mesmo, com as mesmas regras ================= */
+  function erroDemo(msg, codigo, extra) { const e = new Error(msg); e.codigo = codigo; e.extra = extra; return e; }
+  function demoApi(acao, x) { return new Promise(function (ok, nok) { setTimeout(function () { try { ok(demoExec(acao, x || {})); } catch (e) { nok(e); } }, 60); }); }
+  function demoExec(acao, x) {
+    const fr = !ehGestao(), sis = ehSistema();
+    if (acao === "sisden.marcarTodosLidos") { let n = 0; escopo().forEach(d => d.notas.forEach(nt => { if (!nt.vistaGe) { nt.vistaGe = true; n++; } })); return { marcados: n }; }
+    let d = x.codigo ? DEMANDAS.find(y => y.codigo === x.codigo) : null;
+    if (!d && x.id) d = DEMANDAS.find(y => (y.notas || []).some(n => n.id === Number(x.id)));
+    if (!d || escopo().indexOf(d) < 0) throw erroDemo("Demanda não encontrada.", "NAO_ENCONTRADA");
+    const reg = function (a) { d.hist.push({ quando: HOJE, hora: hora(), quem: quemSou(), acao: a }); };
+    const s = situacao(d);
+    const so = function (cond, msg) { if (!cond) throw erroDemo(msg, "PERMISSAO"); };
+    switch (acao) {
+      case "sisden.abrir": {
+        const lado = fr ? "vistaFr" : "vistaGe", destaque = [];
+        d.notas.forEach(n => { if (!n[lado]) { destaque.push(n.id); n[lado] = true; } });
+        if (fr && destaque.length) reg("Visualizou " + (destaque.length === 1 ? "1 anotação nova" : destaque.length + " anotações novas"));
+        return { demanda: d, historico: d.hist.slice().reverse(), destaque: destaque };
+      }
+      case "sisden.salvarAtendimento": {
+        if (s === "arquivada") throw erroDemo("Esta demanda já foi respondida à SEMAD e está arquivada.", "ENCERRADA");
+        const nomes = { atend: "data", resultado: "resultado", gaia: "GAIA", reds: "REDS", obs: "observação" };
+        const antes = { atend: d.atend, resultado: d.resultado, gaia: d.gaia, reds: d.reds, obs: d.obsFracao };
+        const v = { atend: x.atend, resultado: x.resultado, gaia: x.gaia, reds: x.reds, obs: x.obs };
+        const mud = Object.keys(nomes).filter(k => (antes[k] || "") !== (v[k] || ""));
+        if (!mud.length && s !== "devolvida") return { demanda: d, nadaMudou: true };
+        const novo = !d.atend;
+        Object.assign(d, { atend: v.atend, resultado: v.resultado, gaia: v.gaia, reds: v.reds, obsFracao: v.obs, devolvida: null });
+        if (fr && !novo) d.alterado = HOJE + " " + hora(); else if (sis) d.alterado = "";
+        const det = mud.map(k => nomes[k] + (k === "obs" ? "" : ": " + (k === "atend" ? br(antes[k]) : antes[k] || "—") + " → " + (k === "atend" ? br(v[k]) : v[k] || "—"))).join("; ");
+        reg(novo ? "Atendimento registrado" : s === "devolvida" ? (mud.length ? "Atendimento corrigido após a devolução (" + det + ")" : "Atendimento reenviado sem alterações após a devolução") : "Atendimento alterado (" + det + ")");
+        return { demanda: d, novo: novo, voltou: s === "devolvida" };
+      }
+      case "sisden.salvarPlano": {
+        if (fr && d.prioPor === "gestor") throw erroDemo("A prioridade foi definida pelo comando. Só o comando pode alterar.", "PERMISSAO");
+        reg("Prioridade: " + d.prioridade.toLowerCase() + " → " + x.prioridade.toLowerCase());
+        d.prioridade = x.prioridade; d.prioPor = x.prioridade === "NORMAL" ? "" : fr ? "fracao" : "gestor";
+        return { demanda: d };
+      }
+      case "sisden.anotar": {
+        const resp = x.respostaA ? d.notas.find(n => n.id === Number(x.respostaA)) : null;
+        notaDemo(d, x.texto, minhaAssinatura(), st.usuario.email, fr ? "fracao" : "gestao", HOJE + " " + hora(), { gestor: sis, respostaA: resp ? resp.id : null, vistaFr: fr, vistaGe: !fr });
+        reg((resp ? "Respondeu a " + resp.autor : "Anotou") + ": “" + x.texto.slice(0, 80) + "”");
+        return { demanda: d };
+      }
+      case "sisden.editarAnotacao": {
+        const n = d.notas.find(y => y.id === Number(x.id));
+        so(n && n.email === st.usuario.email, "Só quem escreveu a anotação pode editá-la.");
+        if (n.texto === x.texto) return { demanda: d, nadaMudou: true };
+        reg("Editou a anotação. Antes: “" + n.texto.slice(0, 200) + "” · Agora: “" + x.texto.slice(0, 200) + "”");
+        n.texto = x.texto; n.editada = HOJE + " " + hora(); if (fr) n.vistaGe = false; else n.vistaFr = false;
+        return { demanda: d };
+      }
+      case "sisden.arquivar":
+        so(sis, "Quem registra a resposta à SEMAD é o Gestor Sistema.");
+        if (s !== "respondida") throw erroDemo(s === "devolvida" ? "A demanda está devolvida à fração." : "Disponível depois que o atendimento for registrado.", "ESTADO");
+        d.sitAnalista = "RESPONDIDA SEMAD"; d.respSemadEm = HOJE; d.alterado = ""; reg("Respondida à SEMAD em " + br(HOJE) + " · arquivada");
+        return { demanda: d };
+      case "sisden.desarquivar":
+        so(sis, "Só o Gestor Sistema desarquiva.");
+        reg("Desarquivada (desfeita a resposta à SEMAD de " + br(d.respSemadEm) + ")"); d.sitAnalista = ""; d.respSemadEm = "";
+        return { demanda: d };
+      case "sisden.devolver":
+        so(sis, "Só o Gestor Sistema devolve demandas à fração.");
+        if (s !== "respondida") throw erroDemo("Só dá para devolver uma demanda já respondida pela fração.", "ESTADO");
+        d.devolvida = { em: HOJE + " " + hora(), motivo: x.motivo, por: minhaAssinatura() }; d.alterado = "";
+        notaDemo(d, "Devolvida à fração: " + x.motivo, minhaAssinatura(), st.usuario.email, "gestao", d.devolvida.em, { gestor: true, vistaFr: false, vistaGe: true });
+        reg("Devolvida à " + d.fracao + ": “" + x.motivo + "”");
+        return { demanda: d };
     }
-    const nr = novoRecado(d, tipo, campos, txt, HOJE);
-    nr.de = remetente(); d.hist[d.hist.length - 1].quem = quemSou(); d.hist[d.hist.length - 1].hora = hora();
-    st.novoRec = null;
-    atualizar("Recado enviado para " + d.fracao + ".");
+    throw erroDemo("Ação indisponível no protótipo.", "ACAO");
   }
-
-  function acaoRecado(act, id) {
-    const d = st.aberta;
-    if (act === "ciente-aviso") {
-      if (!souComando()) return;
-      const a = d.avisos[Number(id)];
-      if (REAL) { enviar("sisden.cienteAviso", { id: a.id }, () => "Ciente registrado."); return; }
-      a.ciente = true; a.cientePor = assinatura(); a.cienteEm = HOJE;
-      d.hist.push({ quando: HOJE, hora: hora(), quem: quemSou(), acao: "Deu ciente — " + a.texto });
-      atualizar("Ciente registrado.");
-      return;
-    }
-    const r = d.recados.find(x => x.id === Number(id));
-    if (!r) return;
-    if (act === "responder") {
-      if (!souComando()) { toast("Só o Comandante ou o Subcomandante da fração pode dar ciente."); return; }
-      const txt = (document.getElementById("r-txt-" + id) || {}).value || "";
-      if (r.tipo === "CORRECAO") {
-        const iguais = r.campos.filter(c => d[c] === r.snap[c]);
-        if (iguais.length) {
-          erro("r-txt-" + id, "Ainda igual ao que foi apontado: " + iguais.map(c => CAMPOS_COR[c]).join(", ") + ". Corrija no formulário de atendimento e salve antes de confirmar.");
-          return;
-        }
-      }
-      if (r.tipo === "RETORNO") {
-        const dt = document.getElementById("r-data-" + id).value;
-        if (!erro("r-data-" + id, !dt ? "Informe a data em que a equipe voltou ao local." : diff(dt, r.em) < 0 ? "O retorno não pode ser anterior ao recado (" + br(r.em) + ")." : "")) return;
-        if (!erro("r-txt-" + id, txt.trim() ? "" : "Descreva o que foi constatado no retorno.")) return;
-        r.respData = dt;
-      }
-      if (REAL) {
-        enviar("sisden.responderRecado", { id: r.id, texto: txt.trim(), dataRetorno: r.tipo === "RETORNO" ? document.getElementById("r-data-" + id).value : "" },
-          () => r.tipo === "RECADO" ? "Ciência registrada." : "Resposta enviada ao comando.", { texto: "r-txt-" + id, dataRetorno: "r-data-" + id });
-        return;
-      }
-      r.resposta = txt.trim(); r.respEm = HOJE; r.lidoGestor = false; r.respPor = assinatura();
-      r.status = r.tipo === "RECADO" ? "ENCERRADO" : "RESPONDIDO";
-      if (r.status === "ENCERRADO") r.encEm = HOJE;
-      d.hist.push({ quando: HOJE, hora: hora(), quem: quemSou(), acao: r.tipo === "RECADO" ? "Deu ciente no recado do comando" : r.tipo === "RETORNO" ? "Deu ciente e registrou retorno ao local (" + br(r.respData) + ")" : "Deu ciente e informou a correção ao comando" });
-      atualizar(r.tipo === "RECADO" ? "Ciência registrada." : "Resposta enviada ao comando.");
-    } else if (act === "encerrar") {
-      if (REAL) { enviar("sisden.concluirRecado", { id: r.id }, () => "Recado concluído."); return; }
-      r.status = "ENCERRADO"; r.encEm = HOJE;
-      d.hist.push({ quando: HOJE, hora: hora(), quem: quemSou(), acao: "Recado concluído: " + TIPOS_REC[r.tipo].toLowerCase() });
-      atualizar("Recado concluído.");
-    } else if (act === "devolver") {
-      const mot = (document.getElementById("r-dev-" + id) || {}).value.trim();
-      if (!erro("r-dev-" + id, mot ? "" : "Explique à fração o que ainda precisa ser feito.")) return;
-      if (REAL) { enviar("sisden.devolverRecado", { id: r.id, motivo: mot }, () => "Recado devolvido à fração.", { motivo: "r-dev-" + id }); return; }
-      r.status = "ABERTO"; r.respPor = ""; r.texto = r.texto + " — Devolvido em " + br(HOJE) + ": " + mot;
-      r.campos.forEach(c => { r.snap[c] = d[c]; });
-      r.resposta = ""; r.respEm = ""; r.respData = "";
-      d.hist.push({ quando: HOJE, hora: hora(), quem: quemSou(), acao: "Recado devolvido à fração" });
-      atualizar("Recado devolvido à fração.");
-    }
-  }
+  function chamar(acao, dados) { return REAL ? api(acao, dados) : demoApi(acao, dados); }
 
   /* ================= sino de avisos ================= */
   const sino = document.getElementById("sino"), sinoN = document.getElementById("sino-n"), pav = document.getElementById("painel-avisos");
   function itensAvisos() {
-    const gestor = ehGestao(), itens = [];
+    const itens = [], gestao = ehGestao();
     escopo().forEach(function (d) {
-      if (gestor && encerrada(d)) return;
-      d.recados.forEach(function (r) {
-        if (gestor ? !r.lidoGestor : r.status === "ABERTO") itens.push({ cod: d.codigo, quando: gestor ? r.respEm : r.em,
-          titulo: gestor ? "Resposta de " + d.fracao : TIPOS_REC[r.tipo], texto: gestor ? (r.resposta || "Respondido sem comentário") : r.texto });
+      (d.notas || []).forEach(function (n) {
+        if (notaNova(n)) itens.push({ cod: d.codigo, quando: n.em, titulo: "Anotação de " + n.autor.replace(/ \(.*$/, ""), texto: n.texto });
       });
-      if (!gestor) d.avisos.forEach(a => { if (!a.ciente) itens.push({ cod: d.codigo, quando: a.em, titulo: "Prioridade", texto: a.texto }); });
+      if (!gestao && situacao(d) === "devolvida" && d.devolvida && !(d.notas || []).some(notaNova)) itens.push({ cod: d.codigo, quando: d.devolvida.em, titulo: "Devolvida pelo Gestor Sistema", texto: d.devolvida.motivo });
+      if (ehSistema() && d.alterado) itens.push({ cod: d.codigo, quando: d.alterado, titulo: "Atendimento alterado · " + d.fracao, texto: "A fração corrigiu o atendimento depois de respondido." });
     });
     return itens.sort((a, b) => (a.quando < b.quando ? 1 : -1));
   }
   function atualizarSino() {
     const n = itensAvisos().length;
     sinoN.textContent = n; sinoN.hidden = !n;
-    sino.setAttribute("aria-label", n ? n + " aviso(s) pendente(s)" : "Nenhum aviso pendente");
+    sino.setAttribute("aria-label", n ? n + " aviso(s) novo(s)" : "Nenhum aviso novo");
     if (!pav.hidden) montarPainel();
   }
   function montarPainel() {
     const itens = itensAvisos();
-    pav.innerHTML = '<div class="pav-head"><b>' + (ehGestao() ? "Avisos" : souComando() ? "Aguardando o seu ciente" : "Aguardando ciente do comando") + "</b>" + (itens.length && ehGestao() ? '<button type="button" class="link-btn" id="pav-todos">Marcar todos como lidos</button>' : "") + "</div>" +
-      (itens.length ? itens.map(i => '<button type="button" class="pav-item" data-cod="' + esc(i.cod) + '"><span class="pav-t"><b>' + esc(i.titulo) + '</b><span class="mono">' + esc(i.cod) + "</span></span><span class=\"pav-x\">" + esc(i.texto) + '</span><span class="pav-d">' + br(i.quando) + "</span></button>").join("")
-        : '<p class="pav-vazio">Nada pendente. Os recados já respondidos continuam dentro de cada demanda.</p>');
+    pav.innerHTML = '<div class="pav-head"><b>Novidades</b>' + (itens.length && ehGestao() ? '<button type="button" class="link-btn" id="pav-todos">Marcar anotações como lidas</button>' : "") + "</div>" +
+      (itens.length ? itens.map(i => '<button type="button" class="pav-item" data-cod="' + esc(i.cod) + '"><span class="pav-t"><b>' + esc(i.titulo) + '</b><span class="mono">' + esc(i.cod) + "</span></span><span class=\"pav-x\">" + esc(i.texto) + '</span><span class="pav-d">' + quando(i.quando) + "</span></button>").join("")
+        : '<p class="pav-vazio">Nada novo. As anotações antigas continuam dentro de cada demanda.</p>');
   }
   sino.addEventListener("click", function () { pav.hidden = !pav.hidden; if (!pav.hidden) { montarPainel(); sino.setAttribute("aria-expanded", "true"); } else sino.setAttribute("aria-expanded", "false"); });
   pav.addEventListener("click", function (e) {
     if (e.target.id === "pav-todos") {
       if (!ehGestao()) return;
-      if (REAL) {
-        api("sisden.marcarTodosLidos").then(function () { escopo().forEach(d => { d.recados.forEach(r => { r.lidoGestor = true; }); }); render(); toast("Respostas marcadas como lidas."); }).catch(e => falha(e));
-        return;
-      }
-      escopo().forEach(d => { d.recados.forEach(r => { r.lidoGestor = true; }); });
-      render(); toast("Respostas marcadas como lidas."); return;
+      chamar("sisden.marcarTodosLidos").then(function () { if (REAL) escopo().forEach(d => (d.notas || []).forEach(n => { n.nova = false; })); render(); toast("Anotações marcadas como lidas."); }).catch(e => falha(e));
+      return;
     }
     const it = e.target.closest(".pav-item");
     if (it) { pav.hidden = true; sino.setAttribute("aria-expanded", "false"); abrir(it.getAttribute("data-cod")); }
@@ -1951,7 +1801,8 @@ button.pdf:hover { text-decoration-thickness: 2px; }
   function fechar() {
     drawer.hidden = true; scrim.hidden = true; drawer.innerHTML = "";
     const prev = st.aberta && app.querySelector('[data-cod="' + st.aberta.codigo + '"]');
-    st.aberta = null; st.novoRec = null; st.excluindo = false; st.editAt = false;
+    if (st.aberta) st.aberta.altMostrar = "";
+    Object.assign(st, { aberta: null, excluindo: false, editAt: false, confArq: false, devolvendo: false, editNota: null, respA: null, rascunho: "", destaque: {} });
     if (prev) prev.focus();
   }
 
@@ -2387,8 +2238,8 @@ button.pdf:hover { text-decoration-thickness: 2px; }
     const go = e.target.closest("[data-go]");
     if (go || e.target.id === "dp-ver-atraso") {
       esconderTip(); st.tela = "lista";
-      if (ehGestao()) { st.etapa = "fracao"; st.gFiltro = "atraso"; st.gFracao = dash.escopo.indexOf("F:") === 0 ? dash.escopo.slice(2) : ""; }
-      else st.filtro = "atraso";
+      st.aba = "pendentes"; st.chip = "vencidas"; st.busca = "";
+      if (ehGestao()) st.gFracao = dash.escopo.indexOf("F:") === 0 ? dash.escopo.slice(2) : "";
       render(); const g = document.getElementById("g-filtros") || app.querySelector(".toolbar"); if (g) g.scrollIntoView({ block: "start" });
       return true;
     }
@@ -2409,11 +2260,11 @@ button.pdf:hover { text-decoration-thickness: 2px; }
      nunca de uma escolha na tela.
      ===================================================================== */
   const PAPEIS = {
-    BASICO: { nome: "Usuário Básico", sigla: "Básico", desc: "registra atendimentos e anotações da fração; lê os recados" },
-    CMT_FR: { nome: "Comandante Fração", sigla: "Cmt Fração", desc: "tudo do usuário básico + dá ciente e responde recados" },
-    SUBCMT_FR: { nome: "Subcomandante Fração", sigla: "SubCmt Fração", desc: "tudo do usuário básico + dá ciente e responde recados" },
-    CMT_PEL: { nome: "Comandante Pelotão", sigla: "Cmt Pelotão", desc: "demandas e dashboard do pelotão: abre demandas, envia recados, define prioridade e quem vai atender" },
-    GESTOR: { nome: "Gestor Sistema", sigla: "Gestor", desc: "todas as frações, recados, SEMAD, dashboard e usuários" }
+    BASICO: { nome: "Usuário Básico", sigla: "Básico", desc: "registra atendimentos, anota e responde nas demandas da fração" },
+    CMT_FR: { nome: "Comandante Fração", sigla: "Cmt Fração", desc: "o mesmo do usuário básico, assinando com o nome" },
+    SUBCMT_FR: { nome: "Subcomandante Fração", sigla: "SubCmt Fração", desc: "o mesmo do usuário básico, assinando com o nome" },
+    CMT_PEL: { nome: "Comandante Pelotão", sigla: "Cmt Pelotão", desc: "demandas e dashboard do pelotão: anota, define prioridade e pode registrar o atendimento" },
+    GESTOR: { nome: "Gestor Sistema", sigla: "Gestor", desc: "todas as frações, administração (arquivar, devolver, excluir), dashboard e usuários" }
   };
   function slugFr(f) { const m = f.match(/^(\d) GP\/(\d) PELOT/); return m ? m[1] + "gp" + m[2] + "pel" : f.match(/^(\d)/)[1] + "pel"; }
   const NOMES = ["Moreira", "Duarte", "Araújo", "Valadares", "Rezende", "Campos", "Lacerda", "Penido", "Faria", "Teixeira", "Coelho", "Rangel", "Fontes", "Bastos", "Siqueira", "Andrade", "Lopes", "Prado", "Viana", "Queiroz", "Rabelo", "Guimarães", "Tavares", "Brandão", "Carvalho", "Neves", "Paiva", "Sales", "Moura", "Freitas", "Diniz", "Lemos", "Batista", "Rocha", "Amaral", "Peixoto", "Mendes", "Pires", "Couto", "Antunes", "Barcelos", "Furtado", "Gouveia", "Leal"];
@@ -2622,13 +2473,13 @@ button.pdf:hover { text-decoration-thickness: 2px; }
       '<section class="kpis k4u" aria-label="Resumo dos acessos">' +
       '<div class="kpi" data-tone="accent"><span class="kpi-label">Ativos</span><span class="kpi-value">' + ativos.length + '</span><span class="kpi-foot">' + USUARIOS.filter(u => !u.ativo).length + " desativado(s)</span></div>" +
       '<div class="kpi" data-tone="info"><span class="kpi-label">Usuários básicos</span><span class="kpi-value">' + ativos.filter(u => u.papel === "BASICO").length + '</span><span class="kpi-foot">de ' + FRACOES.length + " frações</span></div>" +
-      '<div class="kpi" data-tone="ok"><span class="kpi-label">Cmt e SubCmt Fração</span><span class="kpi-value">' + ativos.filter(u => ehCmtFr(u.papel)).length + '</span><span class="kpi-foot">podem dar ciente · ' + ativos.filter(u => u.papel === "CMT_PEL").length + " Cmt Pelotão</span></div>" +
+      '<div class="kpi" data-tone="ok"><span class="kpi-label">Cmt e SubCmt Fração</span><span class="kpi-value">' + ativos.filter(u => ehCmtFr(u.papel)).length + '</span><span class="kpi-foot">comando das frações · ' + ativos.filter(u => u.papel === "CMT_PEL").length + " Cmt Pelotão</span></div>" +
       '<div class="kpi" data-tone="' + (faltas.length ? "late" : "ok") + '"><span class="kpi-label">Cadastros incompletos</span><span class="kpi-value">' + faltas.length + '</span><span class="kpi-foot">frações e pelotões com falta</span></div>' +
       "</section>" +
       (faltas.length ? '<section class="ufaltas" aria-label="Pendências de cadastro"><b>' + ICO.warn + " Pendências de cadastro</b><ul>" + faltas.map(function (x) {
         if (x.pel) return "<li><span>" + pelNome(x.pel) + '</span> sem Comandante Pelotão — ninguém acompanha o pelotão como um todo <button type="button" class="link-btn" data-u="novo" data-pap="CMT_PEL" data-pel="' + x.pel + '">cadastrar</button></li>';
         const falta = []; if (!x.conta) falta.push("usuário básico"); if (!x.cmt) falta.push("Comandante Fração"); if (!x.sub) falta.push("Subcomandante Fração");
-        return "<li" + (!x.cmt && !x.sub ? ' class="grave"' : "") + "><span>" + esc(x.fr) + "</span> sem " + falta.join(", ") + (!x.cmt && !x.sub ? " — <b>ninguém pode dar ciente nos recados</b>" : "") +
+        return "<li" + (!x.cmt && !x.sub ? ' class="grave"' : "") + "><span>" + esc(x.fr) + "</span> sem " + falta.join(", ") +
           ' <button type="button" class="link-btn" data-u="novo" data-fr="' + esc(x.fr) + '" data-pap="' + (!x.conta ? "BASICO" : !x.cmt ? "CMT_FR" : "SUBCMT_FR") + '">cadastrar</button></li>';
       }).join("") + "</ul></section>" : "") +
       form +
@@ -2908,7 +2759,7 @@ button.pdf:hover { text-decoration-thickness: 2px; }
         st.usuOk = false; st.exclOk = false;
         entrarComo(st.usuario);
         const u = st.usuario, n = itensAvisos().length;
-        toast("Bem-vindo(a), " + (u.papel === "BASICO" ? "equipe do " + u.fracao : u.nome) + "." + (n ? (souComando() ? " " + n + " item(ns) aguardando o seu ciente." : " " + n + " aviso(s) pendente(s).") : ""));
+        toast("Bem-vindo(a), " + (u.papel === "BASICO" ? "equipe do " + u.fracao : u.nome) + "." + (n ? " " + n + " novidade(s) no sino." : ""));
       } else render();
     }).catch(function (e) {
       carregarSisden.ocupado = false;
@@ -2926,15 +2777,22 @@ button.pdf:hover { text-decoration-thickness: 2px; }
   /* ---------- detalhe da demanda (histórico + registro de leitura) ---------- */
   function detalhe(d) {
     const cod = d.codigo, seq = (detalhe.seq = (detalhe.seq || 0) + 1);
-    api("sisden.abrir", { codigo: cod }).then(function (r) {
+    const assin = x => x.versao + "|" + (x.notas || []).map(n => n.id + ":" + n.texto).join("|");
+    chamar("sisden.abrir", { codigo: cod }).then(function (r) {
       if (seq !== detalhe.seq) return;
-      const assinaturaAntes = d.versao + "|" + JSON.stringify(d.recados.map(x => [x.id, x.status, x.respEm, x.texto])) + "|" + d.avisos.length;
+      const antes = assin(d);
+      // destaque "NOVA" desta abertura; depois disso a anotação deixa de ser nova
+      const ids = r.destaque || (r.demanda.notas || []).filter(n => n.nova).map(n => n.id);
       mesclar(d, r.demanda);
+      if (REAL) (d.notas || []).forEach(n => { n.nova = false; });
+      if (ehSistema() && d.alterado) { d.altMostrar = d.alterado; d.alterado = ""; }
       d.hist = r.historico.slice().reverse(); d.histOk = true;
-      const mudou = assinaturaAntes !== d.versao + "|" + JSON.stringify(d.recados.map(x => [x.id, x.status, x.respEm, x.texto])) + "|" + d.avisos.length;
+      const mudou = antes !== assin(d);
       if (st.aberta && st.aberta.codigo === cod) {
-        if (mudou) { render(); abrir(cod, null, true); toast("A demanda foi atualizada com os dados mais recentes."); }
-        else { const el = document.getElementById("d-hist"); if (el) el.innerHTML = histHtml(d); render(); }
+        ids.forEach(id => { st.destaque[id] = true; });
+        render();
+        if (mudou || ids.length || d.altMostrar) { abrir(cod, null, true); if (mudou) toast("A demanda foi atualizada com os dados mais recentes."); }
+        else { const el = document.getElementById("d-hist"); if (el) el.innerHTML = histHtml(d); }
       } else render();
     }).catch(function (e) { if (seq === detalhe.seq) falha(e); });
   }
@@ -2947,9 +2805,10 @@ button.pdf:hover { text-decoration-thickness: 2px; }
   function enviar(acao, dados, msgFn, campos) {
     const d = st.aberta;
     ocupado(true);
-    return api(acao, dados).then(function (r) {
+    return chamar(acao, dados).then(function (r) {
       ocupado(false);
-      if (r && r.demanda) mesclar(d, r.demanda);
+      if (r && r.demanda) { mesclar(d, r.demanda); if (REAL) (d.notas || []).forEach(n => { n.nova = false; }); }
+      st.confArq = false;
       const msg = msgFn ? msgFn(r || {}) : "Salvo.";
       if (st.aberta && st.aberta.codigo === d.codigo) atualizar(msg); else { render(); toast(msg); }
     }).catch(function (e) { ocupado(false); falha(e, campos); });
@@ -3071,18 +2930,17 @@ button.pdf:hover { text-decoration-thickness: 2px; }
     if (ex) { st.verExcluidas = ex.getAttribute("data-excl") === "1"; if (REAL && st.verExcluidas) carregarExcluidas(); render(); const g = document.getElementById("g-filtros"); if (g) g.scrollIntoView({ block: "start" }); return; }
     const rs = e.target.closest("[data-restaurar]");
     if (rs) { restaurarDemanda(rs.getAttribute("data-restaurar")); return; }
-    const et = e.target.closest("[data-etapa],[data-p]");
-    if (et) {
-      const novaEt = et.getAttribute("data-etapa"), p = et.getAttribute("data-p");
-      const doPainel = et.classList.contains("alert-btn") || et.closest(".banner");
-      if (novaEt && novaEt !== st.etapa) { st.etapa = novaEt; st.gFiltro = ""; }
-      if (p !== null) st.gFiltro = (!doPainel && st.gFiltro === p) ? "" : p;
-      render();
-      if (doPainel) { const g = document.getElementById("g-filtros"); if (g) g.scrollIntoView({ block: "start", behavior: "smooth" }); }
+    const ab = e.target.closest("[data-aba]");
+    if (ab) { st.aba = ab.getAttribute("data-aba"); st.chip = ""; st.busca = ""; render(); return; }
+    const ch = e.target.closest("[data-chip]");
+    if (ch) { const k = ch.getAttribute("data-chip"); st.chip = st.chip === k ? "" : k; render(); return; }
+    const kp = e.target.closest("[data-kpi]");
+    if (kp) {
+      const p = kp.getAttribute("data-kpi").split(":"); st.aba = p[0]; st.chip = p[1] || ""; st.busca = ""; render();
+      const g = document.getElementById("g-filtros"); if (g && kp.closest(".banner")) g.scrollIntoView({ block: "start", behavior: "smooth" });
       return;
     }
-    const f = e.target.closest("[data-f]");
-    if (f) { st.filtro = f.getAttribute("data-f"); render(); return; }
+    if (e.target.closest("[data-limpar-busca]")) { st.busca = ""; render(); const b = document.getElementById("busca"); if (b) b.focus(); return; }
     const r = e.target.closest(".row[data-cod]");
     if (r) { abrir(r.getAttribute("data-cod")); return; }
     const fr = e.target.closest("tr.fr");
@@ -3094,35 +2952,44 @@ button.pdf:hover { text-decoration-thickness: 2px; }
     if (fr && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); fr.click(); }
   });
   app.addEventListener("input", function (e) { if (e.target.id === "busca") { st.busca = e.target.value; render(); } });
+  app.addEventListener("change", function (e) { if (e.target.id === "g-fr") { st.gFracao = e.target.value; render(); } });
 
   drawer.addEventListener("click", function (e) {
     if (e.target.closest("[data-close]")) { fechar(); return; }
     const b = e.target.closest("[data-act]");
     if (!b) return;
     const act = b.getAttribute("data-act");
+    const id = Number(b.getAttribute("data-id")) || null, cod = st.aberta.codigo;
     if (act === "conf-sim") { st.atConfirmado = true; document.getElementById("f-at").requestSubmit(); return; }
     if (act === "conf-nao") { document.getElementById("at-confirm").hidden = true; document.getElementById("at-acoes").hidden = false; return; }
-    if (act === "ex-abrir") { st.excluindo = true; abrir(st.aberta.codigo, "ex-motivo", true); return; }
-    if (act === "ex-nao") { st.excluindo = false; abrir(st.aberta.codigo, null, true); return; }
+    if (act === "ex-abrir") { st.excluindo = true; abrir(cod, "ex-motivo", true); return; }
+    if (act === "ex-nao") { st.excluindo = false; abrir(cod, null, true); return; }
     if (act === "ex-sim") { excluirDemanda(); return; }
-    if (act === "pedir") {
-      st.novoRec = { tipo: "CORRECAO", campos: [b.getAttribute("data-campo")], texto: b.getAttribute("data-msg") + ". Confira e corrija." };
-      abrir(st.aberta.codigo, "nr-txt", true);
-      return;
-    }
     if (act === "pdf") { abrirPdf(); return; }
-    if (act === "at-editar") { st.editAt = true; abrir(st.aberta.codigo, "at-data", true); return; }
-    if (act === "at-cancelar") { st.editAt = false; abrir(st.aberta.codigo, null, true); return; }
     if (act === "anexos") { listarAnexos(b); return; }
     if (act === "anexo") { abrirPdf(b.getAttribute("data-id")); return; }
-    acaoRecado(act, b.getAttribute("data-rec") || b.getAttribute("data-i"));
+    if (act === "at-editar") { st.editAt = true; abrir(cod, "at-data", true); return; }
+    if (act === "at-cancelar") { st.editAt = false; abrir(cod, null, true); return; }
+    if (act === "nt-anotar") { anotar(); return; }
+    if (act === "nt-resp") { st.respA = id; st.editNota = null; abrir(cod, "nt-txt", true); return; }
+    if (act === "nt-resp-nao") { st.respA = null; abrir(cod, "nt-txt", true); return; }
+    if (act === "nt-ed") { st.editNota = id; abrir(cod, "ne-txt", true); return; }
+    if (act === "nt-ed-nao") { st.editNota = null; abrir(cod, null, true); return; }
+    if (act === "nt-ed-sim") { salvarEdicaoNota(id); return; }
+    if (act === "adm-arq") { st.confArq = true; abrir(cod, "arq-sim", true); return; }
+    if (act === "adm-arq-nao") { st.confArq = false; abrir(cod, null, true); return; }
+    if (act === "adm-arq-sim") { enviar("sisden.arquivar", { codigo: cod, versao: st.aberta.versao }, r => r.nadaMudou ? "Já estava arquivada." : "Respondida à SEMAD em " + br(HOJE) + ". Demanda arquivada."); return; }
+    if (act === "adm-desarq") { enviar("sisden.desarquivar", { codigo: cod, versao: st.aberta.versao }, r => r.nadaMudou ? "Nada mudou." : "Demanda desarquivada: voltou para Respondidas."); return; }
+    if (act === "adm-dev") { st.devolvendo = true; abrir(cod, "dev-mot", true); return; }
+    if (act === "adm-dev-nao") { st.devolvendo = false; abrir(cod, null, true); return; }
+    if (act === "adm-dev-sim") { devolver(); return; }
   });
   scrim.addEventListener("click", fechar);
   document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !drawer.hidden) fechar(); });
 
   function trocar(p, papel, manterUsuario) {
     if (!manterUsuario) { st.usuario = usuDefault(p === "gestor" ? "gestor" : p === "pelotao" ? "pelotao" : papel === "cmt" ? "cmt" : "fracao"); if (st.usuario.fracao) st.fracao = st.usuario.fracao; }
-    st.perfil = p; st.papel = papel || "operador"; st.filtro = "pendentes"; st.tela = "lista"; st.verExcluidas = false; dash.escopo = ""; st.etapa = "andamento"; st.gFiltro = ""; st.busca = ""; st.gFracao = ""; uf.form = null; uf.confirmar = null;
+    st.perfil = p; st.papel = papel || "operador"; st.aba = abaPadrao(); st.chip = ""; st.tela = "lista"; st.verExcluidas = false; dash.escopo = ""; st.busca = ""; st.gFracao = ""; uf.form = null; uf.confirmar = null;
     if (!drawer.hidden) fechar(); pav.hidden = true; render();
   }
   document.getElementById("ver-fracao").addEventListener("click", function () { trocar("fracao", "operador"); });
