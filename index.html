@@ -2555,7 +2555,7 @@ form.card.at { padding: 14px 16px; }
     }
     if (f.papel === "CMT_PEL") ok = erro("u-pelotao", f.pelotao ? "" : "Escolha o pelotão.") && ok;
     else if (f.papel !== "GESTOR") ok = erro("u-fracao", f.fracao ? "" : "Escolha a fração.") && ok;
-    if (f.papel !== "BASICO") ok = erro("u-nome", !f.nome ? "Informe o posto/graduação e o nome de guerra." : !/^(Cel|Ten Cel|Maj|Cap|[12]º Ten|Asp|ST|[123]º Sgt|Cb|Sd)\s+\S/i.test(f.nome) && f.papel !== "GESTOR" ? "Comece pelo posto ou graduação. Ex.: 1º Sgt Duarte" : "") && ok;
+    if (f.papel !== "BASICO") ok = erro("u-nome", !f.nome ? "Informe o posto/graduação e o nome de guerra." : "") && ok;
     if (!ok) return;
     if (f.papel === "BASICO") f.nome = "Usuário básico " + f.fracao;
     if (f.papel === "GESTOR" || f.papel === "CMT_PEL") f.fracao = "";
