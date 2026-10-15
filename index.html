@@ -2481,7 +2481,7 @@ form.card.at { padding: 14px 16px; }
         campo("u-papel", "Papel", '<select id="u-papel">' + Object.keys(PAPEIS).map(k => '<option value="' + k + '"' + (f.papel === k ? " selected" : "") + ">" + PAPEIS[k].nome + "</option>").join("") + "</select>", PAPEIS[f.papel].desc) +
         (f.papel === "CMT_PEL" ? campo("u-pelotao", "Pelotão", '<select id="u-pelotao"><option value="">Selecione…</option>' + optPel + "</select>", "Vê as demandas e o dashboard do pelotão e de todos os GPs dele.") : "") +
         (f.papel === "GESTOR" || f.papel === "CMT_PEL" ? "" : campo("u-fracao", "Fração", '<select id="u-fracao"><option value="">Selecione…</option>' + FRACOES.map(x => '<option' + (f.fracao === x[0] ? " selected" : "") + ">" + esc(x[0]) + "</option>").join("") + "</select>", "")) +
-        (precisaNome ? campo("u-nome", "Posto/graduação e nome de guerra", '<input id="u-nome" maxlength="60" placeholder="Ex.: 2º Ten Moreira" value="' + esc(f.nome) + '">', "Aparece no ciente: “Ciente dado por " + esc(f.nome || "2º Ten Moreira") + " (" + PAPEIS[f.papel].sigla + ")”.") : "") +
+        (precisaNome ? campo("u-nome", "Posto/graduação e nome de guerra", '<input id="u-nome" maxlength="60" placeholder="Ex.: 2º Ten Moreira" value="' + esc(f.nome) + '">', "Aparece nas anotações como: " + esc(f.nome || "2º Ten Moreira") + " (" + PAPEIS[f.papel].sigla + ").") : "") +
         "</div>" +
         (uf.confirmar ? '<div class="confirm" role="alertdialog" aria-labelledby="u-conf-t"><p id="u-conf-t"><b>' + esc(uf.confirmar.lugar) + " já tem " + PAPEIS[uf.confirmar.papel].nome + " ativo: " + esc(uf.confirmar.atual.nome) + "</b> (" + esc(uf.confirmar.atual.email) + "). Ao salvar, o cadastro dele será desativado e ele perde o acesso. O que ele já assinou continua com o nome dele.</p>" +
           '<div class="actions"><button type="button" class="btn" data-u="conf-nao">Voltar</button><button type="button" class="btn primary" data-u="conf-sim" id="u-conf-sim">Substituir e salvar</button></div></div>'
@@ -2532,8 +2532,12 @@ form.card.at { padding: 14px 16px; }
     f.email = (document.getElementById("u-email") || {}).value.trim().toLowerCase();
     f.papel = document.getElementById("u-papel").value;
     const fr = document.getElementById("u-fracao"); f.fracao = fr ? fr.value : "";
-    const nm = document.getElementById("u-nome"); f.nome = nm ? nm.value.trim() : f.nome;
+    const nm = document.getElementById("u-nome"); f.nome = nm ? normPosto(nm.value) : f.nome;
     const pl = document.getElementById("u-pelotao"); f.pelotao = pl ? pl.value : "";
+  }
+  /** "2° Ten", "2o Ten", "2 ª Sgt", "2ºTen" → "2º Ten" (celular costuma trocar º por °) */
+  function normPosto(v) {
+    return String(v || "").replace(/\s+/g, " ").trim().replace(/^([123])\s*[º°˚ªoO]?\s*(Ten|Sgt)\b\.?/i, function (_, n, p) { return n + "º " + p.charAt(0).toUpperCase() + p.slice(1).toLowerCase(); });
   }
   function logUsu(acao) { LOG_USU.push({ em: HOJE, hora: hora(), quem: st.usuario ? st.usuario.email : CONTA.gestor, acao: acao }); }
   /** só um Cmt Fração e um SubCmt Fração por fração; só um Cmt Pelotão por pelotão */
