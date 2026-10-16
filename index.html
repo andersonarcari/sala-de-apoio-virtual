@@ -901,6 +901,7 @@ form.card.at { padding: 14px 16px; }
 .fbar .frow .fsel { min-width: 220px; min-height: 42px; }
 @media (max-width: 980px) { .kpis.k6c { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 @media (max-width: 520px) { .kpis.k6c { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; } .kpis.k6c .kpi { min-height: 88px; } .fbar .frow .fsel { min-width: 0; flex: 1 1 100%; } }
+.opc { font-weight: 400; font-size: 12.5px; color: var(--muted); }
 .c-anot .anot > span { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; overflow-wrap: anywhere; }
 </style>
 
@@ -940,7 +941,7 @@ form.card.at { padding: 14px 16px; }
 <div class="proto">Protótipo de interface. Os botões “Usuário básico / Cmt Fração / Cmt Pelotão / Gestor” existem só aqui. Todos os códigos, endereços e números são fictícios e nada é gravado.</div>
 
 <main id="app"></main>
-<footer class="rodape">
+<footer class="rodape" id="rodape-sis">
   <div class="rodape-in">
     <span>Gestão Automatizada de Denúncias da SEMAD - Desenvolvido pelo 1º Sgt Anderson Arcari Pereira</span>
   </div>
@@ -949,7 +950,7 @@ form.card.at { padding: 14px 16px; }
 <div class="scrim" id="scrim" hidden></div>
 <aside class="drawer" id="drawer" hidden aria-modal="true" role="dialog" aria-labelledby="d-title"></aside>
 
-<div class="login" id="login" role="dialog" aria-modal="true" aria-label="Entrar no SISDEN">
+<div class="login" id="login" role="dialog" aria-modal="true" aria-label="Entrar na Sala de Apoio Virtual">
   <div class="lg-wrap">
     <section class="lg-brand">
       <img src="data:image/webp;base64,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" alt="" width="150" class="lg-escudo">
@@ -975,7 +976,7 @@ form.card.at { padding: 14px 16px; }
     <p class="hub-sub">Escolha o sistema. Você vê só os sistemas liberados para o seu cadastro.</p>
     <div class="hub-cards" id="hub-cards"></div>
   </main>
-  <footer class="rodape"><div class="rodape-in"><span>Gestão Automatizada de Denúncias da SEMAD - Desenvolvido pelo 1º Sgt Anderson Arcari Pereira</span></div></footer>
+  <footer class="rodape"><div class="rodape-in"><span>Gestão Automatizada de Denúncias - Desenvolvido pelo 1º Sgt Anderson Arcari Pereira</span></div></footer>
 </div>
 
 <div class="sessao" id="sessao" role="alertdialog" aria-modal="true" aria-labelledby="sessao-t" hidden>
@@ -1000,6 +1001,33 @@ form.card.at { padding: 14px 16px; }
      Abrir o site com ?demo no fim do endereço roda o protótipo, com dados fictícios. */
   const CFG = { api: "https://script.google.com/macros/s/AKfycbzEiE2HLZ3PC_EcLETTZEaR0QSUaDYNwg_ZMxLlcptHbpp2ERQqKe3IjLBepgCs2r0l/exec", clientId: "789381026269-khfib91coegbj9n1cf4i0frce8r5fank.apps.googleusercontent.com" };
   const REAL = !!CFG.api && !/[?&]demo(=|&|$)/.test(location.search);
+  /* ===== o que muda de um sistema para o outro (o servidor tem a mesma tabela em 00_Base: SISTEMA_DEF) =====
+     Tudo o mais — quadros, anotações, atendimento, devolver, finalizar, excluir, usuários, dashboard — é igual. */
+  const SIS_UI = {
+    SISDEN: {
+      chave: "SISDEN", prefixo: "sisden", titulo: "SISDEN", rodape: "Gestão Automatizada de Denúncias da SEMAD",
+      busca: "Buscar protocolo, ID (DEN 1480), município, REDS…", orgao: "SEMAD", entrada: "Entrada da SEMAD",
+      final: "RESPONDIDA SEMAD", respondidaA: "respondida à SEMAD", respondidasA: "respondidas à SEMAD", resposta: "Resposta à SEMAD", btnFinal: "Respondida à SEMAD · Finalizar",
+      resultados: ["CONSTATADO", "NÃO CONSTATADO", "ENDEREÇO NÃO LOCALIZADO", "ENTRADA NÃO AUTORIZADA", "ATENDIDA POR OUTRO ÓRGÃO", "OUTROS (descrever na observação)"],
+      motivos: ["Atendida por agentes da SEMAD", "Município de outra companhia", "Demanda duplicada", "Enviada por engano pela SEMAD", "Outro motivo"],
+      exclHint: "Quando a denúncia já foi atendida por agentes da SEMAD, ou veio por engano (por exemplo, município de outra companhia).",
+      gaiaObrig: true, obsRotulo: "Observação", obsNome: "observação", obsLim: 500, obsPh: "Ex.: proprietário notificado; retorno em 15 dias.", csv: "sisden"
+    },
+    DISQUE_181: {
+      chave: "DISQUE_181", prefixo: "ddu", titulo: "DDU", rodape: "Gestão Automatizada de Denúncias do DDU",
+      busca: "Buscar pelo protocolo, município, REDS…", orgao: "DDU", entrada: "Entrada do DDU",
+      final: "RESPONDIDA SISTEMA", respondidaA: "respondida no DDU", respondidasA: "respondidas no DDU", resposta: "Resposta no DDU", btnFinal: "Respondida no DDU · Finalizar",
+      resultados: ["CONSTATADO", "NÃO CONSTATADO", "ORIENTAÇÃO VERBAL", "NINGUÉM NO LOCAL (UMA VEZ)", "DUAS TENTATIVAS", "NÃO LOCALIZADO", "ENTRADA NÃO AUTORIZADA", "PC/SEMMA"],
+      motivos: ["Município de outra companhia", "Demanda duplicada", "Enviada por engano pelo DDU", "Outro motivo"],
+      exclHint: "Quando a denúncia veio por engano, repetida ou de município de outra companhia.",
+      gaiaObrig: false, obsRotulo: "Síntese do atendimento", obsNome: "síntese", obsLim: 1000,
+      obsPh: "Exemplo: Constatado o cativeiro irregular de 11 pássaros e posse de gaiolas e armadilhas. Feita a prisão do autor, lavratura do auto de infração, destinação das aves e destruição sumária dos materiais.", csv: "ddu"
+    }
+  };
+  let SIS = SIS_UI.SISDEN;
+  /** nome da ação no servidor para o sistema aberto: acao("carregar") → "sisden.carregar" ou "ddu.carregar" */
+  function acao(n) { return SIS.prefixo + "." + n; }
+  function maiusc(t) { return t.charAt(0).toUpperCase() + t.slice(1); }
   /* contas de demonstração (no sistema real: o e-mail de quem fez login) */
   const CONTA = { fracao: "2gp3pel@exemplo.com", gestor: "gestor.1cia@exemplo.com", cmt: "ten.moreira@exemplo.com" };
   /* Comando da fração: só estes e-mails dão ciente e respondem aos recados da 1ª Cia */
@@ -1056,7 +1084,6 @@ form.card.at { padding: 14px 16px; }
   const PRIO_PESO = { URGENTE: 0, ALTA: 1, NORMAL: 2 };
   const TIPOS_REC = { CORRECAO: "Correção de dados", RETORNO: "Retornar ao local", RECADO: "Recado" };
   const CAMPOS_COR = { atend: "Data do atendimento", gaia: "Nº GAIA", reds: "Nº REDS", resultado: "Resultado" };
-  const RESULTADOS = ["CONSTATADO", "NÃO CONSTATADO", "ENDEREÇO NÃO LOCALIZADO", "ENTRADA NÃO AUTORIZADA", "ATENDIDA POR OUTRO ÓRGÃO", "OUTROS (descrever na observação)"];
   const SIT_ANALISTA = [["RESPONDIDA SEMAD", "Respondida à SEMAD"], ["NÃO LOCALIZADA NO GAIA", "Não localizada no GAIA"], ["PENDENTE DE RESPOSTA", "Pendente de resposta (aguardando documento)"]];
 
   /* ================= dados fictícios =================
@@ -1095,47 +1122,71 @@ form.card.at { padding: 14px 16px; }
   const DEMANDAS = [];
   /** demandas excluídas pelo Gestor Sistema (saem da lista, mas ficam guardadas e podem ser restauradas) */
   const EXCLUIDAS = [];
-  const MOTIVOS_EXCLUSAO = ["Município de outra companhia", "Demanda duplicada", "Enviada por engano pela SEMAD", "Outro motivo"];
-  let cod = 4100;
-  if (!REAL) FRACOES.forEach(function (f) {
-    for (let i = 0; i < f[2]; i++) {
-      const envio = addDays(HOJE, -ri(0, 185));
-      const gerada = addDays(envio, -ri(0, rnd() < 0.15 ? 240 : 6));
-      const req = rnd() < 0.14;
-      cod += ri(1, 9);
-      const d = {
-        codigo: (req ? "R11" : "D15") + String(cod).padStart(4, "0"),
-        tipo: req ? "REQUISIÇÃO" : "DENÚNCIA",
-        gerada: gerada, envio: envio, venc: addDays(envio, PRAZO),
-        natureza: req ? "OUTROS" : natureza(),
-        municipio: pick(f[1]), fracao: f[0],
-        endereco: pick(RUAS) + ", " + ri(10, 980) + " — " + pick(BAIRROS),
-        atend: "", gaia: "", reds: "", resultado: "", obsFracao: "", sitAnalista: "", respSemadEm: "", obsAnalista: "",
-        prioridade: "NORMAL", prioPor: "", anotacao: "", recados: [], avisos: [],
-        hist: [{ quando: envio, quem: "Importação automática", acao: "Recebida pelo fluxo da SEMAD e encaminhada à fração" }]
-      };
-      /* tempo até o atendimento: no prazo (mediana ~30 dias) ou depois do vencimento; uma parte nunca é atendida */
-      const r0 = rnd();
-      const atraso = r0 > f[3];
-      const espera = atraso ? (rnd() < 0.3 ? 9999 : PRAZO + ri(1, 75)) : Math.round(2 + (PRAZO - 3) * Math.pow(rnd(), 1.6));
-      if (espera <= diff(HOJE, envio)) {
-        const at = addDays(envio, espera);
-        d.atend = at;
-        const p = at.split("-");
-        d.legado = diff(HOJE, at) > 45; // atendimento lançado na planilha antiga e migrado
-        if (!d.legado || rnd() < 0.93) d.gaia = p[0] + "." + p[1] + ".01.362." + String(ri(100, 4999)).padStart(7, "0");
-        if (!d.legado || rnd() < 0.9) d.reds = p[0] + "-0" + String(ri(20000000, 43999999)) + "-001";
-        if (!d.legado || rnd() < 0.86) d.resultado = pick(RESULTADOS.slice(0, 5));
-        if (rnd() < (diff(HOJE, at) > 10 ? 0.97 : 0.35)) { d.sitAnalista = "RESPONDIDA SEMAD"; d.respSemadEm = addDays(at, ri(1, 8)); if (diff(d.respSemadEm, HOJE) > 0) d.respSemadEm = HOJE; }
-        d.hist.push({ quando: at, quem: "Fração " + f[0], acao: "Atendimento registrado" });
+  /* DDU (protótipo): volume por fração e chance de atender no prazo, tirados da planilha antiga do DDU
+     (abr–out/2026, ~40% do volume real para o protótipo ficar leve); naturezas e resultados nas proporções reais. */
+  const DDU_VOL = { "1 PELOTÃO": [990, 0.39], "2 PELOTÃO": [190, 0.07], "1 GP/3 PELOTÃO": [64, 0.17], "2 GP/3 PELOTÃO": [104, 0.07], "3 GP/3 PELOTÃO": [35, 0.95],
+    "1 GP/5 PELOTÃO": [90, 0.9], "2 GP/5 PELOTÃO": [117, 0.4], "1 GP/6 PELOTÃO": [88, 1], "2 GP/6 PELOTÃO": [31, 1], "3 GP/6 PELOTÃO": [19, 1], "4 GP/6 PELOTÃO": [8, 0.75],
+    "5 GP/6 PELOTÃO": [22, 1], "6 GP/6 PELOTÃO": [22, 1], "7 GP/6 PELOTÃO": [19, 1], "1 GP/7 PELOTÃO": [16, 0.87], "2 GP/7 PELOTÃO": [11, 0.85], "3 GP/7 PELOTÃO": [10, 1],
+    "4 GP/7 PELOTÃO": [5, 1], "5 GP/7 PELOTÃO": [14, 0.96], "6 GP/7 PELOTÃO": [23, 0.92] };
+  const DDU_NAT = [["MAUS TRATOS", 74], ["ATIVIDADE POLUIDORA", 9], ["DESMATE", 7], ["CATIVEIRO IRREGULAR", 5.5], ["OUTROS", 1.8], ["RECURSOS HÍDRICOS", 1.4], ["TRÁFICO DE DROGAS", 0.2], ["CARVOEJAMENTO", 0.2], ["FLORA", 0.2], ["INCÊNDIO/QUEIMADA", 0.2], ["PESCA", 0.1]];
+  const DDU_RES = [["NÃO CONSTATADO", 50], ["ORIENTAÇÃO VERBAL", 20], ["NINGUÉM NO LOCAL (UMA VEZ)", 13], ["CONSTATADO", 9], ["NÃO LOCALIZADO", 5.5], ["DUAS TENTATIVAS", 1.5], ["ENTRADA NÃO AUTORIZADA", 0.5], ["PC/SEMMA", 0.5]];
+  const DDU_SINTESE = ["No ato da fiscalização, não foi vislumbrada nenhuma situação que configure maus-tratos. O responsável foi orientado a manter o animal em boas condições, com abrigo, água e comida.",
+    "Constatado o cativeiro irregular de 3 pássaros silvestres. Lavrado o auto de infração e feita a destinação das aves.", "Ninguém no local. Deixada notificação para contato com a fração.",
+    "Endereço não localizado com os dados da denúncia. Feito contato com o denunciante, sem sucesso.", "Animais em boas condições; denúncia não constatada."];
+  function sorteio(tab) { let x = rnd() * tab.reduce((t, i) => t + i[1], 0); for (let i = 0; i < tab.length; i++) { x -= tab[i][1]; if (x < 0) return tab[i][0]; } return tab[0][0]; }
+
+  /** dados fictícios do sistema aberto (SISDEN ou DDU); sempre os mesmos para o mesmo sistema */
+  function gerarDemo() {
+    const ddu = SIS.chave === "DISQUE_181";
+    DEMANDAS.length = 0; EXCLUIDAS.length = 0;
+    seed = ddu ? 20261016 : 20261013; notaSeq = 1;
+    let cod = ddu ? 66410000 : 4100;
+    FRACOES.forEach(function (f) {
+      const vol = ddu ? DDU_VOL[f[0]] || [10, 0.8] : [f[2], f[3]];
+      for (let i = 0; i < vol[0]; i++) {
+        const envio = addDays(HOJE, -ri(0, 185));
+        const gerada = addDays(envio, -ri(0, rnd() < 0.15 ? 240 : 6));
+        const req = !ddu && rnd() < 0.14;
+        cod += ri(1, 9);
+        const d = {
+          codigo: ddu ? String(cod) + String(ri(100, 999)) : (req ? "R11" : "D15") + String(cod).padStart(4, "0"),
+          tipo: ddu ? "DDU" : req ? "REQUISIÇÃO" : "DENÚNCIA",
+          gerada: gerada, envio: envio, venc: addDays(envio, PRAZO),
+          natureza: ddu ? sorteio(DDU_NAT) : req ? "OUTROS" : natureza(),
+          municipio: pick(f[1]), fracao: f[0],
+          endereco: pick(RUAS) + ", " + ri(10, 980) + " — " + pick(BAIRROS),
+          atend: "", gaia: "", reds: "", resultado: "", obsFracao: "", sitAnalista: "", respSemadEm: "", obsAnalista: "",
+          prioridade: "NORMAL", prioPor: "", anotacao: "", recados: [], avisos: [],
+          hist: [{ quando: envio, quem: "Importação automática", acao: (ddu ? "Recebida pelo fluxo do DDU" : "Recebida pelo fluxo da SEMAD") + " e encaminhada à fração" }]
+        };
+        /* tempo até o atendimento: no prazo (mediana ~30 dias) ou depois do vencimento; uma parte nunca é atendida */
+        const r0 = rnd();
+        const atraso = r0 > vol[1];
+        const espera = atraso ? (rnd() < 0.3 ? 9999 : PRAZO + ri(1, 75)) : Math.round(2 + (PRAZO - 3) * Math.pow(rnd(), 1.6));
+        if (espera <= diff(HOJE, envio)) {
+          const at = addDays(envio, espera);
+          d.atend = at;
+          const p = at.split("-");
+          d.legado = diff(HOJE, at) > 45; // atendimento lançado na planilha antiga e migrado
+          if (ddu ? rnd() < 0.17 : !d.legado || rnd() < 0.93) d.gaia = p[0] + "." + p[1] + ".01.362." + String(ri(100, 4999)).padStart(7, "0");
+          if (!d.legado || rnd() < 0.9) d.reds = p[0] + "-0" + String(ri(20000000, 43999999)) + "-001";
+          if (!d.legado || rnd() < 0.86) d.resultado = ddu ? sorteio(DDU_RES) : pick(SIS.resultados.slice(0, 5));
+          if (ddu && rnd() < 0.75) d.obsFracao = pick(DDU_SINTESE);
+          if (rnd() < (diff(HOJE, at) > 10 ? 0.97 : 0.35)) { d.sitAnalista = SIS.final; d.respSemadEm = addDays(at, ri(1, 8)); if (diff(d.respSemadEm, HOJE) > 0) d.respSemadEm = HOJE; }
+          d.hist.push({ quando: at, quem: "Fração " + f[0], acao: "Atendimento registrado" });
+        }
+        const pr = rnd();
+        if (!d.atend && pr < 0.1) d.prioridade = "URGENTE"; else if (!d.atend && pr < 0.28) d.prioridade = "ALTA";
+        if (d.prioridade !== "NORMAL") d.prioPor = rnd() < 0.5 ? "gestor" : "fracao";
+        if (!d.atend && rnd() < 0.55) d.anotacao = pick(ANOTACOES);
+        DEMANDAS.push(d);
       }
-      const pr = rnd();
-      if (!d.atend && pr < 0.1) d.prioridade = "URGENTE"; else if (!d.atend && pr < 0.28) d.prioridade = "ALTA";
-      if (d.prioridade !== "NORMAL") d.prioPor = rnd() < 0.5 ? "gestor" : "fracao";
-      if (!d.atend && rnd() < 0.55) d.anotacao = pick(ANOTACOES);
-      DEMANDAS.push(d);
-    }
-  });
+    });
+    semear();
+    PENDENCIAS.length = 0;
+    PENDENCIAS.push({ tone: "late", titulo: "Município sem fração", texto: (ddu ? "66415320871" : "D154733") + " — CONGONHAS não está na tabela de municípios. A demanda aguarda o cadastro para entrar." },
+      { tone: "warn", titulo: "Duplicata barrada", texto: (ddu ? "66413390245" : "D153994") + " chegou de novo pelo fluxo. Já existe, com envio em outra data; não entrou duas vezes." });
+  }
 
   /* ================= anotações de exemplo (protótipo) ================= */
   let notaSeq = 1;
@@ -1145,7 +1196,7 @@ form.card.at { padding: 14px 16px; }
     d.notas.push(n);
     return n;
   }
-  if (!REAL) (function semear() {
+  function semear() {
     DEMANDAS.forEach(function (d) {
       d.notas = []; d.devolvida = null; d.alterado = "";
       if (d.anotacao) { notaDemo(d, d.anotacao, "Equipe " + d.fracao + " (Básico)", "", "fracao", addDays(d.envio, 2) + " 08:00", { vistaGe: true }); d.anotacao = ""; }
@@ -1166,19 +1217,16 @@ form.card.at { padding: 14px 16px; }
       d.hist.push({ quando: addDays(HOJE, -2), hora: "16:05", quem: G[0], acao: "Devolvida à 2 GP/3 PELOTÃO: “" + d.devolvida.motivo + "”" });
     }
     if (atendidas[1]) { atendidas[1].sitAnalista = ""; atendidas[1].respSemadEm = ""; notaDemo(atendidas[1], "Fotos do auto de constatação anexadas ao GAIA.", B[0], B[1], "fracao", addDays(HOJE, -3) + " 14:20", { vistaGe: false }); }
-    const g1 = DEMANDAS.filter(d => d.fracao === "2 GP/5 PELOTÃO" && d.atend && d.gaia);
-    if (g1[0]) { g1[0].sitAnalista = ""; g1[0].respSemadEm = ""; g1[0].alterado = addDays(HOJE, -1) + " 10:47"; g1[0].hist.push({ quando: addDays(HOJE, -1), hora: "10:47", quem: "2gp5pel@exemplo.com (usuário básico)", acao: "Atendimento alterado (GAIA)" }); }
+    const g1 = DEMANDAS.filter(d => d.fracao === "2 GP/5 PELOTÃO" && d.atend && d.reds);
+    if (g1[0]) { g1[0].sitAnalista = ""; g1[0].respSemadEm = ""; g1[0].alterado = addDays(HOJE, -1) + " 10:47"; g1[0].hist.push({ quando: addDays(HOJE, -1), hora: "10:47", quem: "2gp5pel@exemplo.com (usuário básico)", acao: "Atendimento alterado (REDS)" }); }
     const g2 = DEMANDAS.filter(d => d.fracao === "1 PELOTÃO" && d.atend);
     if (g2[2] && g2[2].reds) { g2[2].reds = "2025" + g2[2].reds.slice(4); g2[2].legado = true; g2[2].sitAnalista = ""; g2[2].respSemadEm = ""; }
     const p3 = DEMANDAS.filter(d => d.fracao === "1 GP/3 PELOTÃO" && !d.atend);
     if (p3[0]) notaDemo(p3[0], "Acesso só pela estrada de terra; levar a 4x4.", P[0], P[1], "gestao", HOJE + " 07:55", { vistaFr: false });
-  })();
+  }
 
-  const PENDENCIAS = [
-    { tone: "late", titulo: "Município sem fração", texto: "D154733 — CONGONHAS não está na tabela de municípios. A demanda aguarda o cadastro para entrar." },
-    { tone: "warn", titulo: "Duplicata barrada", texto: "D153994 chegou de novo pelo fluxo. Já existe, com envio em outra data; não entrou duas vezes." }
-  ];
-  if (REAL) { FRACOES.length = 0; PENDENCIAS.length = 0; }
+  const PENDENCIAS = [];
+  if (REAL) FRACOES.length = 0; else gerarDemo();
 
   /* ================= regras =================
      Situação (uma só): pendente → respondida → arquivada (respondida à SEMAD).
@@ -1186,7 +1234,7 @@ form.card.at { padding: 14px 16px; }
      Devolvida conta como sem atendimento para o prazo (o prazo original continua valendo). */
   function situacao(d) {
     if (d.situacao) return d.situacao;
-    if (d.sitAnalista === "RESPONDIDA SEMAD") return "arquivada";
+    if (d.sitAnalista === SIS.final) return "arquivada";
     if (d.devolvida) return "devolvida";
     return d.atend ? "respondida" : "pendente";
   }
@@ -1228,7 +1276,7 @@ form.card.at { padding: 14px 16px; }
       const m = " (registro migrado)";
       if (!d.reds) p.push({ campo: "reds", msg: "Nº do REDS não informado" + m });
       else if (d.reds.slice(0, 4) !== d.atend.slice(0, 4)) p.push({ campo: "reds", msg: "Ano do REDS (" + d.reds.slice(0, 4) + ") diferente do ano do atendimento" + m });
-      if (!d.gaia) p.push({ campo: "gaia", msg: "Nº do GAIA não informado" + m });
+      if (!d.gaia && SIS.gaiaObrig) p.push({ campo: "gaia", msg: "Nº do GAIA não informado" + m });
       if (!d.resultado) p.push({ campo: "resultado", msg: "Resultado não informado" + m });
     }
     return p;
@@ -1238,7 +1286,7 @@ form.card.at { padding: 14px 16px; }
   /** um status só: No prazo · Em atraso · Atendida (com atraso) · Devolvida · Finalizada */
   function pillFor(d) {
     const c = categoria(d), f = faltam(d);
-    if (c === "finalizadas") return '<span class="pill fim">Finalizada</span><span class="prazo-txt">respondida à SEMAD' + (d.respSemadEm ? " em " + br(d.respSemadEm) : "") + "</span>";
+    if (c === "finalizadas") return '<span class="pill fim">Finalizada</span><span class="prazo-txt">' + SIS.respondidaA + (d.respSemadEm ? " em " + br(d.respSemadEm) : "") + "</span>";
     if (c === "devolvidas") return '<span class="pill dev">Devolvida</span><span class="prazo-txt">para correção' + (f < 0 ? " · prazo vencido" : "") + "</span>";
     if (c === "atendidas") return '<span class="pill ok">Atendida</span><span class="prazo-txt">em ' + br(d.atend) + (diff(d.atend, d.venc) > 0 ? ' · <span class="atr">com atraso</span>' : "") + "</span>";
     if (c === "atraso") return '<span class="pill late">Em atraso</span><span class="prazo-txt">' + (-f) + " dia(s) após o vencimento</span>";
@@ -1331,6 +1379,7 @@ form.card.at { padding: 14px 16px; }
       if (k[0] === "prazo") foot += c.breve ? " · " + c.breve + (c.breve === 1 ? " vence" : " vencem") + " em 10 dias" : "";
       if (k[0] === "atendidas") foot = gestao ? "pelas frações" : "pela fração";
       if (k[0] === "devolvidas" && n && !gestao) foot = "corrija o atendimento";
+      if (k[0] === "finalizadas") foot = SIS.respondidasA;
       return '<button type="button" class="kpi kc-' + k[0] + (k[0] === "devolvidas" && n ? " alerta" : "") + '" data-tone="' + k[2] + '" data-aba="' + k[0] + '" aria-pressed="' + on + '">' +
         '<span class="kpi-label">' + k[1] + '</span><span class="kpi-value">' + n + '</span><span class="kpi-foot">' + foot + "</span></button>";
     }).join("");
@@ -1364,7 +1413,7 @@ form.card.at { padding: 14px 16px; }
 
   function excluidasHtml() {
     return '<section class="panel" id="g-filtros"><div class="panel-head"><h2>Demandas excluídas</h2><button type="button" class="link-btn" data-excl="0">← voltar às demandas</button></div>' +
-      '<p class="nota" style="margin:0">Saem da lista, do painel e dos avisos, mas ficam guardadas com o motivo. Se a SEMAD mandar o mesmo código de novo, ele é barrado. Pode restaurar a qualquer momento.</p>' +
+      '<p class="nota" style="margin:0">Saem da lista, do painel e dos avisos, mas ficam guardadas com o motivo. Se o fluxo ' + (SIS.orgao === "SEMAD" ? "da SEMAD" : "do DDU") + ' mandar o mesmo código de novo, ele é barrado. Pode restaurar a qualquer momento.</p>' +
       (REAL && !st.exclOk ? '<div class="empty" role="status">Carregando…</div>' : EXCLUIDAS.length ? '<div class="tbl-wrap"><table><thead><tr><th>Código</th><th>Município · fração</th><th>Excluída em</th><th>Motivo</th><th></th></tr></thead><tbody>' +
         EXCLUIDAS.slice().reverse().map(function (x) {
           return '<tr><td class="mono">' + esc(x.d.codigo) + '</td><td>' + esc(x.d.municipio) + '<br><span class="muted">' + esc(x.d.fracao) + '</span></td><td class="num">' + br(x.em) + " às " + x.hora +
@@ -1375,7 +1424,7 @@ form.card.at { padding: 14px 16px; }
   /* ================= telas ================= */
   function searchHtml() {
     return '<div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>' +
-      '<input id="busca" type="search" placeholder="Buscar protocolo, ID (DEN 1480), município, REDS…" aria-label="Buscar em todas as demandas" value="' + esc(st.busca) + '"></div>';
+      '<input id="busca" type="search" placeholder="' + esc(SIS.busca) + '" aria-label="Buscar em todas as demandas" value="' + esc(st.busca) + '"></div>';
   }
 
   /** protocolos novos da SEMAD (2026.09.01.503.0000535) cabem numa linha (coluna mais larga); o número curto
@@ -1417,7 +1466,7 @@ form.card.at { padding: 14px 16px; }
       '<section class="head"><div><div class="eyebrow">' + (pelot ? "Comando do pelotão · " + esc(st.usuario.nome) : "Gestão · todas as frações") + "</div><h1>" + (pelot ? pelNome(st.usuario.pelotao) : "1ª Companhia") + "</h1></div>" +
       '<p class="head-note">Clique num quadro para ver as demandas daquela situação. Escolha uma fração na tabela ou no filtro para ver só ela.' + (pelot ? " Finalizar e devolver à fração são do Gestor Sistema." : "") + "</p></section>" +
       cartoesHtml() + tabelaFracoes() +
-      (pend.length ? '<section class="panel"><div class="panel-head"><h2>Entrada da SEMAD</h2><p>linhas que não entraram sozinhas</p></div><div class="alerts">' +
+      (pend.length ? '<section class="panel"><div class="panel-head"><h2>' + SIS.entrada + '</h2><p>linhas que não entraram sozinhas</p></div><div class="alerts">' +
         pend.map(p => '<div class="alert" data-tone="' + p.tone + '"><b>' + esc(p.titulo) + "</b><p>" + esc(p.texto) + "</p></div>").join("") + "</div></section>" : "") +
       (st.verExcluidas && ehSistema() ? excluidasHtml() : filtrosHtml() + listHtml(listaFiltrada(), true));
   }
@@ -1521,11 +1570,11 @@ form.card.at { padding: 14px 16px; }
         (s === "respondida" ? '<button type="button" class="btn sm" data-act="at-editar" aria-label="Editar atendimento">' + ICO.note + "Editar</button>" : "") + "</div></div>" +
         '<dl class="facts">' + fato("Data do atendimento", br(d.atend)) + fato("Resultado", esc(d.resultado || "—")) +
         fato("Nº GAIA", d.gaia ? '<span class="mono">' + esc(d.gaia) + "</span>" : "—", true) + fato("Nº REDS", d.reds ? '<span class="mono">' + esc(d.reds) + "</span>" : "—", true) +
-        fato("Observação", esc(d.obsFracao || "—"), true) + (d.legado ? fato("Origem", "Migrado da planilha antiga — os campos não passaram pela validação do SISDEN", true) : "") + "</dl>" +
-        alt + confHtml + (s === "arquivada" ? '<p class="lock">Demanda finalizada (respondida à SEMAD em ' + br(d.respSemadEm) + "). O atendimento não pode mais ser alterado.</p>" : "") + "</section>";
+        fato(SIS.obsRotulo, esc(d.obsFracao || "—"), true) + (d.legado ? fato("Origem", "Migrado da planilha antiga — os campos não passaram pela validação do " + SIS.titulo, true) : "") + "</dl>" +
+        alt + confHtml + (s === "arquivada" ? '<p class="lock">Demanda finalizada (' + SIS.respondidaA + " em " + br(d.respSemadEm) + "). O atendimento não pode mais ser alterado.</p>" : "") + "</section>";
     }
-    const optsRes = '<option value="">Selecione…</option>' + RESULTADOS.map(r => "<option" + (d.resultado === r ? " selected" : "") + ">" + esc(r) + "</option>").join("") +
-      (d.resultado && RESULTADOS.indexOf(d.resultado) < 0 ? "<option selected>" + esc(d.resultado) + "</option>" : "");
+    const optsRes = '<option value="">Selecione…</option>' + SIS.resultados.map(r => "<option" + (d.resultado === r ? " selected" : "") + ">" + esc(r) + "</option>").join("") +
+      (d.resultado && SIS.resultados.indexOf(d.resultado) < 0 ? "<option selected>" + esc(d.resultado) + "</option>" : "");
     const brancoOk = sistema;
     return '<form class="card at" id="f-at" novalidate aria-labelledby="c-at"><div class="card-h"><h3 class="card-t" id="c-at">' + ICO_CHECK + "Atendimento</h3><div class=\"card-hr\">" + pill + "</div></div>" +
       (s === "respondida" ? '<p class="nota-gestor">Você está alterando um atendimento já respondido. O histórico guarda o valor antigo e o novo' + (ehFracaoPerfil() ? "; o Gestor Sistema vê a marca “atendimento alterado”." : ".") + "</p>" : "") +
@@ -1533,9 +1582,10 @@ form.card.at { padding: 14px 16px; }
       '<div class="f2">' +
       campo("at-data", "Data do atendimento", '<input id="at-data" type="date" min="' + d.envio + '" max="' + HOJE + '" value="' + d.atend + '">', "Entre " + br(d.envio) + " e hoje") +
       campo("at-res", "Resultado", '<select id="at-res">' + optsRes + "</select>", "") + "</div>" +
-      campo("at-gaia", "Nº do GAIA", '<input id="at-gaia" class="mono" inputmode="numeric" placeholder="2026.10.01.362.0001234" value="' + esc(d.gaia) + '">', "Formato aaaa.mm.dd.nnn.nnnnnnn" + (brancoOk && !d.gaia ? " · pode ficar em branco (registro sem GAIA)" : "")) +
+      campo("at-gaia", SIS.gaiaObrig ? "Nº do GAIA" : 'Nº do GAIA <span class="opc">(opcional)</span>', '<input id="at-gaia" class="mono" inputmode="numeric" placeholder="2026.10.01.362.0001234" value="' + esc(d.gaia) + '">',
+        SIS.gaiaObrig ? "Formato aaaa.mm.dd.nnn.nnnnnnn" + (brancoOk && !d.gaia ? " · pode ficar em branco (registro sem GAIA)" : "") : "Se houver, no formato aaaa.mm.dd.nnn.nnnnnnn") +
       campo("at-reds", "Nº do REDS", '<input id="at-reds" class="mono" inputmode="numeric" placeholder="2026-012345678-001" value="' + esc(d.reds) + '">', "Formato aaaa-nnnnnnnnn-nnn" + (brancoOk && !d.reds ? " · pode ficar em branco (registro sem REDS)" : "")) +
-      campo("at-obs", "Observação", '<textarea id="at-obs" maxlength="500" placeholder="Ex.: proprietário notificado; retorno em 15 dias.">' + esc(d.obsFracao) + "</textarea>", '<span id="at-obs-n">' + (d.obsFracao || "").length + "</span>/500") +
+      campo("at-obs", SIS.gaiaObrig ? SIS.obsRotulo : SIS.obsRotulo + ' <span class="opc">(opcional)</span>', '<textarea id="at-obs"' + (SIS.gaiaObrig ? "" : ' rows="4"') + ' maxlength="' + SIS.obsLim + '" placeholder="' + esc(SIS.obsPh) + '">' + esc(d.obsFracao) + "</textarea>", '<span id="at-obs-n">' + (d.obsFracao || "").length + "</span>/" + SIS.obsLim) +
       confHtml +
       '<div class="confirm" id="at-confirm" role="alertdialog" aria-labelledby="at-confirm-t" hidden><p id="at-confirm-t"><b>Ao salvar, a demanda vai para Atendidas.</b> Deseja continuar?</p>' +
       '<div class="actions"><button type="button" class="btn" data-act="conf-nao">Voltar</button><button type="button" class="btn primary" data-act="conf-sim" id="at-conf-sim">Sim, salvar</button></div></div>' +
@@ -1548,14 +1598,14 @@ form.card.at { padding: 14px 16px; }
     if (!ehSistema()) return "";
     const s = situacao(d);
     let semad;
-    if (s === "arquivada") semad = '<div class="adm"><div class="admh"><p class="admt">Resposta à SEMAD</p><button type="button" class="btn sm" data-act="adm-desarq">Reabrir</button></div>' +
-      '<p class="hint">Finalizada: respondida à SEMAD em ' + br(d.respSemadEm) + '. Reabrir volta a demanda para Atendidas (a fração não é afetada).</p></div>';
-    else if (s === "respondida") semad = '<div class="adm"><div class="admh"><p class="admt">Resposta à SEMAD</p>' + (st.confArq ? "" : '<button type="button" class="btn sm ok-btn" data-act="adm-arq">Respondida à SEMAD · Finalizar</button>') + "</div>" +
-      (st.confArq ? '<div class="confirm" role="alertdialog" aria-labelledby="arq-t"><p id="arq-t"><b>Confirmar a resposta à SEMAD com a data de hoje (' + br(HOJE) + ")?</b> A demanda vai para Finalizadas.</p>" +
+    if (s === "arquivada") semad = '<div class="adm"><div class="admh"><p class="admt">' + SIS.resposta + '</p><button type="button" class="btn sm" data-act="adm-desarq">Reabrir</button></div>' +
+      '<p class="hint">Finalizada: ' + SIS.respondidaA + " em " + br(d.respSemadEm) + '. Reabrir volta a demanda para Atendidas (a fração não é afetada).</p></div>';
+    else if (s === "respondida") semad = '<div class="adm"><div class="admh"><p class="admt">' + SIS.resposta + "</p>" + (st.confArq ? "" : '<button type="button" class="btn sm ok-btn" data-act="adm-arq">' + SIS.btnFinal + "</button>") + "</div>" +
+      (st.confArq ? '<div class="confirm" role="alertdialog" aria-labelledby="arq-t"><p id="arq-t"><b>Confirmar: ' + SIS.respondidaA + " com a data de hoje (" + br(HOJE) + ")?</b> A demanda vai para Finalizadas.</p>" +
         '<div class="actions"><button type="button" class="btn" data-act="adm-arq-nao">Cancelar</button><button type="button" class="btn primary" data-act="adm-arq-sim" id="arq-sim">Sim, finalizar</button></div></div>'
         : '<p class="hint">Grava a data de hoje e a demanda vai para Finalizadas. Pede confirmação.</p>') + "</div>";
-    else semad = '<div class="adm"><p class="admt">Resposta à SEMAD</p><p class="hint">' + (s === "devolvida" ? "Aguardando a fração corrigir o atendimento devolvido." : "Disponível depois que o atendimento for registrado.") + "</p></div>";
-    const antigo = d.sitAnalista && d.sitAnalista !== "RESPONDIDA SEMAD" ? '<p class="hint">Situação na planilha antiga: ' + esc((SIT_ANALISTA.find(x => x[0] === d.sitAnalista) || [0, d.sitAnalista])[1]) + "</p>" : "";
+    else semad = '<div class="adm"><p class="admt">' + SIS.resposta + '</p><p class="hint">' + (s === "devolvida" ? "Aguardando a fração corrigir o atendimento devolvido." : "Disponível depois que o atendimento for registrado.") + "</p></div>";
+    const antigo = d.sitAnalista && d.sitAnalista !== SIS.final ? '<p class="hint">Situação na planilha antiga: ' + esc((SIT_ANALISTA.find(x => x[0] === d.sitAnalista) || [0, d.sitAnalista])[1]) + "</p>" : "";
     const obsAn = d.obsAnalista ? '<p class="hint">Observação do analista: ' + esc(d.obsAnalista) + "</p>" : "";
     let dev = "";
     if (s === "respondida") {
@@ -1569,10 +1619,10 @@ form.card.at { padding: 14px 16px; }
     }
     const exc = '<div class="adm"><div class="admh"><p class="admt perigo-t">Excluir demanda</p>' + (st.excluindo ? "" : '<button type="button" class="btn sm danger-out" data-act="ex-abrir">Excluir…</button>') + "</div>" +
       (st.excluindo ? '<div class="confirm perigo" role="alertdialog" aria-labelledby="ex-t"><p id="ex-t"><b>A demanda sai da lista, do dashboard e dos avisos.</b> Ela fica guardada em “Excluídas” e pode ser restaurada.</p>' +
-        campo("ex-motivo", "Motivo", '<select id="ex-motivo"><option value="">Selecione…</option>' + MOTIVOS_EXCLUSAO.map(m => "<option>" + m + "</option>").join("") + "</select>", "") +
+        campo("ex-motivo", "Motivo", '<select id="ex-motivo"><option value="">Selecione…</option>' + SIS.motivos.map(m => "<option>" + m + "</option>").join("") + "</select>", "") +
         campo("ex-detalhe", "Detalhe", '<input id="ex-detalhe" maxlength="300" placeholder="Ex.: Nova Lima é atendida pela 2ª Cia">', "Obrigatório em “Outro motivo”.") +
         '<div class="actions"><button type="button" class="btn" data-act="ex-nao">Cancelar</button><button type="button" class="btn danger" data-act="ex-sim">Excluir demanda</button></div></div>'
-        : '<p class="hint">Quando a SEMAD envia por engano, por exemplo município de outra companhia.</p>') + "</div>";
+        : '<p class="hint">' + SIS.exclHint + "</p>") + "</div>";
     return '<section class="card card-adm" aria-labelledby="c-adm"><div class="card-h"><h3 class="card-t" id="c-adm">' + ICO_ESCUDO + 'Administração</h3><span class="hint">Só o Gestor Sistema vê</span></div>' +
       semad + antigo + obsAn + dev + exc + "</section>";
   }
@@ -1625,12 +1675,12 @@ form.card.at { padding: 14px 16px; }
       diff(data, d.envio) < 0 ? "A data não pode ser anterior ao envio à fração (" + br(d.envio) + ")." :
       diff(data, HOJE) > 0 ? "A data não pode ser futura." : "") && ok;
     ok = erro("at-res", res ? "" : "Escolha o resultado do atendimento.") && ok;
-    ok = erro("at-gaia", !gaia ? (d.gaia ? "O nº do GAIA não pode ser apagado." : sistema ? "" : "O nº do GAIA é obrigatório para fechar o atendimento.") :
+    ok = erro("at-gaia", !gaia ? (!SIS.gaiaObrig ? "" : d.gaia ? "O nº do GAIA não pode ser apagado." : sistema ? "" : "O nº do GAIA é obrigatório para fechar o atendimento.") :
       !/^\d{4}\.\d{2}\.\d{2}\.\d{3}\.\d{7}$/.test(gaia) ? "Confira o número: são 4.2.2.3.7 dígitos separados por ponto." : "") && ok;
     ok = erro("at-reds", !reds ? (d.reds ? "O nº do REDS não pode ser apagado." : sistema ? "" : "O nº do REDS é obrigatório para fechar o atendimento.") :
       !/^\d{4}-\d{9}-\d{3}$/.test(reds) ? "Confira o número: aaaa-nnnnnnnnn-nnn (ex.: 2026-012345678-001)." :
       data && reds.slice(0, 4) !== data.slice(0, 4) ? "O ano do REDS (" + reds.slice(0, 4) + ") não confere com a data do atendimento." : "") && ok;
-    ok = erro("at-obs", res.indexOf("OUTROS") === 0 && !obs ? "Descreva o resultado na observação." : "") && ok;
+    ok = erro("at-obs", res.indexOf("OUTROS") === 0 && !obs ? "Descreva o resultado na " + SIS.obsNome + "." : obs.length > SIS.obsLim ? "Máximo de " + SIS.obsLim + " caracteres." : "") && ok;
     if (!ok) { const b = drawer.querySelector(".field.bad input, .field.bad select, .field.bad textarea"); if (b) b.focus(); return; }
     if (s === "pendente" && !st.atConfirmado && !sistema) {
       document.getElementById("at-confirm").hidden = false;
@@ -1639,7 +1689,7 @@ form.card.at { padding: 14px 16px; }
       return;
     }
     st.atConfirmado = false;
-    enviar("sisden.salvarAtendimento", { codigo: d.codigo, versao: d.versao, atend: data, resultado: res, gaia: gaia, reds: reds, obs: obs },
+    enviar(acao("salvarAtendimento"), { codigo: d.codigo, versao: d.versao, atend: data, resultado: res, gaia: gaia, reds: reds, obs: obs },
       function (r) {
         if (r.nadaMudou) return "Nada mudou.";
         st.editAt = false;
@@ -1651,24 +1701,24 @@ form.card.at { padding: 14px 16px; }
   function salvarPrioridade(ev) {
     const d = st.aberta, prio = ev.target.value;
     if (prio === d.prioridade) return;
-    enviar("sisden.salvarPlano", { codigo: d.codigo, versao: d.versao, prioridade: prio }, r => r.nadaMudou ? "Nada mudou." : "Prioridade: " + prio.toLowerCase() + ".");
+    enviar(acao("salvarPlano"), { codigo: d.codigo, versao: d.versao, prioridade: prio }, r => r.nadaMudou ? "Nada mudou." : "Prioridade: " + prio.toLowerCase() + ".");
   }
 
   function anotar() {
     const d = st.aberta, el = document.getElementById("nt-txt"), txt = (el ? el.value : "").trim();
     if (!erro("nt-txt", !txt ? "Escreva a anotação." : txt.length > 1000 ? "Máximo de 1000 caracteres." : "")) { if (el) el.focus(); return; }
     const resp = st.respA;
-    enviar("sisden.anotar", { codigo: d.codigo, texto: txt, respostaA: resp || "" }, function () { st.rascunho = ""; st.respA = null; return resp ? "Resposta registrada." : "Anotação registrada."; }, { texto: "nt-txt" });
+    enviar(acao("anotar"), { codigo: d.codigo, texto: txt, respostaA: resp || "" }, function () { st.rascunho = ""; st.respA = null; return resp ? "Resposta registrada." : "Anotação registrada."; }, { texto: "nt-txt" });
   }
   function salvarEdicaoNota(id) {
     const el = document.getElementById("ne-txt"), txt = (el ? el.value : "").trim();
     if (!erro("ne-txt", !txt ? "A anotação não pode ficar vazia." : "")) return;
-    enviar("sisden.editarAnotacao", { id: id, texto: txt }, function (r) { st.editNota = null; return r.nadaMudou ? "Nada mudou." : "Anotação editada."; }, { texto: "ne-txt" });
+    enviar(acao("editarAnotacao"), { id: id, texto: txt }, function (r) { st.editNota = null; return r.nadaMudou ? "Nada mudou." : "Anotação editada."; }, { texto: "ne-txt" });
   }
   function devolver() {
     const d = st.aberta, mot = (document.getElementById("dev-mot") || {}).value || "";
     if (!erro("dev-mot", mot.trim() ? "" : "Explique à fração o que precisa ser corrigido.")) { document.getElementById("dev-mot").focus(); return; }
-    enviar("sisden.devolver", { codigo: d.codigo, versao: d.versao, motivo: mot.trim() }, function () { st.devolvendo = false; return "Demanda devolvida à " + d.fracao + "."; }, { motivo: "dev-mot" });
+    enviar(acao("devolver"), { codigo: d.codigo, versao: d.versao, motivo: mot.trim() }, function () { st.devolvendo = false; return "Demanda devolvida à " + d.fracao + "."; }, { motivo: "dev-mot" });
   }
 
   function excluirDemanda() {
@@ -1679,7 +1729,7 @@ form.card.at { padding: 14px 16px; }
     const m = motivo + (det ? " — " + det : "");
     if (REAL) {
       ocupado(true);
-      api("sisden.excluir", { codigo: d.codigo, versao: d.versao, motivo: motivo, detalhe: det }).then(function () {
+      api(acao("excluir"), { codigo: d.codigo, versao: d.versao, motivo: motivo, detalhe: det }).then(function () {
         ocupado(false);
         const k = DEMANDAS.indexOf(d); if (k >= 0) DEMANDAS.splice(k, 1);
         st.nExcl = (st.nExcl || 0) + 1; st.exclOk = false; st.excluindo = false; fechar(); render();
@@ -1695,7 +1745,7 @@ form.card.at { padding: 14px 16px; }
   }
   function restaurarDemanda(cod) {
     if (REAL) {
-      api("sisden.restaurar", { codigo: cod }).then(function (r) {
+      api(acao("restaurar"), { codigo: cod }).then(function (r) {
         const k = EXCLUIDAS.findIndex(x => x.d.codigo === cod); if (k >= 0) EXCLUIDAS.splice(k, 1);
         st.nExcl = Math.max(0, (st.nExcl || 1) - 1); DEMANDAS.push(daServidor(r.demanda)); render(); toast("Demanda " + cod + " restaurada.");
       }).catch(e => falha(e));
@@ -1712,9 +1762,10 @@ form.card.at { padding: 14px 16px; }
   /* ================= protótipo: o "servidor" roda aqui mesmo, com as mesmas regras ================= */
   function erroDemo(msg, codigo, extra) { const e = new Error(msg); e.codigo = codigo; e.extra = extra; return e; }
   function demoApi(acao, x) { return new Promise(function (ok, nok) { setTimeout(function () { try { ok(demoExec(acao, x || {})); } catch (e) { nok(e); } }, 60); }); }
-  function demoExec(acao, x) {
+  function demoExec(nomeAcao, x) {
     const fr = !ehGestao(), sis = ehSistema();
-    if (acao === "sisden.marcarTodosLidos") { let n = 0; escopo().forEach(d => d.notas.forEach(nt => { if (!nt.vistaGe) { nt.vistaGe = true; n++; } })); return { marcados: n }; }
+    const acao = nomeAcao.slice(nomeAcao.indexOf(".") + 1); // "ddu.abrir" → "abrir": o protótipo usa as mesmas regras nos dois sistemas
+    if (acao === "marcarTodosLidos") { let n = 0; escopo().forEach(d => d.notas.forEach(nt => { if (!nt.vistaGe) { nt.vistaGe = true; n++; } })); return { marcados: n }; }
     let d = x.codigo ? DEMANDAS.find(y => y.codigo === x.codigo) : null;
     if (!d && x.id) d = DEMANDAS.find(y => (y.notas || []).some(n => n.id === Number(x.id)));
     if (!d || escopo().indexOf(d) < 0) throw erroDemo("Demanda não encontrada.", "NAO_ENCONTRADA");
@@ -1722,15 +1773,15 @@ form.card.at { padding: 14px 16px; }
     const s = situacao(d);
     const so = function (cond, msg) { if (!cond) throw erroDemo(msg, "PERMISSAO"); };
     switch (acao) {
-      case "sisden.abrir": {
+      case "abrir": {
         const lado = fr ? "vistaFr" : "vistaGe", destaque = [];
         d.notas.forEach(n => { if (!n[lado]) { destaque.push(n.id); n[lado] = true; } });
         if (fr && destaque.length) reg("Visualizou " + (destaque.length === 1 ? "1 anotação nova" : destaque.length + " anotações novas"));
         return { demanda: d, historico: d.hist.slice().reverse(), destaque: destaque };
       }
-      case "sisden.salvarAtendimento": {
-        if (s === "arquivada") throw erroDemo("Esta demanda já foi respondida à SEMAD e está arquivada.", "ENCERRADA");
-        const nomes = { atend: "data", resultado: "resultado", gaia: "GAIA", reds: "REDS", obs: "observação" };
+      case "salvarAtendimento": {
+        if (s === "arquivada") throw erroDemo("Esta demanda já foi " + SIS.respondidaA + " e está finalizada.", "ENCERRADA");
+        const nomes = { atend: "data", resultado: "resultado", gaia: "GAIA", reds: "REDS", obs: SIS.obsNome };
         const antes = { atend: d.atend, resultado: d.resultado, gaia: d.gaia, reds: d.reds, obs: d.obsFracao };
         const v = { atend: x.atend, resultado: x.resultado, gaia: x.gaia, reds: x.reds, obs: x.obs };
         const mud = Object.keys(nomes).filter(k => (antes[k] || "") !== (v[k] || ""));
@@ -1742,19 +1793,19 @@ form.card.at { padding: 14px 16px; }
         reg(novo ? "Atendimento registrado" : s === "devolvida" ? (mud.length ? "Atendimento corrigido após a devolução (" + det + ")" : "Atendimento reenviado sem alterações após a devolução") : "Atendimento alterado (" + det + ")");
         return { demanda: d, novo: novo, voltou: s === "devolvida" };
       }
-      case "sisden.salvarPlano": {
+      case "salvarPlano": {
         if (fr && d.prioPor === "gestor") throw erroDemo("A prioridade foi definida pelo comando. Só o comando pode alterar.", "PERMISSAO");
         reg("Prioridade: " + d.prioridade.toLowerCase() + " → " + x.prioridade.toLowerCase());
         d.prioridade = x.prioridade; d.prioPor = x.prioridade === "NORMAL" ? "" : fr ? "fracao" : "gestor";
         return { demanda: d };
       }
-      case "sisden.anotar": {
+      case "anotar": {
         const resp = x.respostaA ? d.notas.find(n => n.id === Number(x.respostaA)) : null;
         notaDemo(d, x.texto, minhaAssinatura(), st.usuario.email, fr ? "fracao" : "gestao", HOJE + " " + hora(), { gestor: sis, respostaA: resp ? resp.id : null, vistaFr: fr, vistaGe: !fr });
         reg((resp ? "Respondeu a " + resp.autor : "Anotou") + ": “" + x.texto.slice(0, 80) + "”");
         return { demanda: d };
       }
-      case "sisden.editarAnotacao": {
+      case "editarAnotacao": {
         const n = d.notas.find(y => y.id === Number(x.id));
         so(n && n.email === st.usuario.email, "Só quem escreveu a anotação pode editá-la.");
         if (n.texto === x.texto) return { demanda: d, nadaMudou: true };
@@ -1762,16 +1813,16 @@ form.card.at { padding: 14px 16px; }
         n.texto = x.texto; n.editada = HOJE + " " + hora(); if (fr) n.vistaGe = false; else n.vistaFr = false;
         return { demanda: d };
       }
-      case "sisden.arquivar":
-        so(sis, "Quem registra a resposta à SEMAD é o Gestor Sistema.");
+      case "arquivar":
+        so(sis, "Quem finaliza a demanda é o Gestor Sistema.");
         if (s !== "respondida") throw erroDemo(s === "devolvida" ? "A demanda está devolvida à fração." : "Disponível depois que o atendimento for registrado.", "ESTADO");
-        d.sitAnalista = "RESPONDIDA SEMAD"; d.respSemadEm = HOJE; d.alterado = ""; reg("Respondida à SEMAD em " + br(HOJE) + " · arquivada");
+        d.sitAnalista = SIS.final; d.respSemadEm = HOJE; d.alterado = ""; reg(maiusc(SIS.respondidaA) + " em " + br(HOJE) + " · finalizada");
         return { demanda: d };
-      case "sisden.desarquivar":
+      case "desarquivar":
         so(sis, "Só o Gestor Sistema desarquiva.");
-        reg("Desarquivada (desfeita a resposta à SEMAD de " + br(d.respSemadEm) + ")"); d.sitAnalista = ""; d.respSemadEm = "";
+        reg("Reaberta (desfeita a resposta " + (SIS.orgao === "SEMAD" ? "à SEMAD" : "no DDU") + " de " + br(d.respSemadEm) + ")"); d.sitAnalista = ""; d.respSemadEm = "";
         return { demanda: d };
-      case "sisden.devolver":
+      case "devolver":
         so(sis, "Só o Gestor Sistema devolve demandas à fração.");
         if (s !== "respondida") throw erroDemo("Só dá para devolver uma demanda já respondida pela fração.", "ESTADO");
         d.devolvida = { em: HOJE + " " + hora(), motivo: x.motivo, por: minhaAssinatura() }; d.alterado = "";
@@ -1812,7 +1863,7 @@ form.card.at { padding: 14px 16px; }
   pav.addEventListener("click", function (e) {
     if (e.target.id === "pav-todos") {
       if (!ehGestao()) return;
-      chamar("sisden.marcarTodosLidos").then(function () { if (REAL) escopo().forEach(d => (d.notas || []).forEach(n => { n.nova = false; })); render(); toast("Anotações marcadas como lidas."); }).catch(e => falha(e));
+      chamar(acao("marcarTodosLidos")).then(function () { if (REAL) escopo().forEach(d => (d.notas || []).forEach(n => { n.nova = false; })); render(); toast("Anotações marcadas como lidas."); }).catch(e => falha(e));
       return;
     }
     const it = e.target.closest(".pav-item");
@@ -2064,7 +2115,7 @@ form.card.at { padding: 14px 16px; }
       tile("Taxa de atendimento", pct(M.taxa), "atendidas ÷ recebidas — a “eficiência” da planilha antiga", A && delta(M.taxa, A.taxa, "pp", true), "info") +
       tile("Em atraso", milhar(M.atraso), "venceram sem atendimento", null, "late") +
       tile("Tempo mediano", M.med == null ? "—" : M.med + " dias", "do envio ao atendimento", A && delta(M.med, A.med, "dias", false), "") +
-      tile("Respondidas à SEMAD", pct(M.semadPct), M.semad + " de " + M.atend + " atendidas", null, "") +
+      tile(maiusc(SIS.respondidasA), pct(M.semadPct), M.semad + " de " + M.atend + " atendidas", null, "") +
       "</section>";
 
     /* --- situação por fração / pelotão (gráfico + tabela na mesma linha) --- */
@@ -2162,7 +2213,7 @@ form.card.at { padding: 14px 16px; }
       blocoNat + "</section>" +
       (ehFracao ? "" : municipios());
 
-    app.innerHTML = abasHtml() + filtros + titulo + '<div class="print-only print-meta">SISDEN · ' + esc_(escopoNome(esc)) + " · enviadas de " + br(ini) + " a " + br(fim) + " · Gerado em " + br(HOJE) + " · Gestão Automatizada de Denúncias da SEMAD</div>" + kpis + blocos;
+    app.innerHTML = abasHtml() + filtros + titulo + '<div class="print-only print-meta">' + SIS.titulo + " · " + esc_(escopoNome(esc)) + " · enviadas de " + br(ini) + " a " + br(fim) + " · Gerado em " + br(HOJE) + " · " + SIS.rodape + "</div>" + kpis + blocos;
 
     /* gráficos desenhados depois que o layout existe (precisam da largura) */
     const mesesK = [];
@@ -2221,7 +2272,7 @@ form.card.at { padding: 14px 16px; }
     const esc = escopoDash();
     const [ini, fim] = periodo();
     const per = DEMANDAS.filter(d => d.envio >= ini && d.envio <= fim);
-    const linhas = [["Fração", "Pelotão", "Recebidas", "Atendidas no prazo", "Atendidas com atraso", "Em atraso", "A atender no prazo", "Taxa de atendimento", "Cumprimento do prazo", "Tempo mediano (dias)", "Respondidas à SEMAD"]];
+    const linhas = [["Fração", "Pelotão", "Recebidas", "Atendidas no prazo", "Atendidas com atraso", "Em atraso", "A atender no prazo", "Taxa de atendimento", "Cumprimento do prazo", "Tempo mediano (dias)", maiusc(SIS.respondidasA)]];
     FRACOES.map(f => f[0]).filter(f => noEscopo({ fracao: f }, esc)).forEach(function (f) {
       const m = met(per.filter(d => d.fracao === f));
       linhas.push([f, pelNome(pelotaoDe(f)), m.total, m.noprazo, m.comatraso, m.atraso, m.avencer, pct(m.taxa), pct(m.cumpr), m.med == null ? "" : m.med, m.semad]);
@@ -2229,7 +2280,7 @@ form.card.at { padding: 14px 16px; }
     const csv = "﻿" + linhas.map(l => l.map(v => '"' + String(v).replace(/"/g, '""') + '"').join(";")).join("\r\n");
     const a = document.createElement("a");
     a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" }));
-    a.download = "sisden-desempenho-" + ini + "-a-" + fim + ".csv";
+    a.download = SIS.csv + "-desempenho-" + ini + "-a-" + fim + ".csv";
     document.body.appendChild(a); a.click(); setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 500);
   }
 
@@ -2347,7 +2398,7 @@ form.card.at { padding: 14px 16px; }
   const lg = { etapa: "inicio", email: "", motivo: "" };
   function contaDemo(e, nota) {
     const u = usuPorEmail(e);
-    const sub = u ? (u.ativo ? PAPEIS[u.papel].nome + (u.papel === "GESTOR" ? "" : " · " + lotacao(u)) : "desativado") : "sem cadastro no SISDEN";
+    const sub = u ? (u.ativo ? PAPEIS[u.papel].nome + (u.papel === "GESTOR" ? "" : " · " + lotacao(u)) : "desativado") : "sem cadastro";
     return '<button type="button" class="lg-conta" data-email="' + esc(e) + '"><span class="lg-av">' + esc((e[0] || "?").toUpperCase()) + "</span><span><b>" + esc(u && u.papel !== "BASICO" ? u.nome : e) + "</b><small>" + esc(u && u.papel !== "BASICO" ? e : "") + (u && u.papel !== "BASICO" ? " · " : "") + esc(nota || sub) + "</small></span></button>";
   }
   function renderLogin() {
@@ -2369,7 +2420,7 @@ form.card.at { padding: 14px 16px; }
       const u = usuPorEmail(lg.email);
       const desativado = u && !u.ativo;
       h = '<div class="lg-negado"><div class="lg-ico" aria-hidden="true">' + ICO.warn + '</div><h2 class="lg-t">Acesso não autorizado</h2>' +
-        "<p>A conta <b>" + esc(lg.email) + "</b> " + (desativado ? "teve o acesso desativado em " + br(u.desativadoEm) + "." : "não está cadastrada no SISDEN.") + "</p>" +
+        "<p>A conta <b>" + esc(lg.email) + "</b> " + (desativado ? "teve o acesso desativado em " + br(u.desativadoEm) + "." : "não está cadastrada.") + "</p>" +
         "<p>" + (desativado ? "Se você voltou a comandar uma fração, peça ao Gestor Sistema da 1ª Cia para reativar o seu cadastro." : "Se você usa a conta de uma fração ou é comandante, peça ao Gestor Sistema da 1ª Cia para cadastrar este e-mail. Confira também se entrou com a conta certa.") + "</p>" +
         '<button type="button" class="gbtn" data-lg="contas">' + G_LOGO + "<span>Entrar com outra conta</span></button>" +
         '<p class="fine">Nenhum dado do sistema é exibido a contas sem cadastro.</p></div>';
@@ -2408,7 +2459,7 @@ form.card.at { padding: 14px 16px; }
   const SISTEMAS_PORTAL = [
     { chave: "SISDEN", nome: "SISDEN", desc: "Controle de denúncias e requisições da Secretaria Estadual de Meio Ambiente e Desenvolvimento Sustentável (SEMAD)", situacao: "ATIVO",
       img: "data:image/webp;base64,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" },
-    { chave: "DISQUE_181", nome: "Disque Denúncia 181", desc: "Controle de denúncias do Disque Denúncia Unificado (DDU)", situacao: "EM BREVE",
+    { chave: "DISQUE_181", nome: "Disque Denúncia 181", desc: "Controle de denúncias do Disque Denúncia Unificado (DDU)", situacao: "ATIVO",
       img: "data:image/webp;base64,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" },
     { chave: "MONITORAMENTO", nome: "Monitoramento Contínuo", desc: "Controle de demandas do monitoramento da cobertura vegetal", situacao: "EM BREVE",
       img: "data:image/webp;base64,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" }
@@ -2422,7 +2473,7 @@ form.card.at { padding: 14px 16px; }
     document.getElementById("hub-who").textContent = u.papel === "BASICO" ? u.fracao.replace("PELOTÃO", "PEL") : u.nome;
     document.getElementById("hub-avatar").textContent = iniciais(u);
     document.getElementById("hub-cards").innerHTML = SISTEMAS_PORTAL.map(function (s) {
-      const ativo = s.situacao === "ATIVO", acesso = s.chave === "SISDEN"; // no protótipo todos têm acesso ao SISDEN
+      const ativo = s.situacao === "ATIVO", acesso = !!SIS_UI[s.chave]; // no protótipo todos têm acesso ao SISDEN e ao DDU
       const papel = acesso ? (u.papel === "BASICO" ? "Conta da fração" : PAPEIS[u.papel].nome) + (u.papel === "GESTOR" ? "" : " · " + lotacao(u)) : "";
       return '<article class="hub-card' + (ativo && acesso ? "" : " off") + '">' +
         '<div class="hub-ico"><img src="' + s.img + '" alt=""></div><div class="hub-txt"><h2>' + esc(s.nome) + "</h2><p>" + esc(s.desc) + "</p>" +
@@ -2435,10 +2486,33 @@ form.card.at { padding: 14px 16px; }
   }
   hub.addEventListener("click", function (e) {
     const b = e.target.closest("[data-sistema]");
-    if (b) { hub.hidden = true; window.scrollTo(0, 0); if (REAL) carregarSisden(); else render(); return; }
+    if (b) { entrarSistema(b.getAttribute("data-sistema")); return; }
     if (e.target.id === "hub-sair" && REAL) { sairReal(); return; }
     if (e.target.id === "hub-sair") { hub.hidden = true; lg.etapa = "inicio"; renderLogin(); login.hidden = false; }
   });
+  /** abre um sistema do portal: troca nomes e regras (SIS), limpa o que era do outro sistema e carrega */
+  function entrarSistema(chave) {
+    const novo = SIS_UI[chave];
+    if (!novo) return;
+    const trocou = novo !== SIS;
+    SIS = novo; aplicarMarca();
+    hub.hidden = true; window.scrollTo(0, 0);
+    if (trocou) {
+      DEMANDAS.length = 0; EXCLUIDAS.length = 0; PENDENCIAS.length = 0;
+      Object.assign(st, { nExcl: 0, exclOk: false, usuOk: false, verExcluidas: false, tela: "lista", gFracao: "", busca: "" });
+      if (REAL) { USUARIOS.length = 0; CARGA_EM = 0; } else gerarDemo();
+    }
+    if (REAL) { carregarSisden(); return; }
+    entrarComo(st.usuario);
+  }
+  /** cabeçalho, título da aba e rodapé do sistema aberto */
+  function aplicarMarca() {
+    document.title = SIS.titulo + " 1ª Companhia";
+    const t = document.querySelector(".mast-title");
+    if (t) { t.setAttribute("aria-label", SIS.titulo + " — 1ª Companhia"); const sg = t.querySelector(".sis"); if (sg) sg.textContent = SIS.titulo; }
+    const rod = document.querySelector("#rodape-sis .rodape-in span");
+    if (rod) rod.textContent = SIS.rodape + " - Desenvolvido pelo 1º Sgt Anderson Arcari Pereira";
+  }
   document.getElementById("ir-hub").addEventListener("click", function () { if (!drawer.hidden) fechar(); pav.hidden = true; abrirHub(); });
 
   /* ---------- sessão expirada ---------- */
@@ -2490,7 +2564,7 @@ form.card.at { padding: 14px 16px; }
     }
 
     app.innerHTML = abasHtml() +
-      '<section class="head"><div><div class="eyebrow">Gestão · acessos ao SISDEN</div><h1>Usuários</h1></div>' +
+      '<section class="head"><div><div class="eyebrow">Gestão · acessos ao ' + SIS.titulo + '</div><h1>Usuários</h1></div>' +
       '<p class="head-note">Quem entra e o que pode fazer. Ninguém é apagado: quem sai é <b>desativado</b>, perde o acesso na hora e o nome continua no histórico das demandas.</p></section>' +
       '<section class="kpis k4u" aria-label="Resumo dos acessos">' +
       '<div class="kpi" data-tone="accent"><span class="kpi-label">Ativos</span><span class="kpi-value">' + ativos.length + '</span><span class="kpi-foot">' + USUARIOS.filter(u => !u.ativo).length + " desativado(s)</span></div>" +
@@ -2563,7 +2637,7 @@ form.card.at { padding: 14px 16px; }
     const atual = mesmoPosto(f);
     if (atual && !substituir) { uf.confirmar = { lugar: f.papel === "CMT_PEL" ? pelNome(f.pelotao) : f.fracao, papel: f.papel, atual: atual }; telaUsuarios(); return; }
     if (REAL) {
-      api("sisden.usuarios.salvar", { id: f.id || 0, email: f.email, papel: f.papel, fracao: f.fracao, pelotao: f.pelotao, nome: f.nome, substituir: !!atual }).then(function (r) {
+      api(acao("usuarios.salvar"), { id: f.id || 0, email: f.email, papel: f.papel, fracao: f.fracao, pelotao: f.pelotao, nome: f.nome, substituir: !!atual }).then(function (r) {
         aplicarUsuarios(r); uf.form = null; uf.confirmar = null; telaUsuarios();
         toast(novo ? "Usuário cadastrado. Ele já pode entrar com " + f.email + "." : "Alterações salvas.");
       }).catch(function (e) {
@@ -2611,13 +2685,13 @@ form.card.at { padding: 14px 16px; }
     else if (a === "conf-sim") { salvarUsu(true); }
     else if (a === "desativar") {
       if (u.papel === "GESTOR" && USUARIOS.filter(x => x.ativo && x.papel === "GESTOR").length < 2) { toast("Não dá para desativar o único Gestor Sistema ativo."); return true; }
-      if (REAL) { api("sisden.usuarios.desativar", { id: u.id }).then(function (r) { aplicarUsuarios(r); telaUsuarios(); toast(rotuloUsu(u) + " desativado. O acesso foi cortado e o histórico continua."); }).catch(e => falha(e)); return true; }
+      if (REAL) { api(acao("usuarios.desativar"), { id: u.id }).then(function (r) { aplicarUsuarios(r); telaUsuarios(); toast(rotuloUsu(u) + " desativado. O acesso foi cortado e o histórico continua."); }).catch(e => falha(e)); return true; }
       u.ativo = false; u.desativadoEm = HOJE; logUsu("Desativou " + rotuloUsu(u) + (u.fracao ? " · " + u.fracao : ""));
       toast(rotuloUsu(u) + " desativado. O acesso foi cortado e o histórico continua."); telaUsuarios();
     } else if (a === "reativar") {
       const conflito = mesmoPosto(Object.assign({}, u, { id: -1 }));
       if (conflito) { toast(lotacao(u) + " já tem " + PAPEIS[u.papel].nome + " ativo (" + conflito.nome + "). Edite ou desative o atual antes."); return true; }
-      if (REAL) { api("sisden.usuarios.reativar", { id: u.id }).then(function (r) { aplicarUsuarios(r); telaUsuarios(); toast("Acesso reativado."); }).catch(e => falha(e)); return true; }
+      if (REAL) { api(acao("usuarios.reativar"), { id: u.id }).then(function (r) { aplicarUsuarios(r); telaUsuarios(); toast("Acesso reativado."); }).catch(e => falha(e)); return true; }
       u.ativo = true; u.desativadoEm = ""; logUsu("Reativou " + rotuloUsu(u) + (u.fracao ? " · " + u.fracao : "")); toast("Acesso reativado."); telaUsuarios();
     } else if (a === "expirar") expirarSessao();
     return true;
@@ -2731,7 +2805,7 @@ form.card.at { padding: 14px 16px; }
   /* ---------- portal (escolha de sistemas) ---------- */
   function abrirHubReal() {
     const r = PORTAL_SESSAO; if (!r) { sairReal(); return; }
-    const u = r.usuario, sd = r.sistemas.filter(x => x.chave === "SISDEN" && x.acesso)[0];
+    const u = r.usuario, sd = r.sistemas.filter(x => x.chave === "SISDEN" && x.acesso)[0] || r.sistemas.filter(x => x.acesso)[0];
     const eu = { papel: sd ? sd.papel : "GESTOR", fracao: sd ? sd.fracao : "", pelotao: sd ? sd.pelotao : "", nome: u.nome, email: u.email };
     const basico = eu.papel === "BASICO";
     document.getElementById("hub-ola").textContent = basico ? "Bem-vindos, equipe do " + eu.fracao : "Bem-vindo(a), " + u.nome;
@@ -2739,24 +2813,32 @@ form.card.at { padding: 14px 16px; }
     document.getElementById("hub-avatar").textContent = iniciais(eu);
     document.getElementById("hub-cards").innerHTML = r.sistemas.map(function (s) {
       const loc = SISTEMAS_PORTAL.filter(x => x.chave === s.chave)[0] || {};
-      const ativo = s.situacao === "ATIVO", acesso = !!s.acesso;
+      const acesso = !!s.acesso && !!SIS_UI[s.chave];
+      // ainda EM BREVE: só o Gestor Sistema daquele sistema entra, para testar antes de liberar às frações
+      const teste = s.situacao !== "ATIVO" && acesso && s.papel === "GESTOR", ativo = s.situacao === "ATIVO" || teste;
       const papel = acesso ? (s.papel === "BASICO" ? "Conta da fração" : s.papelNome) + (s.papel === "GESTOR" ? "" : " · " + lotacao({ papel: s.papel, pelotao: s.pelotao, fracao: s.fracao })) : "";
       return '<article class="hub-card' + (ativo && acesso ? "" : " off") + '">' +
         '<div class="hub-ico">' + (loc.img ? '<img src="' + loc.img + '" alt="">' : "") + '</div><div class="hub-txt"><h2>' + esc(s.nome || loc.nome) + "</h2><p>" + esc(loc.desc || s.descricao) + "</p>" +
         (ativo && acesso ? '<span class="hub-papel">' + esc(papel) + "</span>" : '<span class="hub-breve">' + (ativo ? "Sem acesso no seu cadastro" : "Em breve") + "</span>") + "</div>" +
-        (ativo && acesso ? '<button type="button" class="btn primary hub-entrar" data-sistema="' + esc(s.chave) + '">Entrar</button>' : '<button type="button" class="btn" disabled>' + (ativo ? "Sem acesso" : "Em breve") + "</button>") +
+        (teste ? '<span class="hub-breve">Em teste: só o Gestor Sistema vê</span>' : "") +
+        (ativo && acesso ? '<button type="button" class="btn primary hub-entrar" data-sistema="' + esc(s.chave) + '">' + (teste ? "Entrar (teste)" : "Entrar") + "</button>" : '<button type="button" class="btn" disabled>' + (ativo ? "Sem acesso" : "Em breve") + "</button>") +
         "</article>";
     }).join("");
     hub.hidden = false; window.scrollTo(0, 0);
     const b = hub.querySelector(".hub-entrar"); if (b) b.focus();
   }
 
-  /* ---------- carga do SISDEN ---------- */
+  /* ---------- carga do sistema aberto (SISDEN ou DDU) ---------- */
   function daServidor(s) { return Object.assign({ hist: [], histOk: false }, s); }
   function mesclar(d, s) { Object.keys(s).forEach(function (k) { d[k] = s[k]; }); return d; }
   function aplicarCarga(r) {
     CARGA_EM = Date.now();
     if (r.config && r.config.prazo) PRAZO = r.config.prazo;
+    const ls = r.listas || {};   // o servidor é quem manda nas regras; o site só repete para avisar antes de salvar
+    if (ls.resultados && ls.resultados.length) SIS.resultados = ls.resultados;
+    if (ls.motivosExclusao && ls.motivosExclusao.length) SIS.motivos = ls.motivosExclusao;
+    if (typeof ls.gaiaObrigatorio === "boolean") SIS.gaiaObrig = ls.gaiaObrigatorio;
+    if (ls.limiteObs) SIS.obsLim = ls.limiteObs;
     FRACOES.length = 0; r.fracoes.forEach(f => FRACOES.push([f.nome, [], 0, 0]));
     const antes = {}; DEMANDAS.forEach(d => { antes[d.codigo] = d; });
     DEMANDAS.length = 0;
@@ -2775,11 +2857,12 @@ form.card.at { padding: 14px 16px; }
     return false;
   }
   function carregarSisden(silencioso) {
-    if (carregarSisden.ocupado) return;
-    carregarSisden.ocupado = true;
+    if (carregarSisden.ocupado === SIS) return;   // já está carregando este sistema
+    const sisPedido = carregarSisden.ocupado = SIS;
     if (!silencioso) app.innerHTML = '<div class="lg-wait carregando" role="status"><span class="spin" aria-hidden="true"></span><b>Carregando as demandas…</b></div>';
-    api("sisden.carregar").then(function (r) {
-      carregarSisden.ocupado = false;
+    api(acao("carregar")).then(function (r) {
+      if (carregarSisden.ocupado === sisPedido) carregarSisden.ocupado = null;
+      if (sisPedido !== SIS) return; // trocou de sistema enquanto carregava
       const mudouUsuario = aplicarCarga(r);
       if (!silencioso || mudouUsuario) {
         st.usuOk = false; st.exclOk = false;
@@ -2788,7 +2871,8 @@ form.card.at { padding: 14px 16px; }
         toast("Bem-vindo(a), " + (u.papel === "BASICO" ? "equipe do " + u.fracao : u.nome) + "." + (n ? " " + n + " novidade(s) no sino." : ""));
       } else render();
     }).catch(function (e) {
-      carregarSisden.ocupado = false;
+      if (carregarSisden.ocupado === sisPedido) carregarSisden.ocupado = null;
+      if (sisPedido !== SIS) return;
       if (!silencioso) app.innerHTML = '<div class="empty">' + esc(e.message) + '</div>';
       falha(e);
     });
@@ -2804,7 +2888,7 @@ form.card.at { padding: 14px 16px; }
   function detalhe(d) {
     const cod = d.codigo, seq = (detalhe.seq = (detalhe.seq || 0) + 1);
     const assin = x => x.versao + "|" + (x.notas || []).map(n => n.id + ":" + n.texto).join("|");
-    chamar("sisden.abrir", { codigo: cod }).then(function (r) {
+    chamar(acao("abrir"), { codigo: cod }).then(function (r) {
       if (seq !== detalhe.seq) return;
       const antes = assin(d);
       // destaque "NOVA" desta abertura; depois disso a anotação deixa de ser nova
@@ -2862,7 +2946,7 @@ form.card.at { padding: 14px 16px; }
     if (!REAL) { toast("No protótipo não há PDF. No sistema real, o arquivo abre aqui, direto da pasta do Drive."); return; }
     const w = window.open("", "_blank");
     if (w) { try { w.document.title = "Arquivo " + d.codigo; w.document.body.innerHTML = '<p style="font:16px system-ui,sans-serif;padding:24px">Abrindo o arquivo da demanda ' + esc(d.codigo) + "…</p>"; } catch (e) { /* janela restrita */ } }
-    api("sisden.pdf", { codigo: d.codigo, arquivo: arquivo || "" }).then(function (r) {
+    api(acao("pdf"), { codigo: d.codigo, arquivo: arquivo || "" }).then(function (r) {
       const bin = atob(r.base64), arr = new Uint8Array(bin.length);
       for (let i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
       const tipo = r.tipo || "application/octet-stream";
@@ -2897,7 +2981,7 @@ form.card.at { padding: 14px 16px; }
     const cod = st.aberta.codigo;
     box.dataset.cod = cod; box.hidden = false; if (botao) botao.setAttribute("aria-expanded", "true");
     box.innerHTML = '<p class="anx-carregando" role="status">Carregando os arquivos da pasta…</p>';
-    api("sisden.anexos", { codigo: cod }).then(function (r) {
+    api(acao("anexos"), { codigo: cod }).then(function (r) {
       if (!st.aberta || st.aberta.codigo !== cod) return;
       const arqs = r.arquivos || [];
       let grupo = null, h = '<p class="section-t" style="margin:0 0 6px">Arquivos da denúncia <span class="anx-n">' + arqs.length + "</span></p>";
@@ -2915,7 +2999,7 @@ form.card.at { padding: 14px 16px; }
   /* ---------- excluídas e usuários ---------- */
   function carregarExcluidas() {
     st.exclOk = false;
-    api("sisden.excluidas").then(function (lista) {
+    api(acao("excluidas")).then(function (lista) {
       EXCLUIDAS.length = 0;
       lista.slice().reverse().forEach(x => EXCLUIDAS.push({ d: { codigo: x.codigo, municipio: x.municipio, fracao: x.fracao }, em: x.em.slice(0, 10), hora: x.em.slice(11, 16), por: x.por, motivo: x.motivo }));
       st.exclOk = true; st.nExcl = EXCLUIDAS.length;
@@ -2933,7 +3017,7 @@ form.card.at { padding: 14px 16px; }
   function carregarUsuarios() {
     if (carregarUsuarios.ocupado) return;
     carregarUsuarios.ocupado = true;
-    api("sisden.usuarios.listar").then(function (r) {
+    api(acao("usuarios.listar")).then(function (r) {
       carregarUsuarios.ocupado = false; aplicarUsuarios(r); if (st.tela === "usuarios") telaUsuarios();
     }).catch(function (e) { carregarUsuarios.ocupado = false; app.innerHTML = abasHtml() + '<div class="empty">' + esc(e.message) + "</div>"; falha(e); });
   }
@@ -3002,8 +3086,8 @@ form.card.at { padding: 14px 16px; }
     if (act === "nt-ed-sim") { salvarEdicaoNota(id); return; }
     if (act === "adm-arq") { st.confArq = true; abrir(cod, "arq-sim", true); return; }
     if (act === "adm-arq-nao") { st.confArq = false; abrir(cod, null, true); return; }
-    if (act === "adm-arq-sim") { enviar("sisden.arquivar", { codigo: cod, versao: st.aberta.versao }, r => r.nadaMudou ? "Já estava finalizada." : "Respondida à SEMAD em " + br(HOJE) + ". Demanda finalizada."); return; }
-    if (act === "adm-desarq") { enviar("sisden.desarquivar", { codigo: cod, versao: st.aberta.versao }, r => r.nadaMudou ? "Nada mudou." : "Demanda reaberta: voltou para Atendidas."); return; }
+    if (act === "adm-arq-sim") { enviar(acao("arquivar"), { codigo: cod, versao: st.aberta.versao }, r => r.nadaMudou ? "Já estava finalizada." : maiusc(SIS.respondidaA) + " em " + br(HOJE) + ". Demanda finalizada."); return; }
+    if (act === "adm-desarq") { enviar(acao("desarquivar"), { codigo: cod, versao: st.aberta.versao }, r => r.nadaMudou ? "Nada mudou." : "Demanda reaberta: voltou para Atendidas."); return; }
     if (act === "adm-dev") { st.devolvendo = true; abrir(cod, "dev-mot", true); return; }
     if (act === "adm-dev-nao") { st.devolvendo = false; abrir(cod, null, true); return; }
     if (act === "adm-dev-sim") { devolver(); return; }
