@@ -318,8 +318,12 @@ form.at { background: var(--surface); border: 1px solid var(--line); border-radi
 .selo-local:hover, .selo-local:focus-visible { background: var(--warn); color: var(--bg); outline: none; }
 .selo-local svg { width: 11px; height: 11px; flex: none; }
 .cell-main .selo-local { display: inline-flex; }
-.local-hint { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
-.local-hint svg { width: 14px; height: 14px; flex: none; color: var(--warn); }
+.local-hint { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 10px; padding: 10px 12px; border-radius: 8px; background: var(--warn-soft); border: 1px solid color-mix(in srgb, var(--warn) 40%, transparent); }
+.local-voltar { flex: none; font-weight: 700; }
+.local-fim { display: flex; justify-content: center; margin-top: 14px; }
+.fsel.on { border-color: var(--warn); background: var(--warn-soft); font-weight: 600; }
+.local-txt { margin: 0; display: flex; align-items: center; gap: 6px; font-size: 13.5px; min-width: 0; flex: 1 1 260px; }
+.local-txt svg { width: 15px; height: 15px; flex: none; color: var(--warn); }
 .loc-b + .loc-b { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--line); }
 .loc-h { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
 .loc-t { margin: 0 0 6px; font-size: 13px; font-weight: 700; }
@@ -1002,7 +1006,7 @@ form.card.at { padding: 14px 16px; }
 <div class="sessao" id="sessao" role="alertdialog" aria-modal="true" aria-labelledby="sessao-t" hidden>
   <div class="sessao-card">
     <h2 id="sessao-t">Sua sessão expirou</h2>
-    <p>Por segurança, o acesso vale por cerca de uma hora. Entre de novo para continuar: o que você estava preenchendo continua na tela.</p>
+    <p>Por segurança, o acesso expira depois de algumas horas sem uso. Entre de novo para continuar: o que você estava preenchendo continua na tela.</p>
     <button type="button" class="btn primary" id="sessao-ok">Entrar de novo com o Google</button>
   </div>
 </div>
@@ -1320,10 +1324,10 @@ form.card.at { padding: 14px 16px; }
   }
   function mesmoLocal(d, tipo) { const l = localDe(d), k = tipo === "end" ? l.end : l.rua; return k ? (indiceLocal()[tipo][k] || []).filter(x => x !== d) : []; }
   function seloLocal(d) {
-    const n = mesmoLocal(d, "end").length;
+    const tipo = st.fLocal === "rua" || (st.local && st.local.tipo === "rua") ? "rua" : "end", n = mesmoLocal(d, tipo).length;
     if (!n) return "";
-    return '<span class="selo-local" role="button" tabindex="0" data-local="end" data-cod="' + esc(d.codigo) + '" title="Ver as denúncias deste endereço">' + ICO_SETOR +
-      "+" + n + " no mesmo endereço</span>";
+    return '<span class="selo-local" role="button" tabindex="0" data-local="' + tipo + '" data-cod="' + esc(d.codigo) + '" title="Ver as denúncias deste ' + (tipo === "end" ? "endereço" : "logradouro") + '">' + ICO_SETOR +
+      "+" + n + (tipo === "end" ? " no mesmo endereço" : " no mesmo logradouro") + "</span>";
   }
 
   /* anotações: "nova" = ainda não vista pelo lado de quem está olhando (fração ou gestão) */
@@ -1382,7 +1386,7 @@ form.card.at { padding: 14px 16px; }
   }
 
   /* ================= estado ================= */
-  const st = { perfil: "fracao", papel: "operador", fracao: "2 GP/3 PELOTÃO", aba: "pendentes", chip: "", busca: "", local: null, gFracao: "", aberta: null, tela: "lista",
+  const st = { perfil: "fracao", papel: "operador", fracao: "2 GP/3 PELOTÃO", aba: "pendentes", chip: "", busca: "", local: null, fLocal: "", gFracao: "", aberta: null, tela: "lista",
     rascunho: "", respA: null, editNota: null, editAt: false, confArq: false, devolvendo: false, destaque: {} };
 
   const app = document.getElementById("app");
@@ -1420,7 +1424,21 @@ form.card.at { padding: 14px 16px; }
     l.forEach(function (d) { c[categoria(d)]++; if (venceLogo(d) && categoria(d) === "prazo") c.breve++; });
     return c;
   }
-  function baseLista() { const b = escopo(); return ehGestao() && st.gFracao ? b.filter(d => d.fracao === st.gFracao) : b; }
+  function baseLista() {
+    let b = escopo();
+    if (ehGestao() && st.gFracao) b = b.filter(d => d.fracao === st.gFracao);
+    if (st.fLocal) b = b.filter(passaFiltroLocal);
+    return b;
+  }
+  /** filtro "Local": repetidas no mesmo endereço, no mesmo logradouro, ou de um setor (BH e Contagem) */
+  function passaFiltroLocal(d) {
+    const f = st.fLocal;
+    if (f === "end") return mesmoLocal(d, "end").length > 0;
+    if (f === "rua") return mesmoLocal(d, "rua").length > 0;
+    if (f.indexOf("setor:") === 0) return setorDe(d) === f.slice(6);
+    return true;
+  }
+  function chaveGrupo(d) { const l = localDe(d); return st.fLocal === "end" ? l.end : st.fLocal === "rua" ? l.rua : ""; }
   function textoBusca(d) { return (d.codigo + " " + d.tipo + " " + d.municipio + " " + d.natureza + " " + d.endereco + " " + ultimaAnot(d) + " " + d.fracao + " " + d.gaia + " " + d.reds).toUpperCase(); }
   const ORDEM_CAT = { devolvidas: 0, atraso: 1, prazo: 2, atendidas: 3, finalizadas: 4 };
   function ordenar(l) {
@@ -1437,7 +1455,14 @@ form.card.at { padding: 14px 16px; }
     const q = st.busca.trim().toUpperCase();
     if (st.local) return ordenar((indiceLocal()[st.local.tipo][st.local.chave] || []).slice());
     if (q) return ordenar(escopo().filter(d => textoBusca(d).indexOf(q) >= 0));
-    return ordenar(baseLista().filter(d => noCartao(d, st.aba)));
+    const l = ordenar(baseLista().filter(d => noCartao(d, st.aba)));
+    if (st.fLocal === "end" || st.fLocal === "rua") {
+      // agrupa: as do mesmo endereço/logradouro ficam juntas; o grupo mais urgente vem primeiro
+      const pos = {};
+      l.forEach(function (d, i) { const k = chaveGrupo(d); if (pos[k] === undefined) pos[k] = i; });
+      return l.map((d, i) => [d, i]).sort((a, b) => (pos[chaveGrupo(a[0])] - pos[chaveGrupo(b[0])]) || (a[1] - b[1])).map(x => x[0]);
+    }
+    return l;
   }
   function abaPadrao() {
     if (st.perfil === "gestor") return "atendidas";
@@ -1481,12 +1506,37 @@ form.card.at { padding: 14px 16px; }
     const buscando = !!st.busca.trim() && !st.local, gestao = ehGestao();
     const sel = gestao ? '<label class="sr" for="g-fr">Fração</label><select id="g-fr" class="fsel"><option value="">' + (st.perfil === "pelotao" ? "Todas as frações do pelotão" : "Todas as frações") + "</option>" +
       fracoesGestao().map(f => '<option value="' + esc(f[0]) + '"' + (st.gFracao === f[0] ? " selected" : "") + ">" + esc(f[0]) + "</option>").join("") + "</select>" : "";
+    const loc = filtroLocalHtml();
     const excl = ehSistema() ? '<button type="button" class="excl-link" data-excl="1">Excluídas (' + (REAL ? st.nExcl || 0 : EXCLUIDAS.length) + ")</button>" : "";
-    return '<section class="toolbar fbar" id="g-filtros"><div class="frow">' + sel + searchHtml() + excl + "</div>" +
-      (st.local ? '<p class="busca-hint local-hint" role="status">' + ICO_SETOR + "<span>" + (st.local.tipo === "end" ? "Mesmo endereço" : "Mesma rua") + ": <b>" + esc(st.local.rotulo) + "</b> · " +
-        (indiceLocal()[st.local.tipo][st.local.chave] || []).length + " denúncia(s), em todas as situações" + (gestao ? " e frações" : "") + '. </span><button type="button" class="link-btn" data-limpar-local>Voltar à lista</button></p>' :
+    return '<section class="toolbar fbar" id="g-filtros"><div class="frow">' + sel + loc + searchHtml() + excl + "</div>" +
+      (st.local ? '<div class="local-hint" role="status"><button type="button" class="btn local-voltar" data-limpar-local>← Voltar à lista</button>' +
+        '<p class="local-txt">' + ICO_SETOR + "<span>" + (st.local.tipo === "end" ? "Mesmo endereço" : "Mesmo logradouro") + ": <b>" + esc(st.local.rotulo) + "</b> · " +
+        (indiceLocal()[st.local.tipo][st.local.chave] || []).length + " denúncia(s), em todas as situações" + (gestao ? " e frações" : "") + "</span></p></div>" :
+      st.fLocal && !buscando ? '<div class="local-hint" role="status"><button type="button" class="btn local-voltar" data-limpar-flocal>✕ Tirar filtro</button>' +
+        '<p class="local-txt">' + ICO_SETOR + "<span>Filtro: <b>" + esc(filtroLocalNome()) + "</b>" + (st.fLocal === "end" || st.fLocal === "rua" ? " · as do mesmo local aparecem juntas" : "") +
+        ". Os quadros acima contam só essas.</span></p></div>" :
       buscando ? '<p class="busca-hint" role="status">Buscando em <b>todas as situações</b>' + (gestao ? " e frações" : "") + '. <button type="button" class="link-btn" data-limpar-busca>Limpar busca</button></p>' : "") +
       "</section>";
+  }
+
+  function filtroLocalHtml() {
+    const base = escopo().filter(d => !(ehGestao() && st.gFracao) || d.fracao === st.gFracao);
+    let nE = 0, nR = 0;
+    const setores = {};
+    base.forEach(function (d) {
+      if (mesmoLocal(d, "end").length) nE++;
+      if (mesmoLocal(d, "rua").length) nR++;
+      const s0 = setorDe(d); if (s0) setores[s0] = (setores[s0] || 0) + 1;
+    });
+    const op = function (v, t) { return '<option value="' + esc(v) + '"' + (st.fLocal === v ? " selected" : "") + ">" + t + "</option>"; };
+    const ns = Object.keys(setores).sort();
+    return '<label class="sr" for="f-local">Local</label><select id="f-local" class="fsel' + (st.fLocal ? " on" : "") + '">' + op("", "Todos os locais") +
+      op("end", "No mesmo endereço (" + nE + ")") + op("rua", "No mesmo logradouro (" + nR + ")") +
+      (ns.length ? '<optgroup label="No mesmo setor (BH e Contagem)">' + ns.map(k => op("setor:" + k, k + " (" + setores[k] + ")")).join("") + "</optgroup>" : "") + "</select>";
+  }
+  function filtroLocalNome() {
+    const f = st.fLocal;
+    return f === "end" ? "repetidas no mesmo endereço" : f === "rua" ? "repetidas no mesmo logradouro" : f.indexOf("setor:") === 0 ? "setor " + f.slice(6) : "";
   }
 
   function excluidasHtml() {
@@ -1541,7 +1591,7 @@ form.card.at { padding: 14px 16px; }
         '<span class="dates c-dates num"><span>' + br(d.envio) + "</span> · " + br(d.venc) + "</span>" +
         '<span class="c-status">' + pillFor(d) + marcasHtml(d) + "</span></button>";
     });
-    return h + "</div>";
+    return h + "</div>" + (st.local ? '<div class="local-fim"><button type="button" class="btn local-voltar" data-limpar-local>← Voltar à lista</button></div>' : "");
   }
 
   function telaFracao() {
@@ -1638,7 +1688,7 @@ form.card.at { padding: 14px 16px; }
         (ord.length > 5 ? '<p class="hint">e mais ' + (ord.length - 5) + ' — use "Ver na lista".</p>' : "") + "</div>";
     };
     return '<section class="card" aria-labelledby="c-local"><div class="card-h"><h3 class="card-t" id="c-local">' + ICO_SETOR + "Outras denúncias aqui</h3></div>" +
-      bloco("Mesmo endereço", e, "end", false) + bloco("Mesma rua", r, "rua", true) + "</section>";
+      bloco("Mesmo endereço", e, "end", false) + bloco("Mesmo logradouro", r, "rua", true) + "</section>";
   }
   function pillMini(x) {
     const cls = { finalizadas: "fim", devolvidas: "dev", atendidas: "ok", atraso: "late", prazo: "info" }[categoria(x)];
@@ -2840,21 +2890,26 @@ form.card.at { padding: 14px 16px; }
       .then(function (r) { if (!r.ok) throw new Error("O servidor respondeu com erro (" + r.status + "). Tente de novo."); return r.json(); },
         function () { const e = new Error("Sem conexão com o servidor. Confira a internet e tente de novo."); e.codigo = "REDE"; throw e; })
       .then(function (j) {
+        if (j && j.sessao) { TOKEN = j.sessao; guardarToken(); } // sessão do sistema (dura mais que o token do Google e se renova com o uso)
         if (!j || !j.ok) { const e = new Error((j && j.erro) || "Não foi possível concluir agora."); e.codigo = j && j.codigo; e.extra = j && j.extra; throw e; }
         return j.dados;
       });
   }
 
-  /* ---------- token do Google (dura cerca de 1 hora) ---------- */
+  /* ---------- token: o do Google (1 hora) só no login; depois, a sessão do sistema (padrão 12 h, renovada com o uso) ---------- */
   function lerJwt(t) {
     try { const b = t.split(".")[1].replace(/-/g, "+").replace(/_/g, "/"); return JSON.parse(decodeURIComponent(escape(atob(b + "===".slice((b.length + 3) % 4))))); }
     catch (e) { return {}; }
   }
-  function guardarToken() { try { sessionStorage.setItem(CHAVE_TK, TOKEN); } catch (e) { /* sem armazenamento */ } }
-  function limparToken() { try { sessionStorage.removeItem(CHAVE_TK); } catch (e) { /* idem */ } }
+  /* fica guardado no navegador (localStorage) até expirar ou a pessoa clicar em Sair: fechar a aba não derruba o login */
+  function guardarToken() { try { localStorage.setItem(CHAVE_TK, TOKEN); } catch (e) { try { sessionStorage.setItem(CHAVE_TK, TOKEN); } catch (x) { /* sem armazenamento */ } } }
+  function limparToken() { try { localStorage.removeItem(CHAVE_TK); } catch (e) { /* idem */ } try { sessionStorage.removeItem(CHAVE_TK); } catch (e) { /* idem */ } }
   function tokenGuardado() {
-    try { const t = sessionStorage.getItem(CHAVE_TK) || ""; const p = lerJwt(t); return t && p.exp && p.exp * 1000 > Date.now() + 60000 ? t : ""; }
-    catch (e) { return ""; }
+    let t = "";
+    try { t = localStorage.getItem(CHAVE_TK) || ""; } catch (e) { /* sem localStorage */ }
+    if (!t) try { t = sessionStorage.getItem(CHAVE_TK) || ""; } catch (e) { /* idem */ }
+    const p = lerJwt(t);
+    return t && p.exp && p.exp * 1000 > Date.now() + 60000 ? t : "";
   }
 
   /* ---------- botão oficial do Google ---------- */
@@ -3181,6 +3236,7 @@ form.card.at { padding: 14px 16px; }
     const sl = e.target.closest("[data-local]");
     if (sl) { e.stopPropagation(); verLocal(sl.getAttribute("data-cod"), sl.getAttribute("data-local")); return; }
     if (e.target.closest("[data-limpar-local]")) { st.local = null; render(); return; }
+    if (e.target.closest("[data-limpar-flocal]")) { st.fLocal = ""; render(); return; }
     const r = e.target.closest(".row[data-cod]");
     if (r) { abrir(r.getAttribute("data-cod")); return; }
     const fr = e.target.closest(".fr-nome");
@@ -3194,7 +3250,10 @@ form.card.at { padding: 14px 16px; }
     if (fr && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); fr.click(); }
   });
   app.addEventListener("input", function (e) { if (e.target.id === "busca") { st.busca = e.target.value; st.local = null; render(); } });
-  app.addEventListener("change", function (e) { if (e.target.id === "g-fr") { st.gFracao = e.target.value; render(); } });
+  app.addEventListener("change", function (e) {
+    if (e.target.id === "g-fr") { st.gFracao = e.target.value; render(); }
+    if (e.target.id === "f-local") { st.fLocal = e.target.value; st.local = null; st.busca = ""; render(); }
+  });
 
   drawer.addEventListener("click", function (e) {
     if (e.target.closest("[data-close]")) { fechar(); return; }
@@ -3229,11 +3288,15 @@ form.card.at { padding: 14px 16px; }
     if (act === "adm-dev-sim") { devolver(); return; }
   });
   scrim.addEventListener("click", fechar);
-  document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !drawer.hidden) fechar(); });
+  document.addEventListener("keydown", function (e) {
+    if (e.key !== "Escape") return;
+    if (!drawer.hidden) fechar();
+    else if (st.local && login.hidden) { st.local = null; render(); }
+  });
 
   function trocar(p, papel, manterUsuario) {
     if (!manterUsuario) { st.usuario = usuDefault(p === "gestor" ? "gestor" : p === "pelotao" ? "pelotao" : papel === "cmt" ? "cmt" : "fracao"); if (st.usuario.fracao) st.fracao = st.usuario.fracao; }
-    st.perfil = p; st.papel = papel || "operador"; st.tela = "lista"; st.verExcluidas = false; dash.escopo = ""; st.busca = ""; st.local = null; st.gFracao = ""; uf.form = null; uf.confirmar = null; st.aba = abaPadrao();
+    st.perfil = p; st.papel = papel || "operador"; st.tela = "lista"; st.verExcluidas = false; dash.escopo = ""; st.busca = ""; st.local = null; st.fLocal = ""; st.gFracao = ""; uf.form = null; uf.confirmar = null; st.aba = abaPadrao();
     if (!drawer.hidden) fechar(); pav.hidden = true; render();
   }
   document.getElementById("ver-fracao").addEventListener("click", function () { trocar("fracao", "operador"); });
