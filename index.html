@@ -1021,7 +1021,7 @@ form.card.at { padding: 14px 16px; }
       motivos: ["Município de outra companhia", "Demanda duplicada", "Enviada por engano pelo DDU", "Outro motivo"],
       exclHint: "Quando a denúncia veio por engano, repetida ou de município de outra companhia.",
       gaiaObrig: false, obsRotulo: "Síntese do atendimento", obsNome: "síntese", obsLim: 1000,
-      obsPh: "Exemplo: Constatado o cativeiro irregular de 11 pássaros e posse de gaiolas e armadilhas. Feita a prisão do autor, lavratura do auto de infração, destinação das aves e destruição sumária dos materiais.", csv: "ddu"
+      obsPh: "Exemplo: Constatado crime de cativeiro irregular de animal silvestre, sendo lavrado o respectivo Termo Circunstanciado de Ocorrência (TCO), bem como adotadas as medidas administrativas cabíveis, com a lavratura do Auto de Infração.", csv: "ddu"
     }
   };
   let SIS = SIS_UI.SISDEN;
@@ -1585,7 +1585,7 @@ form.card.at { padding: 14px 16px; }
       campo("at-gaia", SIS.gaiaObrig ? "Nº do GAIA" : 'Nº do GAIA <span class="opc">(opcional)</span>', '<input id="at-gaia" class="mono" inputmode="numeric" placeholder="2026.10.01.362.0001234" value="' + esc(d.gaia) + '">',
         SIS.gaiaObrig ? "Formato aaaa.mm.dd.nnn.nnnnnnn" + (brancoOk && !d.gaia ? " · pode ficar em branco (registro sem GAIA)" : "") : "Se houver, no formato aaaa.mm.dd.nnn.nnnnnnn") +
       campo("at-reds", "Nº do REDS", '<input id="at-reds" class="mono" inputmode="numeric" placeholder="2026-012345678-001" value="' + esc(d.reds) + '">', "Formato aaaa-nnnnnnnnn-nnn" + (brancoOk && !d.reds ? " · pode ficar em branco (registro sem REDS)" : "")) +
-      campo("at-obs", SIS.gaiaObrig ? SIS.obsRotulo : SIS.obsRotulo + ' <span class="opc">(opcional)</span>', '<textarea id="at-obs"' + (SIS.gaiaObrig ? "" : ' rows="4"') + ' maxlength="' + SIS.obsLim + '" placeholder="' + esc(SIS.obsPh) + '">' + esc(d.obsFracao) + "</textarea>", '<span id="at-obs-n">' + (d.obsFracao || "").length + "</span>/" + SIS.obsLim) +
+      campo("at-obs", SIS.obsRotulo, '<textarea id="at-obs"' + (SIS.gaiaObrig ? "" : ' rows="4"') + ' maxlength="' + SIS.obsLim + '" placeholder="' + esc(SIS.obsPh) + '">' + esc(d.obsFracao) + "</textarea>", '<span id="at-obs-n">' + (d.obsFracao || "").length + "</span>/" + SIS.obsLim) +
       confHtml +
       '<div class="confirm" id="at-confirm" role="alertdialog" aria-labelledby="at-confirm-t" hidden><p id="at-confirm-t"><b>Ao salvar, a demanda vai para Atendidas.</b> Deseja continuar?</p>' +
       '<div class="actions"><button type="button" class="btn" data-act="conf-nao">Voltar</button><button type="button" class="btn primary" data-act="conf-sim" id="at-conf-sim">Sim, salvar</button></div></div>' +
