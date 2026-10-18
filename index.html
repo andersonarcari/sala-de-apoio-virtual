@@ -312,6 +312,9 @@ form.at { background: var(--surface); border: 1px solid var(--line); border-radi
 .anot svg { width: 14px; height: 14px; flex: none; margin-top: 3px; color: var(--muted); }
 .anot-vazia { color: var(--line); }
 .fra-name { font-size: 13.5px; }
+.selo-setor { display: inline-flex; align-items: center; gap: 4px; width: fit-content; margin-top: 5px; padding: 1px 8px 1px 6px; border-radius: 4px; font-size: 11px; font-weight: 700; letter-spacing: .04em; background: var(--info-soft); color: var(--info); border: 1px solid color-mix(in srgb, var(--info) 35%, transparent); white-space: nowrap; }
+.selo-setor svg { width: 11px; height: 11px; flex: none; }
+.cell-main .selo-setor, .facts dd .selo-setor { display: flex; }
 .recb { display: inline-flex; align-items: center; gap: 5px; margin-top: 6px; margin-right: 4px; padding: 2px 9px; border-radius: 999px; font-size: 12px; font-weight: 600; background: var(--caqui); color: var(--preto); }
 .recb svg { width: 13px; height: 13px; }
 .recb-wait { background: var(--surface-2); color: var(--muted); }
@@ -1133,6 +1136,8 @@ form.card.at { padding: 14px 16px; }
   const DDU_SINTESE = ["No ato da fiscalização, não foi vislumbrada nenhuma situação que configure maus-tratos. O responsável foi orientado a manter o animal em boas condições, com abrigo, água e comida.",
     "Constatado o cativeiro irregular de 3 pássaros silvestres. Lavrado o auto de infração e feita a destinação das aves.", "Ninguém no local. Deixada notificação para contato com a fração.",
     "Endereço não localizado com os dados da denúncia. Feito contato com o denunciante, sem sucesso.", "Animais em boas condições; denúncia não constatada."];
+  const DDU_SETORES = { "BELO HORIZONTE": ["LESTE", "OESTE", "NORTE", "NORDESTE", "NOROESTE", "CENTRO-SUL", "PAMPULHA", "BARREIRO", "VENDA NOVA"],
+    "CONTAGEM": ["ELDORADO", "RESSACA", "INDUSTRIAL", "NACIONAL", "PETROLÂNDIA", "RIACHO", "SEDE", "VARGEM DAS FLORES"] };
   function sorteio(tab) { let x = rnd() * tab.reduce((t, i) => t + i[1], 0); for (let i = 0; i < tab.length; i++) { x -= tab[i][1]; if (x < 0) return tab[i][0]; } return tab[0][0]; }
 
   /** dados fictícios do sistema aberto (SISDEN ou DDU); sempre os mesmos para o mesmo sistema */
@@ -1159,6 +1164,7 @@ form.card.at { padding: 14px 16px; }
           prioridade: "NORMAL", prioPor: "", anotacao: "", recados: [], avisos: [],
           hist: [{ quando: envio, quem: "Importação automática", acao: (ddu ? "Recebida pelo fluxo do DDU" : "Recebida pelo fluxo da SEMAD") + " e encaminhada à fração" }]
         };
+        if (ddu && DDU_SETORES[d.municipio] && rnd() < 0.9) d.endereco += " (" + pick(DDU_SETORES[d.municipio]) + ")";
         /* tempo até o atendimento: no prazo (mediana ~30 dias) ou depois do vencimento; uma parte nunca é atendida */
         const r0 = rnd();
         const atraso = r0 > vol[1];
@@ -1435,6 +1441,19 @@ form.card.at { padding: 14px 16px; }
     if (c.length <= 12 || k < 0) return '<span class="code">' + esc(c) + "</span>";
     return '<span class="code longo" title="' + esc(c) + '">' + esc(c.slice(0, k + 1)) + "<wbr>" + esc(c.slice(k + 1)) + "</span>";
   }
+  /** setor de BH e Contagem: vem entre parênteses no fim do endereço, ex.: "Rua X, 10 (LESTE)" */
+  const MUN_SETOR = { "BELO HORIZONTE": 1, "CONTAGEM": 1 };
+  function setorDe(d) {
+    const mun = String(d.municipio || "").trim().toUpperCase();
+    if (!MUN_SETOR[mun]) return "";
+    const m = String(d.endereco || "").match(/\(([^()]+)\)\s*$/);
+    return m ? m[1].trim().toUpperCase() : "";
+  }
+  function seloSetor(d) {
+    const s = setorDe(d);
+    return s ? '<span class="selo-setor" title="Setor de ' + esc(d.municipio) + '">' + ICO_SETOR + esc(s) + "</span>" : "";
+  }
+  const ICO_SETOR = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 22s7-6.2 7-12a7 7 0 0 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg>';
   function listHtml(lista, gestor) {
     if (!lista.length) return '<div class="list"><div class="empty">' + (st.busca.trim() ? "Nada encontrado com essa busca." : "Nenhuma demanda aqui.") + "</div></div>";
     let h = '<div class="list' + (gestor ? " gestor" : "") + '" role="list">';
@@ -1444,8 +1463,8 @@ form.card.at { padding: 14px 16px; }
       const novo = notasNovas(d), ua = ultimaAnot(d);
       h += '<button type="button" class="row' + (novo ? " unread" : "") + '" role="listitem" data-cod="' + esc(d.codigo) + '">' +
         '<span class="cell-main">' + codHtml(d.codigo) + '<span class="tipo' + (/\d/.test(d.tipo || "") ? " tipo-id" : "") + '">' + esc(d.tipo) + "</span>" + prioTag(d) + "</span>" +
-        '<span class="cell-main c-nat"><b>' + esc(d.natureza) + '</b><span class="cell-sub">' + esc(d.municipio) + '</span><span class="cell-sub">' + esc(d.endereco) + "</span></span>" +
-        (gestor ? '<span class="cell-main c-fra"><span class="fra-name">' + esc(d.fracao) + "</span></span>" : "") +
+        '<span class="cell-main c-nat"><b>' + esc(d.natureza) + '</b><span class="cell-sub">' + esc(d.municipio) + '</span><span class="cell-sub">' + esc(d.endereco) + "</span>" + (gestor ? "" : seloSetor(d)) + "</span>" +
+        (gestor ? '<span class="cell-main c-fra"><span class="fra-name">' + esc(d.fracao) + "</span>" + seloSetor(d) + "</span>" : "") +
         '<span class="cell-main c-anot">' + (ua ? '<span class="anot">' + ICO.msg + "<span>" + esc(ua) + "</span></span>" : '<span class="anot-vazia">—</span>') + "</span>" +
         '<span class="dates c-dates num"><span>' + br(d.envio) + "</span> · " + br(d.venc) + "</span>" +
         '<span class="c-status">' + pillFor(d) + marcasHtml(d) + "</span></button>";
@@ -1522,7 +1541,7 @@ form.card.at { padding: 14px 16px; }
     return '<section class="card" aria-labelledby="c-dados"><div class="card-h"><h3 class="card-t" id="c-dados">' + ICO_DOC + "Dados da denúncia</h3></div>" +
       '<dl class="facts">' + fato("Natureza", esc(d.natureza)) + fato("Município", esc(d.municipio)) + fato("Endereço", esc(d.endereco || "—"), true) +
       fato("Gerada em", br(d.gerada)) + fato("Enviada à fração", br(d.envio)) +
-      fato("Vencimento", br(d.venc) + ' <span class="fine">(envio + ' + PRAZO + " dias)</span>") + fato("Fração", esc(d.fracao)) +
+      fato("Vencimento", br(d.venc) + ' <span class="fine">(envio + ' + PRAZO + " dias)</span>") + fato("Fração", esc(d.fracao) + seloSetor(d)) +
       fato("Documento", doc, true) + "</dl>" + '<div id="d-anexos" class="anexos" hidden></div></section>';
   }
 
