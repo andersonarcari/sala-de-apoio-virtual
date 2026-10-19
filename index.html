@@ -321,6 +321,29 @@ form.at { background: var(--surface); border: 1px solid var(--line); border-radi
 .local-hint { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 10px; padding: 10px 12px; border-radius: 8px; background: var(--warn-soft); border: 1px solid color-mix(in srgb, var(--warn) 40%, transparent); }
 .local-voltar { flex: none; font-weight: 700; }
 .local-fim { display: flex; justify-content: center; margin-top: 14px; }
+.lc-barra { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin: -4px 0 14px; }
+.lc-abrir svg { width: 16px; height: 16px; margin-right: 6px; vertical-align: -3px; }
+.lc-barra .hint { color: var(--muted); font-size: 13px; }
+.lc-form { display: grid; gap: 14px; }
+.lc-form .field input, .lc-form .field select { font-size: 16px; min-height: 44px; }
+.lc-intro { margin: 0; padding: 10px 12px; border-radius: 8px; background: var(--surface-2); font-size: 14px; }
+.lc-datas { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+@media (max-width: 560px) { .lc-datas { grid-template-columns: 1fr; } }
+.lc-ja { padding: 10px 12px; border-radius: 8px; background: var(--info-soft); color: var(--info); font-size: 14px; margin-top: -6px; }
+.lc-pdfnome { display: inline-flex; align-items: center; gap: 6px; margin-top: 6px; font-size: 13px; }
+.lc-pdfnome svg { width: 15px; height: 15px; }
+.lc-conf { border: 2px solid var(--caqui); border-radius: 10px; padding: 14px; background: var(--accent-soft); }
+.lc-conf-t { margin: 0 0 8px; font-weight: 800; font-size: 16px; }
+.lc-conf dl { display: grid; grid-template-columns: max-content 1fr; gap: 6px 14px; margin: 0 0 12px; font-size: 14px; }
+.lc-conf dt { color: var(--muted); }
+.lc-conf dd { margin: 0; }
+.lc-res { text-align: center; padding: 26px 18px; }
+.lc-res-t { font-size: 20px; font-weight: 800; margin: 0 0 8px; }
+.lc-res[data-tone=ok] .lc-res-t { color: var(--ok); }
+.lc-res[data-tone=warn] .lc-res-t { color: var(--warn); }
+.lc-res[data-tone=info] .lc-res-t { color: var(--info); }
+.lc-res-cod { color: var(--muted); }
+.lc-res .actions { justify-content: center; }
 .fsel.on { border-color: var(--warn); background: var(--warn-soft); font-weight: 600; }
 .local-txt { margin: 0; display: flex; align-items: center; gap: 6px; font-size: 13.5px; min-width: 0; flex: 1 1 260px; }
 .local-txt svg { width: 15px; height: 15px; flex: none; color: var(--warn); }
@@ -1163,6 +1186,8 @@ form.card.at { padding: 14px 16px; }
   const RUA_NOME = ["DAS ACÁCIAS", "IPÊ BRANCO", "BEIRA RIO", "DOS SABIÁS", "JEQUITIBÁ", "BEM-TE-VI", "DOS CANÁRIOS", "SÃO JOSÉ", "DAS PALMEIRAS", "DOM PEDRO II",
     "TIRADENTES", "DAS ORQUÍDEAS", "SANTA RITA", "DO CONTORNO", "DOS IPÊS", "JOÃO PINHEIRO", "DAS MANGUEIRAS", "BOA VISTA", "DOS PARDAIS", "SETE DE SETEMBRO",
     "DAS AROEIRAS", "PRINCESA ISABEL", "DO ROSÁRIO", "DOS ANDRADAS", "CORONEL JOSÉ BENTO", "DAS FLORES", "DO CRUZEIRO", "SANTOS DUMONT", "DOS GUARANIS", "PARAÍBA"];
+  const RUA_SOBRE = ["", "", "SILVA", "COSTA", "PEREIRA", "ALVES", "MOREIRA", "RIBEIRO", "SOUZA", "MARTINS", "GOMES", "BARBOSA", "ROCHA", "DIAS", "TEIXEIRA", "CARDOSO",
+    "NUNES", "MENDES", "FREITAS", "LIMA", "ARAÚJO", "CAMPOS", "VIEIRA", "MONTEIRO", "MOURA", "PINTO"];
   let END_DEMO = {};
   function sorteio(tab) { let x = rnd() * tab.reduce((t, i) => t + i[1], 0); for (let i = 0; i < tab.length; i++) { x -= tab[i][1]; if (x < 0) return tab[i][0]; } return tab[0][0]; }
 
@@ -1194,7 +1219,8 @@ form.card.at { padding: 14px 16px; }
           const ja = END_DEMO[d.municipio] = END_DEMO[d.municipio] || [], r0e = rnd();
           if (ja.length && r0e < 0.16) d.endereco = pick(ja);                                    // mesmo endereço de outra denúncia
           else {
-            d.endereco = (ja.length && r0e < 0.3 ? pick(ja).split(",")[0] : pick(RUA_TIPO) + " " + pick(RUA_NOME)) + ", " + ri(10, 980) + " - " + pick(BAIRROS).toUpperCase();
+            d.endereco = (ja.length && r0e < 0.27 ? pick(ja).split(",")[0] : pick(RUA_TIPO) + " " + pick(RUA_NOME) + " " + pick(RUA_SOBRE)) + ", " + ri(10, 980) + " - " + pick(BAIRROS).toUpperCase();
+            d.endereco = d.endereco.replace(/ ,/, ",");
             if (DDU_SETORES[d.municipio] && rnd() < 0.9) d.endereco += " (" + pick(DDU_SETORES[d.municipio]) + ")";
             ja.push(d.endereco);
           }
@@ -1241,10 +1267,12 @@ form.card.at { padding: 14px 16px; }
       d.notas = []; d.devolvida = null; d.alterado = "";
       if (d.anotacao) { notaDemo(d, d.anotacao, "Equipe " + d.fracao + " (Básico)", "", "fracao", addDays(d.envio, 2) + " 08:00", { vistaGe: true }); d.anotacao = ""; }
     });
-    const minhas = DEMANDAS.filter(d => d.fracao === "2 GP/3 PELOTÃO");
+    const G = ["Sgt Anderson (Gestor Sistema)", "gestor.1cia@exemplo.com"], P = ["Maj Monteiro (Cmt 3º Pelotão)", "monteiro.pel3@exemplo.com"];
+    (SIS.chave === "DISQUE_181" ? ["2 GP/3 PELOTÃO", "1 PELOTÃO"] : ["2 GP/3 PELOTÃO"]).forEach(function (fr) {
+    const minhas = DEMANDAS.filter(d => d.fracao === fr);
     const atendidas = minhas.filter(d => d.atend && d.reds);
     const pend = minhas.filter(d => !d.atend);
-    const G = ["Sgt Anderson (Gestor Sistema)", "gestor.1cia@exemplo.com"], P = ["Maj Monteiro (Cmt 3º Pelotão)", "monteiro.pel3@exemplo.com"], B = ["2gp3pel@exemplo.com (Básico · 2 GP/3 PELOTÃO)", "2gp3pel@exemplo.com"];
+    const sl = fr === "1 PELOTÃO" ? "1pel" : "2gp3pel", B = [sl + "@exemplo.com (Básico · " + fr + ")", sl + "@exemplo.com"];
     if (pend[0]) {
       pend[0].prioridade = "URGENTE"; pend[0].prioPor = "gestor";
       const n = notaDemo(pend[0], "Demanda com repercussão na imprensa local. O Comando pede atendimento ainda nesta semana.", G[0], G[1], "gestao", addDays(HOJE, -1) + " 09:12", { vistaFr: false });
@@ -1254,9 +1282,10 @@ form.card.at { padding: 14px 16px; }
       const d = atendidas[0]; d.sitAnalista = ""; d.respSemadEm = "";
       d.devolvida = { em: addDays(HOJE, -2) + " 16:05", motivo: "O ano do REDS não confere com a data do atendimento. Confira no sistema e corrija.", por: G[0] };
       notaDemo(d, "Devolvida à fração: " + d.devolvida.motivo, G[0], G[1], "gestao", d.devolvida.em, { vistaFr: false });
-      d.hist.push({ quando: addDays(HOJE, -2), hora: "16:05", quem: G[0], acao: "Devolvida à 2 GP/3 PELOTÃO: “" + d.devolvida.motivo + "”" });
+      d.hist.push({ quando: addDays(HOJE, -2), hora: "16:05", quem: G[0], acao: "Devolvida à " + fr + ": “" + d.devolvida.motivo + "”" });
     }
     if (atendidas[1]) { atendidas[1].sitAnalista = ""; atendidas[1].respSemadEm = ""; notaDemo(atendidas[1], "Fotos do auto de constatação anexadas ao GAIA.", B[0], B[1], "fracao", addDays(HOJE, -3) + " 14:20", { vistaGe: false }); }
+    });
     const g1 = DEMANDAS.filter(d => d.fracao === "2 GP/5 PELOTÃO" && d.atend && d.reds);
     if (g1[0]) { g1[0].sitAnalista = ""; g1[0].respSemadEm = ""; g1[0].alterado = addDays(HOJE, -1) + " 10:47"; g1[0].hist.push({ quando: addDays(HOJE, -1), hora: "10:47", quem: "2gp5pel@exemplo.com (usuário básico)", acao: "Atendimento alterado (REDS)" }); }
     const g2 = DEMANDAS.filter(d => d.fracao === "1 PELOTÃO" && d.atend);
@@ -1606,6 +1635,7 @@ form.card.at { padding: 14px 16px; }
     app.innerHTML = abasHtml() +
       '<section class="head"><div><div class="eyebrow">' + (pelot ? "Comando do pelotão · " + esc(st.usuario.nome) : "Gestão · todas as frações") + "</div><h1>" + (pelot ? pelNome(st.usuario.pelotao) : "1ª Companhia") + "</h1></div>" +
       '<p class="head-note">Clique num quadro para ver as demandas daquela situação. Escolha uma fração na tabela ou no filtro para ver só ela.' + (pelot ? " Finalizar e devolver à fração são do Gestor Sistema." : "") + "</p></section>" +
+      (ehSistema() ? '<div class="lc-barra"><button type="button" class="btn primary lc-abrir" data-lancar>' + ICO_MAIS + 'Lançar denúncia</button><span class="hint">Use quando uma denúncia não entrar sozinha pelo Power Automate.</span></div>' : "") +
       cartoesHtml() + tabelaFracoes() +
       (pend.length ? '<section class="panel"><div class="panel-head"><h2>' + SIS.entrada + '</h2><p>linhas que não entraram sozinhas</p></div><div class="alerts">' +
         pend.map(p => '<div class="alert" data-tone="' + p.tone + '"><b>' + esc(p.titulo) + "</b><p>" + esc(p.texto) + "</p></div>").join("") + "</div></section>" : "") +
@@ -1944,6 +1974,7 @@ form.card.at { padding: 14px 16px; }
   function demoExec(nomeAcao, x) {
     const fr = !ehGestao(), sis = ehSistema();
     const acao = nomeAcao.slice(nomeAcao.indexOf(".") + 1); // "ddu.abrir" → "abrir": o protótipo usa as mesmas regras nos dois sistemas
+    if (acao === "lancar") return demoLancar(x);
     if (acao === "marcarTodosLidos") { let n = 0; escopo().forEach(d => d.notas.forEach(nt => { if (!nt.vistaGe) { nt.vistaGe = true; n++; } })); return { marcados: n }; }
     let d = x.codigo ? DEMANDAS.find(y => y.codigo === x.codigo) : null;
     if (!d && x.id) d = DEMANDAS.find(y => (y.notas || []).some(n => n.id === Number(x.id)));
@@ -2049,6 +2080,181 @@ form.card.at { padding: 14px 16px; }
     if (it) { pav.hidden = true; sino.setAttribute("aria-expanded", "false"); abrir(it.getAttribute("data-cod")); }
   });
   document.addEventListener("click", function (e) { if (!pav.hidden && !pav.contains(e.target) && !sino.contains(e.target)) { pav.hidden = true; sino.setAttribute("aria-expanded", "false"); } });
+
+  /* ================= lançamento manual de denúncia (Gestor Sistema) =================
+     Para quando o Power Automate não lançar. Mesmas conferências do servidor; pensado para quem não é da área:
+     um campo por vez, exemplos, a fração aparece sozinha e tudo é conferido antes de gravar. */
+  const LANC = { municipios: [], naturezas: [] };
+  const ICO_MAIS = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>';
+  const SETORES = { "BELO HORIZONTE": ["BARREIRO", "CENTRO-SUL", "LESTE", "NORDESTE", "NOROESTE", "NORTE", "OESTE", "PAMPULHA", "VENDA NOVA"],
+    "CONTAGEM": ["ELDORADO", "INDUSTRIAL", "NACIONAL", "PETROLÂNDIA", "RESSACA", "RIACHO", "SEDE", "VARGEM DAS FLORES"] };
+  const lc = { etapa: "form", v: {}, res: null, pdf: null, pdfNome: "" };
+  function semAcento(t) { return String(t || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase().replace(/\s+/g, " ").trim(); }
+  function listasLanc() {
+    if (!REAL && LANC.sis !== SIS.chave) {
+      LANC.sis = SIS.chave; LANC.municipios = [];
+      FRACOES.forEach(f => (f[1] || []).forEach(m => LANC.municipios.push([m, f[0]])));
+      LANC.municipios.sort((a, b) => (a[0] < b[0] ? -1 : 1));
+      LANC.naturezas = [];
+    }
+    if (!LANC.naturezas.length) LANC.naturezas = (SIS.chave === "DISQUE_181" ? DDU_NAT.map(n => n[0]) : NATUREZAS.slice()).sort();
+    return LANC;
+  }
+  function munLanc(nome) { const k = semAcento(nome); return listasLanc().municipios.find(m => semAcento(m[0]) === k) || null; }
+  function abrirLancamento(manter) {
+    if (!manter) { lc.etapa = "form"; lc.v = { envio: HOJE }; lc.res = null; lc.pdf = null; lc.pdfNome = ""; }
+    st.aberta = null;
+    const L = listasLanc(), v = lc.v, ddu = SIS.chave === "DISQUE_181";
+    let corpo = "";
+    if (lc.etapa === "form" || lc.etapa === "conferir") {
+      const mun = munLanc(v.mun), setores = mun && SETORES[semAcento(mun[0])];
+      corpo = '<form id="f-lc" class="card lc-form" novalidate>' +
+        '<p class="lc-intro">Pegue o <b>PDF da denúncia</b> e copie os dados abaixo. Tudo é conferido antes de gravar.</p>' +
+        campo("lc-cod", "1. Número do protocolo", '<input id="lc-cod" class="mono" inputmode="numeric" autocomplete="off" placeholder="' + (ddu ? "Ex.: 11638102608" : "Ex.: D154733") + '" value="' + esc(v.cod || "") + '">',
+          ddu ? "São 11 números, no alto do PDF. Sem pontos, traços ou espaços." : "Como está no PDF da SEMAD.") +
+        '<div id="lc-ja" class="lc-ja" hidden></div>' +
+        campo("lc-nat", "2. Natureza", '<select id="lc-nat"><option value="">Selecione…</option>' + L.naturezas.map(n => '<option' + (v.nat === n ? " selected" : "") + ">" + esc(n) + "</option>").join("") + "</select>",
+          "Escolha a que mais se parece com a do PDF. Se nenhuma servir, use OUTROS.") +
+        campo("lc-mun", "3. Município", '<input id="lc-mun" list="lc-muns" autocomplete="off" placeholder="Comece a digitar e escolha da lista" value="' + esc(v.mun || "") + '"><datalist id="lc-muns">' +
+          L.municipios.map(m => '<option value="' + esc(m[0]) + '"></option>').join("") + "</datalist>",
+          '<span id="lc-vai">' + (mun ? "Vai para: <b>" + esc(mun[1]) + "</b>" : "Só aparecem os municípios desta companhia.") + "</span>") +
+        (setores ? campo("lc-setor", "Setor de " + esc(mun[0]), '<select id="lc-setor"><option value="">Não informado no PDF</option>' + setores.map(x => '<option' + (v.setor === x ? " selected" : "") + ">" + esc(x) + "</option>").join("") + "</select>",
+          "No PDF, o setor aparece entre parênteses depois do município. Ex.: BELO HORIZONTE (LESTE).") : "") +
+        campo("lc-end", "4. Endereço", '<input id="lc-end" autocomplete="off" placeholder="Ex.: RUA DAS FLORES, 120 - CENTRO" value="' + esc(v.end || "") + '">', "Copie como está no PDF: rua, número e bairro.") +
+        '<div class="lc-datas">' +
+        campo("lc-ger", "5. Data em que a denúncia foi gerada", '<input id="lc-ger" type="date" max="' + HOJE + '" value="' + esc(v.ger || "") + '">', "Está no PDF. Se não achar, deixe em branco.") +
+        campo("lc-env", "6. Data de envio à fração", '<input id="lc-env" type="date" max="' + HOJE + '" value="' + esc(v.env || HOJE) + '">', "Normalmente é hoje. O prazo conta a partir desta data.") +
+        "</div>" +
+        campo("lc-pdf", "7. PDF da denúncia <span class=\"opc\">(se tiver o arquivo)</span>", '<input id="lc-pdf" type="file" accept="application/pdf,.pdf">' + (lc.pdfNome ? '<span class="lc-pdfnome">' + ICO_DOC + esc(lc.pdfNome) + "</span>" : ""),
+          "Ele fica junto da demanda, para a fração abrir.") +
+        (lc.etapa === "conferir" ? conferirLancHtml() :
+          '<div class="actions"><button type="button" class="btn" data-act="lc-fechar">Cancelar</button><button type="button" class="btn primary" data-act="lc-conferir">Conferir e lançar</button></div>') +
+        "</form>";
+    } else {
+      corpo = resultadoLancHtml();
+    }
+    drawer.innerHTML = '<div class="drawer-head"><div class="drawer-top"><div><div class="eyebrow">' + esc(SIS.titulo) + ' · lançamento manual</div><h2 class="drawer-title" id="d-title">Lançar denúncia</h2></div>' +
+      '<button type="button" class="x" data-close aria-label="Fechar">×</button></div></div><div class="drawer-body" id="d-body">' + corpo + "</div>";
+    if (drawer.hidden) { drawer.hidden = false; scrim.hidden = false; }
+    const f = document.getElementById("f-lc");
+    if (f) {
+      f.addEventListener("input", function (e) { lerLanc(); if (e.target.id === "lc-cod") checarCodigo(); if (e.target.id === "lc-mun") atualizarMun(); });
+      f.addEventListener("change", function (e) {
+        lerLanc();
+        if (e.target.id === "lc-mun") abrirLancamento(true);
+        if (e.target.id === "lc-pdf") lerPdf(e.target);
+      });
+      f.addEventListener("submit", function (e) { e.preventDefault(); });
+      checarCodigo();
+      if (lc.etapa === "form" && !manter) document.getElementById("lc-cod").focus();
+      if (lc.etapa === "conferir") { const c = document.getElementById("lc-conf"); if (c) c.scrollIntoView({ block: "center" }); }
+    }
+  }
+  function lerLanc() {
+    const g = id => { const el = document.getElementById(id); return el ? el.value : undefined; };
+    const v = lc.v;
+    ["cod", "nat", "mun", "setor", "end", "ger", "env"].forEach(k => { const x = g("lc-" + k); if (x !== undefined) v[k] = x; });
+    v.cod = String(v.cod || "").trim();
+    if (SIS.chave === "DISQUE_181") v.cod = v.cod.replace(/[\s.\-\/]/g, "");
+  }
+  function checarCodigo() {
+    const box = document.getElementById("lc-ja"); if (!box) return;
+    const c = semAcento(lc.v.cod), k = c.replace(/^0+/, "");
+    const d = c ? DEMANDAS.find(x => { const y = semAcento(x.codigo); return y === c || (/^\d+$/.test(c) && y.replace(/^0+/, "") === k); }) : null;
+    box.hidden = !d;
+    if (d) box.innerHTML = "<b>Esta denúncia já está no sistema.</b> Foi enviada ao " + esc(d.fracao) + " em " + br(d.envio) + '. Não precisa lançar de novo. <button type="button" class="link-btn" data-act="lc-ver" data-cod="' + esc(d.codigo) + '">Abrir a demanda</button>';
+  }
+  function atualizarMun() {
+    const el = document.getElementById("lc-vai"); if (!el) return;
+    const m = munLanc(lc.v.mun);
+    el.innerHTML = m ? "Vai para: <b>" + esc(m[1]) + "</b>" : (lc.v.mun ? "Escolha um município da lista." : "Só aparecem os municípios desta companhia.");
+  }
+  function lerPdf(input) {
+    const f = input.files && input.files[0];
+    if (!f) { lc.pdf = null; lc.pdfNome = ""; return; }
+    if (!/\.pdf$/i.test(f.name) && f.type !== "application/pdf") { erro("lc-pdf", "Escolha um arquivo PDF."); input.value = ""; return; }
+    if (f.size > 15 * 1024 * 1024) { erro("lc-pdf", "O arquivo passa de 15 MB. Anexe depois, pela pasta de PDFs."); input.value = ""; return; }
+    const r = new FileReader();
+    r.onload = function () { lc.pdf = String(r.result).replace(/^data:[^,]*,/, ""); lc.pdfNome = f.name; erro("lc-pdf", ""); };
+    r.readAsDataURL(f);
+  }
+  function validarLanc() {
+    lerLanc();
+    const v = lc.v, ddu = SIS.chave === "DISQUE_181";
+    let ok = true, foco = "";
+    const e = (id, msg) => { const r = erro(id, msg); if (!r && !foco) foco = id; ok = ok && r; };
+    e("lc-cod", !v.cod ? "Digite o número do protocolo." : ddu && !/^\d{10,11}$/.test(v.cod) ? "O protocolo do DDU tem 11 números. Confira no PDF." : !/^[0-9A-Za-z.\-\/]+$/.test(v.cod) ? "Use só letras e números." : "");
+    e("lc-nat", v.nat ? "" : "Escolha a natureza.");
+    e("lc-mun", !v.mun ? "Digite o município." : !munLanc(v.mun) ? "Este município não está na lista da companhia. Escolha um da lista." : "");
+    e("lc-end", String(v.end || "").trim().length < 5 ? "Digite o endereço como está no PDF." : "");
+    e("lc-env", !v.env ? "Informe a data de envio à fração." : v.env > HOJE ? "A data de envio não pode ser futura." : "");
+    e("lc-ger", v.ger && v.env && v.ger > v.env ? "A data em que foi gerada não pode ser depois do envio." : v.ger && v.ger > HOJE ? "A data não pode ser futura." : "");
+    if (foco) { const el = document.getElementById(foco); if (el) { el.focus(); el.scrollIntoView({ block: "center" }); } }
+    return ok;
+  }
+  function conferirLancHtml() {
+    const v = lc.v, m = munLanc(v.mun);
+    const linha = (t, x) => "<dt>" + t + "</dt><dd>" + x + "</dd>";
+    return '<div class="lc-conf" id="lc-conf" role="alertdialog" aria-labelledby="lc-conf-t"><p class="lc-conf-t" id="lc-conf-t">Confira antes de lançar</p><dl>' +
+      linha("Protocolo", '<span class="mono">' + esc(v.cod) + "</span>") + linha("Natureza", esc(v.nat)) +
+      linha("Município", esc(m ? m[0] : v.mun) + (v.setor ? " (" + esc(v.setor) + ")" : "")) + linha("Endereço", esc(v.end)) +
+      linha("Vai para", "<b>" + esc(m ? m[1] : "—") + "</b>") + linha("Envio", br(v.env) + " · vence em <b>" + br(addDays(v.env, PRAZO)) + "</b>") +
+      linha("PDF", lc.pdf ? esc(lc.pdfNome) : "sem PDF (pode ir depois, pela pasta)") + "</dl>" +
+      '<div class="actions"><button type="button" class="btn" data-act="lc-voltar">Voltar e corrigir</button><button type="button" class="btn primary" data-act="lc-lancar" id="lc-sim">Está certo, lançar</button></div></div>';
+  }
+  function resultadoLancHtml() {
+    const r = lc.res || {}, d = r.demanda;
+    const tom = r.situacao === "IMPORTADA" ? "ok" : r.situacao === "DUPLICADA" ? "info" : "warn";
+    const tit = r.situacao === "IMPORTADA" ? "Denúncia lançada" : r.situacao === "DUPLICADA" ? "Esta denúncia já estava no sistema" : "A denúncia foi registrada, mas ainda não entrou";
+    const txt = r.situacao === "IMPORTADA" ? "Já aparece para o <b>" + esc(d ? d.fracao : "") + "</b>" + (d ? ", com vencimento em <b>" + br(d.venc) + "</b>" : "") + "." + (r.avisoPdf ? " " + esc(r.avisoPdf) : r.pdf ? " O PDF ficou junto da demanda." : "")
+      : r.situacao === "DUPLICADA" ? "Nada foi repetido. " + esc(r.detalhe || "")
+      : esc(r.detalhe || "") + " Avise o Gestor Sistema: corrigido o motivo, ela entra sozinha.";
+    return '<div class="card lc-res" data-tone="' + tom + '" role="status"><p class="lc-res-t">' + (tom === "ok" ? "✓ " : "") + tit + '</p><p>' + txt + "</p>" +
+      '<p class="mono lc-res-cod">' + esc(r.codigo || lc.v.cod) + "</p>" +
+      '<div class="actions">' + (d ? '<button type="button" class="btn" data-act="lc-ver" data-cod="' + esc(d.codigo) + '">Abrir a demanda</button>' : "") +
+      '<button type="button" class="btn primary" data-act="lc-outra">Lançar outra</button></div></div>';
+  }
+  function acaoLancamento(act, b) {
+    if (act === "lc-fechar") { fechar(); return; }
+    if (act === "lc-conferir") { if (validarLanc()) { lc.etapa = "conferir"; abrirLancamento(true); } return; }
+    if (act === "lc-voltar") { lc.etapa = "form"; abrirLancamento(true); return; }
+    if (act === "lc-outra") { abrirLancamento(); return; }
+    if (act === "lc-ver") { const c = b.getAttribute("data-cod"); fechar(); render(); abrir(c); return; }
+    if (act === "lc-lancar") {
+      if (!validarLanc()) { lc.etapa = "form"; abrirLancamento(true); return; }
+      const v = lc.v, m = munLanc(v.mun);
+      b.disabled = true; b.textContent = "Lançando…"; document.body.classList.add("ocupado");
+      chamar(acao("lancar"), { codigo: v.cod, natureza: v.nat, municipio: (m ? m[0] : v.mun) + (v.setor ? " (" + v.setor + ")" : ""), endereco: String(v.end).trim(),
+        data_gerada: v.ger || "", data_envio: v.env, pdf: lc.pdf || "" })
+        .then(function (r) {
+          document.body.classList.remove("ocupado");
+          lc.res = r; lc.etapa = "fim";
+          if (r.demanda) { const o = DEMANDAS.find(x => x.codigo === r.demanda.codigo); if (o) mesclar(o, r.demanda); else DEMANDAS.push(REAL ? daServidor(r.demanda) : r.demanda); }
+          render(); abrirLancamento(true);
+          if (REAL && r.situacao === "IMPORTADA") carregarSisden(true);
+        })
+        .catch(function (e) {
+          document.body.classList.remove("ocupado");
+          lc.etapa = "form"; abrirLancamento(true);
+          falha(e, { codigo: "lc-cod", natureza: "lc-nat", municipio: "lc-mun", endereco: "lc-end", data_envio: "lc-env", data_gerada: "lc-ger" });
+        });
+    }
+  }
+  /* protótipo: mesmas regras do servidor */
+  function demoLancar(x) {
+    if (!ehSistema()) throw erroDemo("Só o Gestor Sistema lança denúncias.", "PERMISSAO");
+    const c = String(x.codigo || "").trim(), k = c.replace(/^0+/, "");
+    const ja = DEMANDAS.find(y => y.codigo === c || (/^\d+$/.test(c) && String(y.codigo).replace(/^0+/, "") === k));
+    if (ja) return { ok: true, situacao: "DUPLICADA", detalhe: "Já existe (enviada em " + br(ja.envio) + ")", codigo: c, demanda: ja };
+    const mm = String(x.municipio).match(/^(.*?)\s*\(([^()]+)\)\s*$/), munNome = mm ? mm[1] : x.municipio, m = munLanc(munNome);
+    if (!m) return { ok: true, situacao: "PENDENTE", detalhe: "Município \"" + munNome + "\" não está na aba MUNICÍPIOS.", codigo: c };
+    const d = { codigo: c, tipo: SIS.chave === "DISQUE_181" ? "DDU" : "DENÚNCIA", gerada: x.data_gerada || x.data_envio, envio: x.data_envio, venc: addDays(x.data_envio, PRAZO),
+      natureza: x.natureza, municipio: m[0], fracao: m[1], endereco: x.endereco + (mm ? " (" + mm[2] + ")" : ""),
+      atend: "", gaia: "", reds: "", resultado: "", obsFracao: "", sitAnalista: "", respSemadEm: "", obsAnalista: "", prioridade: "NORMAL", prioPor: "", anotacao: "", recados: [], avisos: [], notas: [],
+      hist: [{ quando: HOJE, hora: hora(), quem: quemSou(), acao: "Lançada manualmente no site" }] };
+    DEMANDAS.push(d);
+    return { ok: true, situacao: "IMPORTADA", codigo: c, demanda: d, pdf: !!x.pdf };
+  }
 
   function fechar() {
     drawer.hidden = true; scrim.hidden = true; drawer.innerHTML = "";
@@ -3028,6 +3234,7 @@ form.card.at { padding: 14px 16px; }
     DEMANDAS.length = 0;
     r.demandas.forEach(function (s) { const o = antes[s.codigo]; DEMANDAS.push(o ? mesclar(o, s) : daServidor(s)); });
     st.nExcl = r.excluidas || 0;
+    if (r.lancamento) { LANC.municipios = r.lancamento.municipios || []; LANC.naturezas = r.lancamento.naturezas || []; }
     PENDENCIAS.length = 0;
     const pe = r.pendenciasEntrada || [];
     if (pe.length > 3) PENDENCIAS.push({ tone: "warn", titulo: pe.length + " linhas da ENTRADA pendentes", texto: "Códigos: " + pe.map(p => p.codigo || "linha " + p.linha).join(", ") + ". Confira a coluna de situação na aba ENTRADA da planilha." });
@@ -3233,6 +3440,7 @@ form.card.at { padding: 14px 16px; }
     }
     if (e.target.closest("[data-geral]")) { st.gFracao = ""; render(); return; }
     if (e.target.closest("[data-limpar-busca]")) { st.busca = ""; st.local = null; render(); const b = document.getElementById("busca"); if (b) b.focus(); return; }
+    if (e.target.closest("[data-lancar]")) { abrirLancamento(); return; }
     const sl = e.target.closest("[data-local]");
     if (sl) { e.stopPropagation(); verLocal(sl.getAttribute("data-cod"), sl.getAttribute("data-local")); return; }
     if (e.target.closest("[data-limpar-local]")) { st.local = null; render(); return; }
@@ -3260,6 +3468,7 @@ form.card.at { padding: 14px 16px; }
     const b = e.target.closest("[data-act]");
     if (!b) return;
     const act = b.getAttribute("data-act");
+    if (act.indexOf("lc-") === 0) { acaoLancamento(act, b); return; }
     const id = Number(b.getAttribute("data-id")) || null, cod = st.aberta.codigo;
     if (act === "conf-sim") { st.atConfirmado = true; document.getElementById("f-at").requestSubmit(); return; }
     if (act === "conf-nao") { document.getElementById("at-confirm").hidden = true; document.getElementById("at-acoes").hidden = false; return; }
