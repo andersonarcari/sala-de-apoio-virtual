@@ -327,6 +327,12 @@ form.at { background: var(--surface); border: 1px solid var(--line); border-radi
 .lc-form { display: grid; gap: 14px; }
 .lc-form .field input, .lc-form .field select { font-size: 16px; min-height: 44px; }
 .lc-intro { margin: 0; padding: 10px 12px; border-radius: 8px; background: var(--surface-2); font-size: 14px; }
+.lc-idja { color: var(--warn); font-weight: 600; }
+.lc-tipos { display: flex; gap: 10px; flex-wrap: wrap; }
+.lc-tipo { flex: 1 1 140px; display: flex; align-items: center; gap: 10px; min-height: 48px; padding: 0 14px; border: 1.5px solid var(--line); border-radius: 10px; cursor: pointer; font-weight: 600; background: var(--surface); }
+.lc-tipo input { width: 20px; height: 20px; margin: 0; accent-color: var(--caqui); }
+.lc-tipo.on { border-color: var(--caqui); background: var(--accent-soft); }
+.lc-tipo:focus-within { outline: 2px solid var(--caqui); outline-offset: 2px; }
 .lc-datas { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 @media (max-width: 560px) { .lc-datas { grid-template-columns: 1fr; } }
 .lc-ja { padding: 10px 12px; border-radius: 8px; background: var(--info-soft); color: var(--info); font-size: 14px; margin-top: -6px; }
@@ -749,6 +755,8 @@ button.rk:hover { background: color-mix(in srgb, var(--caqui) 9%, transparent); 
 .hub-ola { font-family: var(--f-display); font-size: 30px; margin: 0 0 4px; }
 .hub-sub { margin: 0 0 22px; color: var(--muted); }
 .hub-cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+.hub-cia { grid-column: 1 / -1; margin: 10px 0 -4px; font-family: var(--f-display); font-size: 18px; text-transform: uppercase; letter-spacing: .4px; color: var(--muted); }
+.hub-cia:first-child { margin-top: 0; }
 .hub-card { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 22px; display: flex; flex-direction: column; gap: 14px; position: relative; overflow: hidden; }
 .hub-card::before { content: ""; position: absolute; inset: 0 0 auto 0; height: 4px; background: var(--caqui); }
 .hub-card.off { background: var(--surface-2); }
@@ -1001,7 +1009,7 @@ form.card.at { padding: 14px 16px; }
   <div class="lg-wrap">
     <section class="lg-brand">
       <img src="data:image/webp;base64,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" alt="" width="150" class="lg-escudo">
-      <div class="lg-name"><span class="lg-portal" data-portal-nome>Sala de Apoio Virtual</span><span class="lg-cia">1ª Companhia</span></div>
+      <div class="lg-name"><span class="lg-portal" data-portal-nome>Sala de Apoio Virtual</span><span class="lg-cia">BPM MAMB</span></div>
       <svg class="lg-slashes" viewBox="0 0 190 48" preserveAspectRatio="none" aria-hidden="true"><g fill="currentColor"><polygon points="20,0 28,0 52,48 44,48"/><polygon points="56,0 64,0 88,48 80,48"/><polygon points="92,0 100,0 124,48 116,48"/><polygon points="128,0 136,0 160,48 152,48"/></g></svg>
     </section>
     <section class="lg-card" id="login-card" aria-live="polite"></section>
@@ -1052,7 +1060,7 @@ form.card.at { padding: 14px 16px; }
      Tudo o mais — quadros, anotações, atendimento, devolver, finalizar, excluir, usuários, dashboard — é igual. */
   const SIS_UI = {
     SISDEN: {
-      chave: "SISDEN", prefixo: "sisden", titulo: "SISDEN", rodape: "Gestão Automatizada de Denúncias da SEMAD",
+      chave: "SISDEN", base: "SISDEN", prefixo: "sisden", titulo: "SISDEN", rodape: "Gestão Automatizada de Denúncias da SEMAD",
       busca: "Buscar protocolo, ID (DEN 1480), município, REDS…", orgao: "SEMAD", entrada: "Entrada da SEMAD",
       final: "RESPONDIDA SEMAD", respondidaA: "respondida à SEMAD", respondidasA: "respondidas à SEMAD", resposta: "Resposta à SEMAD", btnFinal: "Respondida à SEMAD · Finalizar",
       resultados: ["CONSTATADO", "NÃO CONSTATADO", "ENDEREÇO NÃO LOCALIZADO", "ENTRADA NÃO AUTORIZADA", "ATENDIDA POR OUTRO ÓRGÃO", "OUTROS (descrever na observação)"],
@@ -1061,7 +1069,7 @@ form.card.at { padding: 14px 16px; }
       gaiaObrig: true, obsRotulo: "Observação", obsNome: "observação", obsLim: 500, obsPh: "Ex.: proprietário notificado; retorno em 15 dias.", csv: "sisden"
     },
     DISQUE_181: {
-      chave: "DISQUE_181", prefixo: "ddu", titulo: "DDU", rodape: "Gestão Automatizada de Denúncias do DDU",
+      chave: "DISQUE_181", base: "DISQUE_181", prefixo: "ddu", titulo: "DDU", rodape: "Gestão Automatizada de Denúncias do DDU",
       busca: "Buscar pelo protocolo, município, REDS…", orgao: "DDU", entrada: "Entrada do DDU",
       final: "RESPONDIDA SISTEMA", respondidaA: "respondida no DDU", respondidasA: "respondidas no DDU", resposta: "Resposta no DDU", btnFinal: "Respondida no DDU · Finalizar",
       resultados: ["CONSTATADO", "NÃO CONSTATADO", "ORIENTAÇÃO VERBAL", "NINGUÉM NO LOCAL (UMA VEZ)", "DUAS TENTATIVAS", "NÃO LOCALIZADO", "ENTRADA NÃO AUTORIZADA", "PC/SEMMA"],
@@ -1071,7 +1079,19 @@ form.card.at { padding: 14px 16px; }
       obsPh: "Exemplo: Constatado crime de cativeiro irregular de animal silvestre, sendo lavrado o respectivo Termo Circunstanciado de Ocorrência (TCO), bem como adotadas as medidas administrativas cabíveis, com a lavratura do Auto de Infração.", csv: "ddu"
     }
   };
-  let SIS = SIS_UI.SISDEN;
+  let SIS = uiDe({ chave: "SISDEN" });
+  /** sistema do portal (chave SISDEN_2CIA, base SISDEN, companhia 2CIA…) → regras e textos do sistema de base + a companhia */
+  function uiDe(s) {
+    const base = s.base || (SIS_UI[s.chave] ? s.chave : ""), ui = SIS_UI[base];
+    if (!ui) return null;
+    return Object.assign({}, ui, { chave: s.chave, base: base, prefixo: s.prefixo || ui.prefixo, cia: s.cia || "1CIA", nomeCia: s.nomeCia || "1ª Companhia",
+      resultados: ui.resultados.slice(), motivos: ui.motivos.slice() });
+  }
+  function nomeCia(curto) { const n = (SIS && SIS.nomeCia) || "1ª Companhia"; return curto ? n.replace("Companhia", "Cia") : n; }
+  /** pelotões que existem nesta companhia (das frações), em ordem */
+  function pelotoes() { return Array.from(new Set(FRACOES.map(f => pelotaoDe(f[0])).filter(p => p !== "?"))).sort((a, b) => a - b); }
+  /** pelotões com GPs (só eles têm Cmt Pelotão) */
+  function pelotoesComGp() { return pelotoes().filter(p => FRACOES.some(f => pelotaoDe(f[0]) === p && /GP\//.test(f[0]))); }
   /** nome da ação no servidor para o sistema aberto: acao("carregar") → "sisden.carregar" ou "ddu.carregar" */
   function acao(n) { return SIS.prefixo + "." + n; }
   function maiusc(t) { return t.charAt(0).toUpperCase() + t.slice(1); }
@@ -1094,7 +1114,7 @@ form.card.at { padding: 14px 16px; }
   function demandasGestao() { return st.perfil === "pelotao" ? DEMANDAS.filter(noMeuPelotao) : DEMANDAS; }
   function fracoesGestao() { return st.perfil === "pelotao" ? FRACOES.filter(f => pelotaoDe(f[0]) === st.usuario.pelotao) : FRACOES; }
   /** quem assina recados, prioridades e conclusões na gestão */
-  function remetente() { return st.perfil === "pelotao" ? st.usuario.nome + " (Cmt " + pelNome(st.usuario.pelotao) + ")" : "Gestor Sistema · 1ª Cia"; }
+  function remetente() { return st.perfil === "pelotao" ? st.usuario.nome + " (Cmt " + pelNome(st.usuario.pelotao) + ")" : "Gestor Sistema · " + nomeCia(true); }
   function quemSou() {
     const u = st.usuario;
     if (!u) return CONTA.fracao;
@@ -1193,7 +1213,7 @@ form.card.at { padding: 14px 16px; }
 
   /** dados fictícios do sistema aberto (SISDEN ou DDU); sempre os mesmos para o mesmo sistema */
   function gerarDemo() {
-    const ddu = SIS.chave === "DISQUE_181";
+    const ddu = SIS.base === "DISQUE_181";
     DEMANDAS.length = 0; EXCLUIDAS.length = 0; END_DEMO = {};
     seed = ddu ? 20261016 : 20261013; notaSeq = 1;
     let cod = ddu ? 66410000 : 4100;
@@ -1268,7 +1288,7 @@ form.card.at { padding: 14px 16px; }
       if (d.anotacao) { notaDemo(d, d.anotacao, "Equipe " + d.fracao + " (Básico)", "", "fracao", addDays(d.envio, 2) + " 08:00", { vistaGe: true }); d.anotacao = ""; }
     });
     const G = ["Sgt Anderson (Gestor Sistema)", "gestor.1cia@exemplo.com"], P = ["Maj Monteiro (Cmt 3º Pelotão)", "monteiro.pel3@exemplo.com"];
-    (SIS.chave === "DISQUE_181" ? ["2 GP/3 PELOTÃO", "1 PELOTÃO"] : ["2 GP/3 PELOTÃO"]).forEach(function (fr) {
+    (SIS.base === "DISQUE_181" ? ["2 GP/3 PELOTÃO", "1 PELOTÃO"] : ["2 GP/3 PELOTÃO"]).forEach(function (fr) {
     const minhas = DEMANDAS.filter(d => d.fracao === fr);
     const atendidas = minhas.filter(d => d.atend && d.reds);
     const pend = minhas.filter(d => !d.atend);
@@ -1633,7 +1653,7 @@ form.card.at { padding: 14px 16px; }
   function telaGestor() {
     const pelot = st.perfil === "pelotao", pend = pelot ? [] : PENDENCIAS;
     app.innerHTML = abasHtml() +
-      '<section class="head"><div><div class="eyebrow">' + (pelot ? "Comando do pelotão · " + esc(st.usuario.nome) : "Gestão · todas as frações") + "</div><h1>" + (pelot ? pelNome(st.usuario.pelotao) : "1ª Companhia") + "</h1></div>" +
+      '<section class="head"><div><div class="eyebrow">' + (pelot ? "Comando do pelotão · " + esc(st.usuario.nome) : "Gestão · todas as frações") + "</div><h1>" + (pelot ? pelNome(st.usuario.pelotao) : esc(nomeCia())) + "</h1></div>" +
       '<p class="head-note">Clique num quadro para ver as demandas daquela situação. Escolha uma fração na tabela ou no filtro para ver só ela.' + (pelot ? " Finalizar e devolver à fração são do Gestor Sistema." : "") + "</p></section>" +
       (ehSistema() ? '<div class="lc-barra"><button type="button" class="btn primary lc-abrir" data-lancar>' + ICO_MAIS + 'Lançar denúncia</button><span class="hint">Use quando uma denúncia não entrar sozinha pelo Power Automate.</span></div>' : "") +
       cartoesHtml() + tabelaFracoes() +
@@ -2097,35 +2117,41 @@ form.card.at { padding: 14px 16px; }
       LANC.municipios.sort((a, b) => (a[0] < b[0] ? -1 : 1));
       LANC.naturezas = [];
     }
-    if (!LANC.naturezas.length) LANC.naturezas = (SIS.chave === "DISQUE_181" ? DDU_NAT.map(n => n[0]) : NATUREZAS.slice()).sort();
+    if (!LANC.naturezas.length) LANC.naturezas = (SIS.base === "DISQUE_181" ? DDU_NAT.map(n => n[0]) : NATUREZAS.slice()).sort();
     return LANC;
   }
   function munLanc(nome) { const k = semAcento(nome); return listasLanc().municipios.find(m => semAcento(m[0]) === k) || null; }
   function abrirLancamento(manter) {
     if (!manter) { lc.etapa = "form"; lc.v = { envio: HOJE }; lc.res = null; lc.pdf = null; lc.pdfNome = ""; }
     st.aberta = null;
-    const L = listasLanc(), v = lc.v, ddu = SIS.chave === "DISQUE_181";
+    const L = listasLanc(), v = lc.v, ddu = SIS.base === "DISQUE_181";
     let corpo = "";
     if (lc.etapa === "form" || lc.etapa === "conferir") {
       const mun = munLanc(v.mun), setores = mun && SETORES[semAcento(mun[0])];
+      let num = 0; const nr = t => (++num) + ". " + t;
       corpo = '<form id="f-lc" class="card lc-form" novalidate>' +
         '<p class="lc-intro">Pegue o <b>PDF da denúncia</b> e copie os dados abaixo. Tudo é conferido antes de gravar.</p>' +
-        campo("lc-cod", "1. Número do protocolo", '<input id="lc-cod" class="mono" inputmode="numeric" autocomplete="off" placeholder="' + (ddu ? "Ex.: 11638102608" : "Ex.: D154733") + '" value="' + esc(v.cod || "") + '">',
-          ddu ? "São 11 números, no alto do PDF. Sem pontos, traços ou espaços." : "Como está no PDF da SEMAD.") +
+        (ddu ? "" : campo("lc-tipo", nr("Tipo de demanda"), '<div class="lc-tipos" id="lc-tipo" role="radiogroup">' +
+          ["DENÚNCIA", "REQUISIÇÃO"].map(t => '<label class="lc-tipo' + (v.tipo === t ? " on" : "") + '"><input type="radio" name="lc-tipo" value="' + t + '"' + (v.tipo === t ? " checked" : "") + "><span>" + (t === "DENÚNCIA" ? "Denúncia" : "Requisição") + "</span></label>").join("") + "</div>",
+          "Está escrito no alto do PDF da SEMAD.")) +
+        (ddu ? "" : campo("lc-id", nr("Número do ID"), '<input id="lc-id" class="mono" inputmode="numeric" autocomplete="off" placeholder="Ex.: 1890" value="' + esc(v.id || "") + '">',
+          '<span id="lc-idprev">' + idPrevia() + "</span>")) +
+        campo("lc-cod", nr("Número do protocolo"), '<input id="lc-cod" class="mono" inputmode="numeric" autocomplete="off" placeholder="' + (ddu ? "Ex.: 11638102608" : "Ex.: 2026.10.01.503.0001840") + '" value="' + esc(v.cod || "") + '">',
+          ddu ? "São 11 números, no alto do PDF. Sem pontos, traços ou espaços." : "Copie com os pontos, como está no PDF da SEMAD.") +
         '<div id="lc-ja" class="lc-ja" hidden></div>' +
-        campo("lc-nat", "2. Natureza", '<select id="lc-nat"><option value="">Selecione…</option>' + L.naturezas.map(n => '<option' + (v.nat === n ? " selected" : "") + ">" + esc(n) + "</option>").join("") + "</select>",
+        campo("lc-nat", nr("Natureza"), '<select id="lc-nat"><option value="">Selecione…</option>' + L.naturezas.map(n => '<option' + (v.nat === n ? " selected" : "") + ">" + esc(n) + "</option>").join("") + "</select>",
           "Escolha a que mais se parece com a do PDF. Se nenhuma servir, use OUTROS.") +
-        campo("lc-mun", "3. Município", '<input id="lc-mun" list="lc-muns" autocomplete="off" placeholder="Comece a digitar e escolha da lista" value="' + esc(v.mun || "") + '"><datalist id="lc-muns">' +
+        campo("lc-mun", nr("Município"), '<input id="lc-mun" list="lc-muns" autocomplete="off" placeholder="Comece a digitar e escolha da lista" value="' + esc(v.mun || "") + '"><datalist id="lc-muns">' +
           L.municipios.map(m => '<option value="' + esc(m[0]) + '"></option>').join("") + "</datalist>",
           '<span id="lc-vai">' + (mun ? "Vai para: <b>" + esc(mun[1]) + "</b>" : "Só aparecem os municípios desta companhia.") + "</span>") +
         (setores ? campo("lc-setor", "Setor de " + esc(mun[0]), '<select id="lc-setor"><option value="">Não informado no PDF</option>' + setores.map(x => '<option' + (v.setor === x ? " selected" : "") + ">" + esc(x) + "</option>").join("") + "</select>",
           "No PDF, o setor aparece entre parênteses depois do município. Ex.: BELO HORIZONTE (LESTE).") : "") +
-        campo("lc-end", "4. Endereço", '<input id="lc-end" autocomplete="off" placeholder="Ex.: RUA DAS FLORES, 120 - CENTRO" value="' + esc(v.end || "") + '">', "Copie como está no PDF: rua, número e bairro.") +
+        campo("lc-end", nr("Endereço"), '<input id="lc-end" autocomplete="off" placeholder="Ex.: RUA DAS FLORES, 120 - CENTRO" value="' + esc(v.end || "") + '">', "Copie como está no PDF: rua, número e bairro.") +
         '<div class="lc-datas">' +
-        campo("lc-ger", "5. Data em que a denúncia foi gerada", '<input id="lc-ger" type="date" max="' + HOJE + '" value="' + esc(v.ger || "") + '">', "Está no PDF. Se não achar, deixe em branco.") +
-        campo("lc-env", "6. Data de envio à fração", '<input id="lc-env" type="date" max="' + HOJE + '" value="' + esc(v.env || HOJE) + '">', "Normalmente é hoje. O prazo conta a partir desta data.") +
+        campo("lc-ger", nr("Data em que a denúncia foi gerada"), '<input id="lc-ger" type="date" max="' + HOJE + '" value="' + esc(v.ger || "") + '">', "Está no PDF. Se não achar, deixe em branco.") +
+        campo("lc-env", nr("Data de envio à fração"), '<input id="lc-env" type="date" max="' + HOJE + '" value="' + esc(v.env || HOJE) + '">', "Normalmente é hoje. O prazo conta a partir desta data.") +
         "</div>" +
-        campo("lc-pdf", "7. PDF da denúncia <span class=\"opc\">(se tiver o arquivo)</span>", '<input id="lc-pdf" type="file" accept="application/pdf,.pdf">' + (lc.pdfNome ? '<span class="lc-pdfnome">' + ICO_DOC + esc(lc.pdfNome) + "</span>" : ""),
+        campo("lc-pdf", nr("PDF da denúncia") + " <span class=\"opc\">(se tiver o arquivo)</span>", '<input id="lc-pdf" type="file" accept="application/pdf,.pdf">' + (lc.pdfNome ? '<span class="lc-pdfnome">' + ICO_DOC + esc(lc.pdfNome) + "</span>" : ""),
           "Ele fica junto da demanda, para a fração abrir.") +
         (lc.etapa === "conferir" ? conferirLancHtml() :
           '<div class="actions"><button type="button" class="btn" data-act="lc-fechar">Cancelar</button><button type="button" class="btn primary" data-act="lc-conferir">Conferir e lançar</button></div>') +
@@ -2138,11 +2164,12 @@ form.card.at { padding: 14px 16px; }
     if (drawer.hidden) { drawer.hidden = false; scrim.hidden = false; }
     const f = document.getElementById("f-lc");
     if (f) {
-      f.addEventListener("input", function (e) { lerLanc(); if (e.target.id === "lc-cod") checarCodigo(); if (e.target.id === "lc-mun") atualizarMun(); });
+      f.addEventListener("input", function (e) { lerLanc(); if (e.target.id === "lc-cod") checarCodigo(); if (e.target.id === "lc-id") atualizarId(); if (e.target.id === "lc-mun") atualizarMun(); });
       f.addEventListener("change", function (e) {
         lerLanc();
         if (e.target.id === "lc-mun") abrirLancamento(true);
         if (e.target.id === "lc-pdf") lerPdf(e.target);
+        if (e.target.name === "lc-tipo") { document.querySelectorAll(".lc-tipo").forEach(l => l.classList.toggle("on", l.querySelector("input").checked)); erro("lc-tipo", ""); atualizarId(); }
       });
       f.addEventListener("submit", function (e) { e.preventDefault(); });
       checarCodigo();
@@ -2153,9 +2180,11 @@ form.card.at { padding: 14px 16px; }
   function lerLanc() {
     const g = id => { const el = document.getElementById(id); return el ? el.value : undefined; };
     const v = lc.v;
-    ["cod", "nat", "mun", "setor", "end", "ger", "env"].forEach(k => { const x = g("lc-" + k); if (x !== undefined) v[k] = x; });
+    const tp = document.querySelector('input[name="lc-tipo"]:checked'); if (tp) v.tipo = tp.value;
+    ["id", "cod", "nat", "mun", "setor", "end", "ger", "env"].forEach(k => { const x = g("lc-" + k); if (x !== undefined) v[k] = x; });
     v.cod = String(v.cod || "").trim();
-    if (SIS.chave === "DISQUE_181") v.cod = v.cod.replace(/[\s.\-\/]/g, "");
+    v.id = String(v.id || "").replace(/\D/g, "").replace(/^0+(?=\d)/, "");
+    if (SIS.base === "DISQUE_181") v.cod = v.cod.replace(/[\s.\-\/]/g, "");
   }
   function checarCodigo() {
     const box = document.getElementById("lc-ja"); if (!box) return;
@@ -2164,6 +2193,15 @@ form.card.at { padding: 14px 16px; }
     box.hidden = !d;
     if (d) box.innerHTML = "<b>Esta denúncia já está no sistema.</b> Foi enviada ao " + esc(d.fracao) + " em " + br(d.envio) + '. Não precisa lançar de novo. <button type="button" class="link-btn" data-act="lc-ver" data-cod="' + esc(d.codigo) + '">Abrir a demanda</button>';
   }
+  /** SISDEN: o TIPO DE DEMANDA é a sigla + o ID da SEMAD ("DEN 1890", "REQ 942") */
+  function tipoCompleto(v) { return v.tipo && v.id ? (v.tipo === "REQUISIÇÃO" ? "REQ " : "DEN ") + v.id : ""; }
+  function idPrevia() {
+    const t = tipoCompleto(lc.v);
+    if (!t) return "Só os números do ID que vêm no PDF (Denúncia ID / Requisição ID).";
+    const ja = DEMANDAS.find(d => semAcento(d.tipo) === t);
+    return "Vai aparecer como <b>" + esc(t) + "</b>" + (ja ? ' · <span class="lc-idja">já existe uma demanda com este ID (' + esc(ja.codigo) + ")</span>" : "");
+  }
+  function atualizarId() { const el = document.getElementById("lc-idprev"); if (el) el.innerHTML = idPrevia(); }
   function atualizarMun() {
     const el = document.getElementById("lc-vai"); if (!el) return;
     const m = munLanc(lc.v.mun);
@@ -2180,9 +2218,11 @@ form.card.at { padding: 14px 16px; }
   }
   function validarLanc() {
     lerLanc();
-    const v = lc.v, ddu = SIS.chave === "DISQUE_181";
+    const v = lc.v, ddu = SIS.base === "DISQUE_181";
     let ok = true, foco = "";
     const e = (id, msg) => { const r = erro(id, msg); if (!r && !foco) foco = id; ok = ok && r; };
+    if (!ddu) e("lc-tipo", v.tipo ? "" : "Marque se é Denúncia ou Requisição.");
+    if (!ddu) e("lc-id", !v.id ? "Digite o número do ID (está no PDF)." : v.id.length > 6 ? "O ID tem poucos números (ex.: 1890). Não confunda com o protocolo." : "");
     e("lc-cod", !v.cod ? "Digite o número do protocolo." : ddu && !/^\d{10,11}$/.test(v.cod) ? "O protocolo do DDU tem 11 números. Confira no PDF." : !/^[0-9A-Za-z.\-\/]+$/.test(v.cod) ? "Use só letras e números." : "");
     e("lc-nat", v.nat ? "" : "Escolha a natureza.");
     e("lc-mun", !v.mun ? "Digite o município." : !munLanc(v.mun) ? "Este município não está na lista da companhia. Escolha um da lista." : "");
@@ -2196,7 +2236,7 @@ form.card.at { padding: 14px 16px; }
     const v = lc.v, m = munLanc(v.mun);
     const linha = (t, x) => "<dt>" + t + "</dt><dd>" + x + "</dd>";
     return '<div class="lc-conf" id="lc-conf" role="alertdialog" aria-labelledby="lc-conf-t"><p class="lc-conf-t" id="lc-conf-t">Confira antes de lançar</p><dl>' +
-      linha("Protocolo", '<span class="mono">' + esc(v.cod) + "</span>") + linha("Natureza", esc(v.nat)) +
+      (SIS.base === "DISQUE_181" ? "" : linha("Tipo / ID", (v.tipo === "REQUISIÇÃO" ? "Requisição" : "Denúncia") + " · <b>" + esc(tipoCompleto(v)) + "</b>")) + linha("Protocolo", '<span class="mono">' + esc(v.cod) + "</span>") + linha("Natureza", esc(v.nat)) +
       linha("Município", esc(m ? m[0] : v.mun) + (v.setor ? " (" + esc(v.setor) + ")" : "")) + linha("Endereço", esc(v.end)) +
       linha("Vai para", "<b>" + esc(m ? m[1] : "—") + "</b>") + linha("Envio", br(v.env) + " · vence em <b>" + br(addDays(v.env, PRAZO)) + "</b>") +
       linha("PDF", lc.pdf ? esc(lc.pdfNome) : "sem PDF (pode ir depois, pela pasta)") + "</dl>" +
@@ -2224,7 +2264,7 @@ form.card.at { padding: 14px 16px; }
       if (!validarLanc()) { lc.etapa = "form"; abrirLancamento(true); return; }
       const v = lc.v, m = munLanc(v.mun);
       b.disabled = true; b.textContent = "Lançando…"; document.body.classList.add("ocupado");
-      chamar(acao("lancar"), { codigo: v.cod, natureza: v.nat, municipio: (m ? m[0] : v.mun) + (v.setor ? " (" + v.setor + ")" : ""), endereco: String(v.end).trim(),
+      chamar(acao("lancar"), { tipo: SIS.base === "DISQUE_181" ? "DDU" : tipoCompleto(v), codigo: v.cod, natureza: v.nat, municipio: (m ? m[0] : v.mun) + (v.setor ? " (" + v.setor + ")" : ""), endereco: String(v.end).trim(),
         data_gerada: v.ger || "", data_envio: v.env, pdf: lc.pdf || "" })
         .then(function (r) {
           document.body.classList.remove("ocupado");
@@ -2236,19 +2276,20 @@ form.card.at { padding: 14px 16px; }
         .catch(function (e) {
           document.body.classList.remove("ocupado");
           lc.etapa = "form"; abrirLancamento(true);
-          falha(e, { codigo: "lc-cod", natureza: "lc-nat", municipio: "lc-mun", endereco: "lc-end", data_envio: "lc-env", data_gerada: "lc-ger" });
+          falha(e, { tipo: "lc-tipo", codigo: "lc-cod", natureza: "lc-nat", municipio: "lc-mun", endereco: "lc-end", data_envio: "lc-env", data_gerada: "lc-ger" });
         });
     }
   }
   /* protótipo: mesmas regras do servidor */
   function demoLancar(x) {
     if (!ehSistema()) throw erroDemo("Só o Gestor Sistema lança denúncias.", "PERMISSAO");
+    if (SIS.base !== "DISQUE_181" && !x.tipo) throw erroDemo("Falta o campo: tipo", "VALIDACAO", { campo: "tipo" });
     const c = String(x.codigo || "").trim(), k = c.replace(/^0+/, "");
     const ja = DEMANDAS.find(y => y.codigo === c || (/^\d+$/.test(c) && String(y.codigo).replace(/^0+/, "") === k));
     if (ja) return { ok: true, situacao: "DUPLICADA", detalhe: "Já existe (enviada em " + br(ja.envio) + ")", codigo: c, demanda: ja };
     const mm = String(x.municipio).match(/^(.*?)\s*\(([^()]+)\)\s*$/), munNome = mm ? mm[1] : x.municipio, m = munLanc(munNome);
     if (!m) return { ok: true, situacao: "PENDENTE", detalhe: "Município \"" + munNome + "\" não está na aba MUNICÍPIOS.", codigo: c };
-    const d = { codigo: c, tipo: SIS.chave === "DISQUE_181" ? "DDU" : "DENÚNCIA", gerada: x.data_gerada || x.data_envio, envio: x.data_envio, venc: addDays(x.data_envio, PRAZO),
+    const d = { codigo: c, tipo: SIS.base === "DISQUE_181" ? "DDU" : (x.tipo || "DENÚNCIA"), gerada: x.data_gerada || x.data_envio, envio: x.data_envio, venc: addDays(x.data_envio, PRAZO),
       natureza: x.natureza, municipio: m[0], fracao: m[1], endereco: x.endereco + (mm ? " (" + mm[2] + ")" : ""),
       atend: "", gaia: "", reds: "", resultado: "", obsFracao: "", sitAnalista: "", respSemadEm: "", obsAnalista: "", prioridade: "NORMAL", prioPor: "", anotacao: "", recados: [], avisos: [], notas: [],
       hist: [{ quando: HOJE, hora: hora(), quem: quemSou(), acao: "Lançada manualmente no site" }] };
@@ -2315,7 +2356,7 @@ form.card.at { padding: 14px 16px; }
     return d.fracao === esc.slice(2);
   }
   function escopoNome(esc) {
-    if (!esc) return "1ª Companhia";
+    if (!esc) return nomeCia();
     if (esc.indexOf("P:") === 0) return pelNome(esc.slice(2)) + " · todos os GPs";
     return esc.slice(2);
   }
@@ -2471,8 +2512,8 @@ form.card.at { padding: 14px 16px; }
 
     /* filtros: uma linha acima de tudo */
     const presets = [["30d", "Últimos 30 dias"], ["90d", "Últimos 90 dias"], ["6m", "Últimos 6 meses"], ["ano", "Este ano"], ["custom", "Personalizado"]];
-    let optEsc = '<option value="">1ª Companhia — todas as frações</option>';
-    ["1", "2", "3", "5", "6", "7"].forEach(function (p) {
+    let optEsc = '<option value="">' + nomeCia() + ' — todas as frações</option>';
+    pelotoes().forEach(function (p) {
       const fr = FRACOES.map(f => f[0]).filter(f => pelotaoDe(f) === p);
       optEsc += '<optgroup label="' + pelNome(p) + '">' + (fr.length > 1 ? '<option value="P:' + p + '"' + (dash.escopo === "P:" + p ? " selected" : "") + ">" + pelNome(p) + " — todos os GPs</option>" : "") +
         fr.map(f => '<option value="F:' + esc_(f) + '"' + (dash.escopo === "F:" + f ? " selected" : "") + ">" + esc_(f) + "</option>").join("") + "</optgroup>";
@@ -2482,8 +2523,7 @@ form.card.at { padding: 14px 16px; }
       (dash.preset === "custom" ? '<label class="df"><span>De</span><input type="date" id="dp-ini" value="' + (dash.ini || ini) + '" max="' + HOJE + '"></label><label class="df"><span>Até</span><input type="date" id="dp-fim" value="' + (dash.fim || fim) + '" max="' + HOJE + '"></label>' : "") +
       (pelot ? '<label class="df df-w"><span>Fração</span><select id="dp-esc"><option value="P:' + st.usuario.pelotao + '">' + pelNome(st.usuario.pelotao) + " — todos os GPs</option>" +
         FRACOES.map(f => f[0]).filter(f => pelotaoDe(f) === st.usuario.pelotao).map(f => '<option value="F:' + esc_(f) + '"' + (esc === "F:" + f ? " selected" : "") + ">" + esc_(f) + "</option>").join("") + "</select></label>" : "") +
-      (fracao || pelot ? "" : '<label class="df"><span>Companhia</span><select id="dp-cia"><option>1ª Companhia</option><option disabled>2ª Companhia (em breve)</option></select></label>' +
-        '<label class="df df-w"><span>Fração</span><select id="dp-esc">' + optEsc + "</select></label>") +
+      (fracao || pelot ? "" : '<label class="df df-w"><span>Fração</span><select id="dp-esc">' + optEsc + "</select></label>") +
       '<div class="df-acoes"><button type="button" class="btn" id="dp-csv">Baixar CSV</button><button type="button" class="btn" id="dp-print">Imprimir / PDF</button></div></section>';
 
     const titulo = '<section class="dtitulo"><div><div class="eyebrow">' + (fracao ? "Desempenho da fração" : pelot ? "Dashboard do pelotão" : "Dashboard") + " · enviadas de " + br(ini) + " a " + br(fim) + "</div><h1>" + esc_(escopoNome(esc)) + "</h1></div>" +
@@ -2509,7 +2549,7 @@ form.card.at { padding: 14px 16px; }
       let grupos;
       const porPel = !esc && dash.agrupar === "pelotao";
       if (porPel) {
-        grupos = ["1", "2", "3", "5", "6", "7"].map(p => ({ nome: pelNome(p), esc: FRACOES.filter(f => pelotaoDe(f[0]) === p).length > 1 ? "P:" + p : "F:" + FRACOES.find(f => pelotaoDe(f[0]) === p)[0], m: met(per.filter(d => pelotaoDe(d.fracao) === p)) }));
+        grupos = pelotoes().map(p => ({ nome: pelNome(p), esc: FRACOES.filter(f => pelotaoDe(f[0]) === p).length > 1 ? "P:" + p : "F:" + FRACOES.find(f => pelotaoDe(f[0]) === p)[0], m: met(per.filter(d => pelotaoDe(d.fracao) === p)) }));
       } else {
         grupos = FRACOES.map(f => f[0]).filter(f => noEscopo({ fracao: f }, esc)).map(f => ({ nome: f, esc: "F:" + f, m: met(per.filter(d => d.fracao === f)) }));
       }
@@ -2540,12 +2580,12 @@ form.card.at { padding: 14px 16px; }
         const C = met(daCia);
         const fr = FRACOES.map(f => ({ n: f[0], m: met(daCia.filter(d => d.fracao === f[0])) })).filter(x => x.m.decid >= 8).sort((a, b) => b.m.cumpr - a.m.cumpr);
         const pos = fr.findIndex(x => x.n === esc.slice(2));
-        itens.push(["Cumprimento da fração", pct(M.cumpr), "média da 1ª Cia: " + pct(C.cumpr)]);
+        itens.push(["Cumprimento da fração", pct(M.cumpr), "média da " + nomeCia(true) + ": " + pct(C.cumpr)]);
         if (pos >= 0) {
           const eu = fr[pos].m.cumpr, acima = fr.filter(x => x.m.cumpr > eu + 1e-9).length, emp = fr.filter(x => Math.abs(x.m.cumpr - eu) < 1e-9).length - 1;
           itens.push(["Posição no cumprimento do prazo", (acima + 1) + "º de " + fr.length + (emp ? " (empatada com " + emp + ")" : ""), "entre as frações com 8 ou mais demandas vencidas ou atendidas"]);
         }
-        itens.push(["Tempo mediano", M.med == null ? "—" : M.med + " dias", "1ª Cia: " + (C.med == null ? "—" : C.med + " dias")]);
+        itens.push(["Tempo mediano", M.med == null ? "—" : M.med + " dias", nomeCia(true) + ": " + (C.med == null ? "—" : C.med + " dias")]);
         const v30 = per.filter(d => !d.atend && faltam(d) >= 0 && faltam(d) <= 30).length;
         itens.push(["Vencem nos próximos 30 dias", String(v30), "demandas ainda sem atendimento"]);
       } else {
@@ -2553,7 +2593,7 @@ form.card.at { padding: 14px 16px; }
         const comp = fr.filter(x => x.m.decid >= 8);
         const top = (arr, k, asc) => arr.slice().sort((a, b) => asc ? a.m[k] - b.m[k] : b.m[k] - a.m[k])[0];
         const vol = top(fr, "total"), melhor = top(comp, "cumpr"), pior = top(comp, "cumpr", true), atr = top(fr, "atraso"), lento = top(fr.filter(x => x.m.med != null && x.m.atend >= 5), "med");
-        if (esc.indexOf("P:") === 0) { const C = met(daCia); itens.push(["Cumprimento do pelotão", pct(M.cumpr), "média da 1ª Cia: " + pct(C.cumpr)]); }
+        if (esc.indexOf("P:") === 0) { const C = met(daCia); itens.push(["Cumprimento do pelotão", pct(M.cumpr), "média da " + nomeCia(true) + ": " + pct(C.cumpr)]); }
         if (vol) itens.push(["Maior volume recebido", vol.n, vol.m.total + " demandas"]);
         if (melhor) itens.push(["Melhor cumprimento do prazo", melhor.n, pct(melhor.m.cumpr) + " no prazo"]);
         if (pior && pior !== melhor) itens.push(["Menor cumprimento do prazo", pior.n, pct(pior.m.cumpr) + " no prazo", "late"]);
@@ -2759,7 +2799,7 @@ form.card.at { padding: 14px 16px; }
   function usuPorEmail(e) { e = String(e || "").trim().toLowerCase(); return USUARIOS.find(u => u.email === e); }
   function usuDefault(p) { return usuPorEmail(p === "gestor" ? "gestor.1cia@exemplo.com" : p === "pelotao" ? "monteiro.pel6@exemplo.com" : p === "cmt" ? "ten.moreira@exemplo.com" : "2gp3pel@exemplo.com"); }
   /** onde o usuário trabalha, por extenso */
-  function lotacao(u) { return u.papel === "CMT_PEL" ? pelNome(u.pelotao) : u.fracao || "1ª Companhia"; }
+  function lotacao(u) { return u.papel === "CMT_PEL" ? pelNome(u.pelotao) : u.fracao || nomeCia(); }
   function rotuloUsu(u) { return u.papel === "BASICO" ? u.email + " (usuário básico)" : u.nome + " (" + PAPEIS[u.papel].sigla + ")"; }
   function iniciais(u) {
     if (u.papel === "BASICO") return slugFr(u.fracao).toUpperCase().replace("PEL", "").slice(0, 3);
@@ -2792,7 +2832,7 @@ form.card.at { padding: 14px 16px; }
     if (lg.etapa === "inicio") {
       h = '<h2 class="lg-t">Entrar</h2><p>Use a conta Google cadastrada para a sua fração ou o seu e-mail pessoal, se você for comandante ou gestor.</p>' +
         '<button type="button" class="gbtn" id="lg-google">' + G_LOGO + "<span>Entrar com o Google</span></button>" +
-        '<ul class="lg-info"><li>Não existe senha própria do sistema: quem confere a sua identidade é o Google.</li><li>O que você pode fazer depende do cadastro do seu e-mail, feito pelo Gestor Sistema da 1ª Cia.</li><li>Use um computador ou celular de confiança e clique em <b>Sair</b> ao terminar.</li></ul>';
+        '<ul class="lg-info"><li>Não existe senha própria do sistema: quem confere a sua identidade é o Google.</li><li>O que você pode fazer depende do cadastro do seu e-mail, feito pelo Gestor Sistema da sua companhia.</li><li>Use um computador ou celular de confiança e clique em <b>Sair</b> ao terminar.</li></ul>';
     } else if (lg.etapa === "contas") {
       h = '<button type="button" class="link-btn lg-voltar" data-lg="inicio">← voltar</button><h2 class="lg-t">Simulação: com qual conta Google entrar?</h2>' +
         '<p class="fine">No site real, esta escolha é feita na janela do próprio Google. Aqui ela só serve para testar os perfis e as recusas.</p>' +
@@ -2806,7 +2846,7 @@ form.card.at { padding: 14px 16px; }
       const desativado = u && !u.ativo;
       h = '<div class="lg-negado"><div class="lg-ico" aria-hidden="true">' + ICO.warn + '</div><h2 class="lg-t">Acesso não autorizado</h2>' +
         "<p>A conta <b>" + esc(lg.email) + "</b> " + (desativado ? "teve o acesso desativado em " + br(u.desativadoEm) + "." : "não está cadastrada.") + "</p>" +
-        "<p>" + (desativado ? "Se você voltou a comandar uma fração, peça ao Gestor Sistema da 1ª Cia para reativar o seu cadastro." : "Se você usa a conta de uma fração ou é comandante, peça ao Gestor Sistema da 1ª Cia para cadastrar este e-mail. Confira também se entrou com a conta certa.") + "</p>" +
+        "<p>" + (desativado ? "Se você voltou a comandar uma fração, peça ao Gestor Sistema da sua companhia para reativar o seu cadastro." : "Se você usa a conta de uma fração ou é comandante, peça ao Gestor Sistema da sua companhia para cadastrar este e-mail. Confira também se entrou com a conta certa.") + "</p>" +
         '<button type="button" class="gbtn" data-lg="contas">' + G_LOGO + "<span>Entrar com outra conta</span></button>" +
         '<p class="fine">Nenhum dado do sistema é exibido a contas sem cadastro.</p></div>';
     }
@@ -2877,9 +2917,10 @@ form.card.at { padding: 14px 16px; }
   });
   /** abre um sistema do portal: troca nomes e regras (SIS), limpa o que era do outro sistema e carrega */
   function entrarSistema(chave) {
-    const novo = SIS_UI[chave];
+    const lista = REAL ? ((PORTAL_SESSAO && PORTAL_SESSAO.sistemas) || []) : SISTEMAS_PORTAL;
+    const novo = uiDe(lista.filter(x => x.chave === chave)[0] || { chave: chave });
     if (!novo) return;
-    const trocou = novo !== SIS;
+    const trocou = novo.chave !== SIS.chave;
     SIS = novo; aplicarMarca();
     hub.hidden = true; window.scrollTo(0, 0);
     if (trocou) {
@@ -2892,9 +2933,10 @@ form.card.at { padding: 14px 16px; }
   }
   /** cabeçalho, título da aba e rodapé do sistema aberto */
   function aplicarMarca() {
-    document.title = SIS.titulo + " 1ª Companhia";
+    const ciaEl = document.querySelector(".mast-title .cia"); if (ciaEl) ciaEl.textContent = nomeCia().toUpperCase();
+    document.title = SIS.titulo + " " + nomeCia();
     const t = document.querySelector(".mast-title");
-    if (t) { t.setAttribute("aria-label", SIS.titulo + " — 1ª Companhia"); const sg = t.querySelector(".sis"); if (sg) sg.textContent = SIS.titulo; }
+    if (t) { t.setAttribute("aria-label", SIS.titulo + " — " + nomeCia()); const sg = t.querySelector(".sis"); if (sg) sg.textContent = SIS.titulo; }
     const rod = document.querySelector("#rodape-sis .rodape-in span");
     if (rod) rod.textContent = SIS.rodape + " - Desenvolvido pelo 1º Sgt Anderson Arcari Pereira";
   }
@@ -2911,7 +2953,7 @@ form.card.at { padding: 14px 16px; }
     return FRACOES.map(f => f[0]).map(function (fr) {
       const at = USUARIOS.filter(u => u.ativo && u.fracao === fr);
       return { fr: fr, cmt: at.find(u => u.papel === "CMT_FR"), sub: at.find(u => u.papel === "SUBCMT_FR"), conta: at.find(u => u.papel === "BASICO") };
-    }).filter(x => !x.cmt || !x.sub || !x.conta).concat(["3", "5", "6", "7"].filter(p => !USUARIOS.some(u => u.ativo && u.papel === "CMT_PEL" && u.pelotao === p)).map(p => ({ pel: p })));
+    }).filter(x => !x.cmt || !x.sub || !x.conta).concat(pelotoesComGp().filter(p => !USUARIOS.some(u => u.ativo && u.papel === "CMT_PEL" && u.pelotao === p)).map(p => ({ pel: p })));
   }
   function telaUsuarios() {
     if (REAL && !st.usuOk) { app.innerHTML = abasHtml() + '<div class="empty" role="status">Carregando os usuários…</div>'; carregarUsuarios(); return; }
@@ -2932,7 +2974,7 @@ form.card.at { padding: 14px 16px; }
     if (uf.form) {
       const f = uf.form, novo = !f.id;
       const precisaNome = f.papel !== "BASICO";
-    const optPel = ["1", "2", "3", "5", "6", "7"].map(x => '<option value="' + x + '"' + (f.pelotao === x ? " selected" : "") + ">" + pelNome(x) + "</option>").join("");
+    const optPel = pelotoesComGp().map(x => '<option value="' + x + '"' + (f.pelotao === x ? " selected" : "") + ">" + pelNome(x) + "</option>").join("");
       form = '<form class="panel uform" id="u-form" novalidate><div class="panel-head"><h2>' + (novo ? "Adicionar usuário" : "Editar usuário") + "</h2>" +
         '<button type="button" class="x" data-u="cancelar" aria-label="Fechar">×</button></div>' +
         '<div class="uf-grid">' +
@@ -2973,7 +3015,7 @@ form.card.at { padding: 14px 16px; }
         const eu = st.usuario && st.usuario.id === u.id;
         const grupo = !k || grupoU(lista[k - 1]) !== grupoU(u) ? '<tr class="grp"><th colspan="6">' + esc(grupoU(u)) + "</th></tr>" : "";
         return grupo + '<tr class="' + (u.ativo ? "" : "inativo") + '"><td><b>' + esc(u.papel === "BASICO" ? "Usuário básico" : u.nome) + (eu ? ' <span class="voce">você</span>' : "") + '</b><span class="u-mail mono">' + esc(u.email) + "</span></td>" +
-          '<td><span class="papel p-' + u.papel.toLowerCase() + '">' + PAPEIS[u.papel].nome + "</span></td><td>" + (u.papel === "GESTOR" ? '<span class="muted">1ª Cia</span>' : esc(lotacao(u))) + '</td><td class="num">' + (u.ultimo ? br(u.ultimo) : '<span class="muted">nunca entrou</span>') + "</td>" +
+          '<td><span class="papel p-' + u.papel.toLowerCase() + '">' + PAPEIS[u.papel].nome + "</span></td><td>" + (u.papel === "GESTOR" ? '<span class="muted">' + nomeCia(true) + "</span>" : esc(lotacao(u))) + '</td><td class="num">' + (u.ultimo ? br(u.ultimo) : '<span class="muted">nunca entrou</span>') + "</td>" +
           "<td>" + (u.ativo ? '<span class="pill ok">Ativo</span>' : '<span class="pill">Desativado em ' + br(u.desativadoEm) + "</span>") + "</td>" +
           '<td class="r u-acoes">' + (u.ativo ? '<button type="button" class="btn sm" data-u="editar" data-id="' + u.id + '">Editar</button><button type="button" class="btn sm" data-u="desativar" data-id="' + u.id + '"' + (eu ? ' disabled title="Você não pode desativar o próprio acesso"' : "") + ">Desativar</button>"
             : '<button type="button" class="btn sm" data-u="reativar" data-id="' + u.id + '">Reativar</button>') + "</td></tr>";
@@ -3146,8 +3188,8 @@ form.card.at { padding: 14px 16px; }
       h = '<div class="lg-wait" role="status"><span class="spin" aria-hidden="true"></span><b>Verificando o seu acesso…</b><span class="fine">' + esc(lg.email) + "</span></div>";
     } else if (lg.etapa === "negado") {
       h = '<div class="lg-negado"><div class="lg-ico" aria-hidden="true">' + ICO.warn + '</div><h2 class="lg-t">Acesso não autorizado</h2><p>' + esc(lg.motivo) + "</p><p>" +
-        (lg.codigo === "DESATIVADO" ? "Se você voltou a comandar uma fração, peça ao Gestor Sistema da 1ª Cia para reativar o seu cadastro."
-          : "Se você usa a conta de uma fração ou é comandante, peça ao Gestor Sistema da 1ª Cia para cadastrar o seu e-mail.") + "</p>" +
+        (lg.codigo === "DESATIVADO" ? "Se você voltou a comandar uma fração, peça ao Gestor Sistema da sua companhia para reativar o seu cadastro."
+          : "Se você usa a conta de uma fração ou é comandante, peça ao Gestor Sistema da sua companhia para cadastrar o seu e-mail.") + "</p>" +
         '<div class="g-btn" id="g-btn"></div><p class="fine">Nenhum dado do sistema é exibido a contas sem cadastro.</p></div>';
     } else if (lg.etapa === "erro") {
       h = '<h2 class="lg-t">Não foi possível entrar</h2><p>' + esc(lg.motivo) + '</p><div class="g-btn" id="g-btn"></div>';
@@ -3155,7 +3197,7 @@ form.card.at { padding: 14px 16px; }
       h = '<h2 class="lg-t">' + (st.renovando ? "Entrar de novo" : "Entrar") + "</h2><p>" + (st.renovando ? "Use a mesma conta Google. O que você estava preenchendo continua na tela."
         : "Use a conta Google cadastrada para a sua fração ou o seu e-mail pessoal, se você for comandante ou gestor.") + "</p>" +
         '<div class="g-btn" id="g-btn"></div>' +
-        '<ul class="lg-info"><li>Não existe senha própria do sistema: quem confere a sua identidade é o Google.</li><li>O que você pode fazer depende do cadastro do seu e-mail, feito pelo Gestor Sistema da 1ª Cia.</li></ul>';
+        '<ul class="lg-info"><li>Não existe senha própria do sistema: quem confere a sua identidade é o Google.</li><li>O que você pode fazer depende do cadastro do seu e-mail, feito pelo Gestor Sistema da sua companhia.</li></ul>';
     }
     lgCard.innerHTML = h;
     const gb = document.getElementById("g-btn"); if (gb) gisBotao(gb);
@@ -3192,18 +3234,34 @@ form.card.at { padding: 14px 16px; }
     lg.etapa = "inicio"; renderLogin(); login.hidden = false;
   }
 
+  /* ---------- portal (escolha de sistemas) ----------
+     Cada companhia tem o próprio SISDEN e DDU. Quem tem acesso a uma companhia só vê os cartões dela;
+     quem tem acesso a mais de uma (ex.: o desenvolvedor) vê os cartões separados por companhia. */
+  function hubPorCompanhia(sistemas, cartao) {
+    const minhas = Array.from(new Set(sistemas.filter(s => s.acesso && s.cia).map(s => s.cia)));
+    const cias = minhas.length ? minhas : Array.from(new Set(sistemas.filter(s => s.cia).map(s => s.cia))).slice(0, 1);
+    const semCia = sistemas.filter(s => !s.cia);
+    if (cias.length <= 1) return sistemas.filter(s => !s.cia || s.cia === cias[0]).map(cartao).join("");
+    return cias.map(function (c) {
+      const doGrupo = sistemas.filter(s => s.cia === c);
+      return '<h2 class="hub-cia">' + esc(doGrupo[0].nomeCia || c) + "</h2>" + doGrupo.map(cartao).join("");
+    }).join("") + (semCia.length ? '<h2 class="hub-cia">Em breve</h2>' + semCia.map(cartao).join("") : "");
+  }
+
   /* ---------- portal (escolha de sistemas) ---------- */
   function abrirHubReal() {
     const r = PORTAL_SESSAO; if (!r) { sairReal(); return; }
-    const u = r.usuario, sd = r.sistemas.filter(x => x.chave === "SISDEN" && x.acesso)[0] || r.sistemas.filter(x => x.acesso)[0];
+    const u = r.usuario, sd = r.sistemas.filter(x => (x.base || x.chave) === "SISDEN" && x.acesso)[0] || r.sistemas.filter(x => x.acesso)[0];
     const eu = { papel: sd ? sd.papel : "GESTOR", fracao: sd ? sd.fracao : "", pelotao: sd ? sd.pelotao : "", nome: u.nome, email: u.email };
     const basico = eu.papel === "BASICO";
     document.getElementById("hub-ola").textContent = basico ? "Bem-vindos, equipe do " + eu.fracao : "Bem-vindo(a), " + u.nome;
     document.getElementById("hub-who").textContent = basico ? eu.fracao.replace("PELOTÃO", "PEL") : u.nome;
     document.getElementById("hub-avatar").textContent = iniciais(eu);
-    document.getElementById("hub-cards").innerHTML = r.sistemas.map(function (s) {
-      const loc = SISTEMAS_PORTAL.filter(x => x.chave === s.chave)[0] || {};
-      const acesso = !!s.acesso && !!SIS_UI[s.chave];
+    const ciasMinhas = Array.from(new Set(r.sistemas.filter(x => x.acesso && x.nomeCia).map(x => x.nomeCia)));
+    const hm = document.querySelector(".hub-marca span"); if (hm) hm.textContent = ciasMinhas.length === 1 ? ciasMinhas[0] : "BPM MAMB";
+    document.getElementById("hub-cards").innerHTML = hubPorCompanhia(r.sistemas, function (s) {
+      const loc = SISTEMAS_PORTAL.filter(x => x.chave === (s.base || s.chave))[0] || {};
+      const acesso = !!s.acesso && !!SIS_UI[s.base || s.chave];
       // ainda EM BREVE: só o Gestor Sistema daquele sistema entra, para testar antes de liberar às frações
       const teste = s.situacao !== "ATIVO" && acesso && s.papel === "GESTOR", ativo = s.situacao === "ATIVO" || teste;
       const papel = acesso ? (s.papel === "BASICO" ? "Conta da fração" : s.papelNome) + (s.papel === "GESTOR" ? "" : " · " + lotacao({ papel: s.papel, pelotao: s.pelotao, fracao: s.fracao })) : "";
@@ -3213,7 +3271,7 @@ form.card.at { padding: 14px 16px; }
         (teste ? '<span class="hub-breve">Em teste: só o Gestor Sistema vê</span>' : "") +
         (ativo && acesso ? '<button type="button" class="btn primary hub-entrar" data-sistema="' + esc(s.chave) + '">' + (teste ? "Entrar (teste)" : "Entrar") + "</button>" : '<button type="button" class="btn" disabled>' + (ativo ? "Sem acesso" : "Em breve") + "</button>") +
         "</article>";
-    }).join("");
+    });
     hub.hidden = false; window.scrollTo(0, 0);
     const b = hub.querySelector(".hub-entrar"); if (b) b.focus();
   }
@@ -3224,6 +3282,7 @@ form.card.at { padding: 14px 16px; }
   function aplicarCarga(r) {
     CARGA_EM = Date.now();
     if (r.config && r.config.prazo) PRAZO = r.config.prazo;
+    if (r.config && r.config.nomeCia && r.config.nomeCia !== SIS.nomeCia) { SIS.nomeCia = r.config.nomeCia; aplicarMarca(); }
     const ls = r.listas || {};   // o servidor é quem manda nas regras; o site só repete para avisar antes de salvar
     if (ls.resultados && ls.resultados.length) SIS.resultados = ls.resultados;
     if (ls.motivosExclusao && ls.motivosExclusao.length) SIS.motivos = ls.motivosExclusao;
