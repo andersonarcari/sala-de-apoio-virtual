@@ -755,6 +755,20 @@ button.rk:hover { background: color-mix(in srgb, var(--caqui) 9%, transparent); 
 .hub-ola { font-family: var(--f-display); font-size: 30px; margin: 0 0 4px; }
 .hub-sub { margin: 0 0 22px; color: var(--muted); }
 .hub-cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+.hub-cards.hub-cias { grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 12px; }
+@media (max-width: 1000px) { .hub-cards.hub-cias { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+@media (max-width: 560px) { .hub-cards.hub-cias { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.hub-card.cia-card { padding: 14px 12px 12px; gap: 6px; align-items: center; text-align: center; border-radius: 12px; }
+.hub-card.cia-card::before { height: 3px; }
+.cia-num { width: 42px; height: 42px; border-radius: 10px; display: grid; place-items: center; background: var(--preto, #373435); color: var(--caqui, #A08F63); font-family: var(--f-display); font-size: 18px; font-weight: 800; }
+.cia-card.off .cia-num { background: var(--line); color: var(--muted); }
+.cia-card .hub-txt { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.cia-card .hub-txt h2 { font-size: 15px; margin: 0; }
+.cia-cidade { margin: 0; color: var(--muted); font-size: 12.5px; font-weight: 600; line-height: 1.25; min-height: 2.5em; }
+.cia-card .cia-estado { font-size: 11.5px; color: var(--muted); }
+.cia-card .cia-sis { font-size: 11.5px; font-weight: 700; color: var(--ok, #2E7A4F); }
+.cia-card .btn { margin-top: 4px; width: 100%; min-height: 34px; padding: 6px 8px; font-size: 13.5px; }
+.hub-sub .hub-voltar { margin-right: 12px; font-weight: 700; }
 .hub-cia { grid-column: 1 / -1; margin: 10px 0 -4px; font-family: var(--f-display); font-size: 18px; text-transform: uppercase; letter-spacing: .4px; color: var(--muted); }
 .hub-cia:first-child { margin-top: 0; }
 .hub-card { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 22px; display: flex; flex-direction: column; gap: 14px; position: relative; overflow: hidden; }
@@ -1079,6 +1093,10 @@ form.card.at { padding: 14px 16px; }
       obsPh: "Exemplo: Constatado crime de cativeiro irregular de animal silvestre, sendo lavrado o respectivo Termo Circunstanciado de Ocorrência (TCO), bem como adotadas as medidas administrativas cabíveis, com a lavratura do Auto de Infração.", csv: "ddu"
     }
   };
+  /* companhias do batalhão (cartões do portal) e o que o portal está mostrando */
+  const CIAS = [["1CIA", "1ª Companhia", "Belo Horizonte"], ["2CIA", "2ª Companhia", "Montes Claros"], ["3CIA", "3ª Companhia", "Governador Valadares"],
+    ["4CIA", "4ª Companhia", "Juiz de Fora"], ["5CIA", "5ª Companhia", "Lavras"], ["6CIA", "6ª Companhia", "Uberaba"], ["7CIA", "7ª Companhia", "Patos de Minas"]];
+  const HUB = { sistemas: [], cia: "" };
   let SIS = uiDe({ chave: "SISDEN" });
   /** sistema do portal (chave SISDEN_2CIA, base SISDEN, companhia 2CIA…) → regras e textos do sistema de base + a companhia */
   function uiDe(s) {
@@ -2861,7 +2879,7 @@ form.card.at { padding: 14px 16px; }
       login.hidden = true; lg.etapa = "inicio";
       if (sessaoEl && !sessaoEl.hidden) { sessaoEl.hidden = true; toast("Sessão renovada. Pode continuar de onde parou."); return; }
       entrarComo(u);
-      abrirHub();
+      HUB.cia = ""; abrirHub();
       const n = itensAvisos().length;
       toast("Bem-vindo(a), " + (u.papel === "BASICO" ? "equipe do " + u.fracao : u.nome) + "." + (n ? (souComando() ? " " + n + " item(ns) aguardando o seu ciente." : " " + n + " aviso(s) pendente(s).") : ""));
     }, 700);
@@ -2894,22 +2912,19 @@ form.card.at { padding: 14px 16px; }
   function abrirHub() {
     if (REAL) { abrirHubReal(); return; }
     const u = st.usuario;
-    document.getElementById("hub-ola").textContent = (u.papel === "BASICO" ? "Bem-vindos, equipe do " + u.fracao : "Bem-vindo(a), " + u.nome);
+    const ola = document.getElementById("hub-ola");
+    ola.textContent = ola.dataset.ola = (u.papel === "BASICO" ? "Bem-vindos, equipe do " + u.fracao : "Bem-vindo(a), " + u.nome);
     document.getElementById("hub-who").textContent = u.papel === "BASICO" ? u.fracao.replace("PELOTÃO", "PEL") : u.nome;
     document.getElementById("hub-avatar").textContent = iniciais(u);
-    document.getElementById("hub-cards").innerHTML = SISTEMAS_PORTAL.map(function (s) {
-      const ativo = s.situacao === "ATIVO", acesso = !!SIS_UI[s.chave]; // no protótipo todos têm acesso ao SISDEN e ao DDU
-      const papel = acesso ? (u.papel === "BASICO" ? "Conta da fração" : PAPEIS[u.papel].nome) + (u.papel === "GESTOR" ? "" : " · " + lotacao(u)) : "";
-      return '<article class="hub-card' + (ativo && acesso ? "" : " off") + '">' +
-        '<div class="hub-ico"><img src="' + s.img + '" alt=""></div><div class="hub-txt"><h2>' + esc(s.nome) + "</h2><p>" + esc(s.desc) + "</p>" +
-        (ativo && acesso ? '<span class="hub-papel">' + esc(papel) + "</span>" : '<span class="hub-breve">' + (ativo ? "Sem acesso no seu cadastro" : "Em breve") + "</span>") + "</div>" +
-        (ativo && acesso ? '<button type="button" class="btn primary hub-entrar" data-sistema="' + s.chave + '">Entrar</button>' : '<button type="button" class="btn" disabled>' + (ativo ? "Sem acesso" : "Em breve") + "</button>") +
-        "</article>";
-    }).join("");
-    hub.hidden = false; window.scrollTo(0, 0);
-    const b = hub.querySelector(".hub-entrar"); if (b) b.focus();
+    // protótipo: só a 1ª Cia existe, com acesso ao SISDEN e ao DDU
+    HUB.sistemas = SISTEMAS_PORTAL.map(x => ({ chave: x.chave, base: x.chave, cia: SIS_UI[x.chave] ? "1CIA" : "", nomeCia: "1ª Companhia", acesso: !!SIS_UI[x.chave],
+      papel: u.papel, papelNome: PAPEIS[u.papel].nome, fracao: u.fracao, pelotao: u.pelotao, situacao: x.situacao, nome: x.nome, descricao: x.desc }));
+    desenharHub();
   }
   hub.addEventListener("click", function (e) {
+    const c = e.target.closest("[data-cia]");
+    if (c) { HUB.cia = c.getAttribute("data-cia"); desenharHub(); return; }
+    if (e.target.closest("#hub-voltar")) { HUB.cia = ""; desenharHub(); return; }
     const b = e.target.closest("[data-sistema]");
     if (b) { entrarSistema(b.getAttribute("data-sistema")); return; }
     if (e.target.id === "hub-sair" && REAL) { sairReal(); return; }
@@ -2940,7 +2955,7 @@ form.card.at { padding: 14px 16px; }
     const rod = document.querySelector("#rodape-sis .rodape-in span");
     if (rod) rod.textContent = SIS.rodape + " - Desenvolvido pelo 1º Sgt Anderson Arcari Pereira";
   }
-  document.getElementById("ir-hub").addEventListener("click", function () { if (!drawer.hidden) fechar(); pav.hidden = true; abrirHub(); });
+  document.getElementById("ir-hub").addEventListener("click", function () { if (!drawer.hidden) fechar(); pav.hidden = true; HUB.cia = SIS.cia || ""; abrirHub(); });
 
   /* ---------- sessão expirada ---------- */
   const sessaoEl = document.getElementById("sessao");
@@ -3216,7 +3231,7 @@ form.card.at { padding: 14px 16px; }
       }
       st.renovando = false; login.hidden = true; sessaoEl.hidden = true;
       if (!drawer.hidden) fechar();
-      abrirHub();
+      HUB.cia = ""; abrirHub();
     }).catch(function (e) {
       TOKEN = ""; limparToken();
       if (silencioso && e.codigo === "SESSAO") { lg.etapa = "inicio"; renderLogin(); return; }
@@ -3234,46 +3249,66 @@ form.card.at { padding: 14px 16px; }
     lg.etapa = "inicio"; renderLogin(); login.hidden = false;
   }
 
-  /* ---------- portal (escolha de sistemas) ----------
-     Cada companhia tem o próprio SISDEN e DDU. Quem tem acesso a uma companhia só vê os cartões dela;
-     quem tem acesso a mais de uma (ex.: o desenvolvedor) vê os cartões separados por companhia. */
-  function hubPorCompanhia(sistemas, cartao) {
-    const minhas = Array.from(new Set(sistemas.filter(s => s.acesso && s.cia).map(s => s.cia)));
-    const cias = minhas.length ? minhas : Array.from(new Set(sistemas.filter(s => s.cia).map(s => s.cia))).slice(0, 1);
-    const semCia = sistemas.filter(s => !s.cia);
-    if (cias.length <= 1) return sistemas.filter(s => !s.cia || s.cia === cias[0]).map(cartao).join("");
-    return cias.map(function (c) {
-      const doGrupo = sistemas.filter(s => s.cia === c);
-      return '<h2 class="hub-cia">' + esc(doGrupo[0].nomeCia || c) + "</h2>" + doGrupo.map(cartao).join("");
-    }).join("") + (semCia.length ? '<h2 class="hub-cia">Em breve</h2>' + semCia.map(cartao).join("") : "");
+  /* ---------- portal: companhias → sistemas ----------
+     Depois do login, um cartão para cada companhia do batalhão; dentro da companhia, os sistemas dela
+     (SISDEN, DDU, Monitoramento Contínuo). Só entra quem tem cadastro: o resto aparece como "Sem acesso"
+     ou "Em breve" (companhia que ainda não está no sistema). */
+  function cartaoSistema(s) {
+    const loc = SISTEMAS_PORTAL.filter(x => x.chave === (s.base || s.chave))[0] || {};
+    const acesso = !!s.acesso && !!SIS_UI[s.base || s.chave];
+    // ainda EM BREVE: só o Gestor Sistema daquele sistema entra, para testar antes de liberar às frações
+    const teste = REAL && s.situacao !== "ATIVO" && acesso && s.papel === "GESTOR", ativo = s.situacao === "ATIVO" || teste;
+    const papel = acesso ? (s.papel === "BASICO" ? "Conta da fração" : s.papelNome) + (s.papel === "GESTOR" ? "" : " · " + lotacao({ papel: s.papel, pelotao: s.pelotao, fracao: s.fracao })) : "";
+    return '<article class="hub-card' + (ativo && acesso ? "" : " off") + '">' +
+      '<div class="hub-ico">' + (loc.img ? '<img src="' + loc.img + '" alt="">' : "") + '</div><div class="hub-txt"><h2>' + esc(s.nome || loc.nome) + "</h2><p>" + esc(loc.desc || s.descricao) + "</p>" +
+      (ativo && acesso ? '<span class="hub-papel">' + esc(papel) + "</span>" : '<span class="hub-breve">' + (ativo ? "Sem acesso no seu cadastro" : "Em breve") + "</span>") + "</div>" +
+      (teste ? '<span class="hub-breve">Em teste: só o Gestor Sistema vê</span>' : "") +
+      (ativo && acesso ? '<button type="button" class="btn primary hub-entrar" data-sistema="' + esc(s.chave) + '">' + (teste ? "Entrar (teste)" : "Entrar") + "</button>" : '<button type="button" class="btn" disabled>' + (ativo ? "Sem acesso" : "Em breve") + "</button>") +
+      "</article>";
+  }
+  function desenharHub() {
+    const sub = hub.querySelector(".hub-sub"), ola = document.getElementById("hub-ola"), hm = hub.querySelector(".hub-marca span"), cards = document.getElementById("hub-cards");
+    if (!ola.dataset.ola) ola.dataset.ola = ola.textContent;
+    const cia = CIAS.filter(c => c[0] === HUB.cia)[0];
+    if (!cia) {
+      ola.textContent = ola.dataset.ola; hm.textContent = "BPM MAMB";
+      sub.textContent = "Escolha a companhia. Você entra nas companhias liberadas para o seu cadastro.";
+      cards.className = "hub-cards hub-cias";
+      cards.innerHTML = CIAS.map(function (c) {
+        const dela = HUB.sistemas.filter(x => x.cia === c[0]);
+        const meus = dela.filter(x => x.acesso && SIS_UI[x.base || x.chave]);
+        return '<article class="hub-card cia-card' + (meus.length ? "" : " off") + '">' +
+          '<div class="cia-num" aria-hidden="true">' + c[1].split(" ")[0] + '</div><div class="hub-txt"><h2>' + esc(c[1]) + '</h2><p class="cia-cidade">' + esc(c[2]) + "</p>" +
+          (meus.length ? '<span class="cia-sis">' + meus.map(x => SIS_UI[x.base || x.chave].titulo).join(" · ") + "</span>" : '<span class="cia-estado">' + (dela.length ? "Sem acesso" : "Em breve") + "</span>") + "</div>" +
+          (meus.length ? '<button type="button" class="btn primary hub-entrar" data-cia="' + c[0] + '" aria-label="Entrar na ' + esc(c[1]) + '">Entrar</button>' : "") +
+          "</article>";
+      }).join("");
+    } else {
+      ola.textContent = cia[1]; hm.textContent = cia[1];
+      sub.innerHTML = '<button type="button" class="link-btn hub-voltar" id="hub-voltar">← Todas as companhias</button><span>' + esc(cia[2]) + " · escolha o sistema.</span>";
+      cards.className = "hub-cards";
+      const lista = HUB.sistemas.filter(x => x.cia === cia[0]).concat(HUB.sistemas.filter(x => !x.cia));
+      // sistemas que a companhia ainda não tem aparecem como "Em breve"
+      ["SISDEN", "DISQUE_181"].forEach(function (b) {
+        if (!lista.some(x => (x.base || x.chave) === b)) lista.splice(b === "SISDEN" ? 0 : 1, 0, { chave: b, base: b, cia: cia[0], acesso: false, situacao: "EM BREVE" });
+      });
+      cards.innerHTML = lista.map(cartaoSistema).join("");
+    }
+    hub.hidden = false; window.scrollTo(0, 0);
+    const b = hub.querySelector(".hub-entrar"); if (b) b.focus();
   }
 
-  /* ---------- portal (escolha de sistemas) ---------- */
   function abrirHubReal() {
     const r = PORTAL_SESSAO; if (!r) { sairReal(); return; }
     const u = r.usuario, sd = r.sistemas.filter(x => (x.base || x.chave) === "SISDEN" && x.acesso)[0] || r.sistemas.filter(x => x.acesso)[0];
     const eu = { papel: sd ? sd.papel : "GESTOR", fracao: sd ? sd.fracao : "", pelotao: sd ? sd.pelotao : "", nome: u.nome, email: u.email };
     const basico = eu.papel === "BASICO";
-    document.getElementById("hub-ola").textContent = basico ? "Bem-vindos, equipe do " + eu.fracao : "Bem-vindo(a), " + u.nome;
+    const ola = document.getElementById("hub-ola");
+    ola.textContent = ola.dataset.ola = basico ? "Bem-vindos, equipe do " + eu.fracao : "Bem-vindo(a), " + u.nome;
     document.getElementById("hub-who").textContent = basico ? eu.fracao.replace("PELOTÃO", "PEL") : u.nome;
     document.getElementById("hub-avatar").textContent = iniciais(eu);
-    const ciasMinhas = Array.from(new Set(r.sistemas.filter(x => x.acesso && x.nomeCia).map(x => x.nomeCia)));
-    const hm = document.querySelector(".hub-marca span"); if (hm) hm.textContent = ciasMinhas.length === 1 ? ciasMinhas[0] : "BPM MAMB";
-    document.getElementById("hub-cards").innerHTML = hubPorCompanhia(r.sistemas, function (s) {
-      const loc = SISTEMAS_PORTAL.filter(x => x.chave === (s.base || s.chave))[0] || {};
-      const acesso = !!s.acesso && !!SIS_UI[s.base || s.chave];
-      // ainda EM BREVE: só o Gestor Sistema daquele sistema entra, para testar antes de liberar às frações
-      const teste = s.situacao !== "ATIVO" && acesso && s.papel === "GESTOR", ativo = s.situacao === "ATIVO" || teste;
-      const papel = acesso ? (s.papel === "BASICO" ? "Conta da fração" : s.papelNome) + (s.papel === "GESTOR" ? "" : " · " + lotacao({ papel: s.papel, pelotao: s.pelotao, fracao: s.fracao })) : "";
-      return '<article class="hub-card' + (ativo && acesso ? "" : " off") + '">' +
-        '<div class="hub-ico">' + (loc.img ? '<img src="' + loc.img + '" alt="">' : "") + '</div><div class="hub-txt"><h2>' + esc(s.nome || loc.nome) + "</h2><p>" + esc(loc.desc || s.descricao) + "</p>" +
-        (ativo && acesso ? '<span class="hub-papel">' + esc(papel) + "</span>" : '<span class="hub-breve">' + (ativo ? "Sem acesso no seu cadastro" : "Em breve") + "</span>") + "</div>" +
-        (teste ? '<span class="hub-breve">Em teste: só o Gestor Sistema vê</span>' : "") +
-        (ativo && acesso ? '<button type="button" class="btn primary hub-entrar" data-sistema="' + esc(s.chave) + '">' + (teste ? "Entrar (teste)" : "Entrar") + "</button>" : '<button type="button" class="btn" disabled>' + (ativo ? "Sem acesso" : "Em breve") + "</button>") +
-        "</article>";
-    });
-    hub.hidden = false; window.scrollTo(0, 0);
-    const b = hub.querySelector(".hub-entrar"); if (b) b.focus();
+    HUB.sistemas = r.sistemas;
+    desenharHub();
   }
 
   /* ---------- carga do sistema aberto (SISDEN ou DDU) ---------- */
