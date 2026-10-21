@@ -321,6 +321,7 @@ form.at { background: var(--surface); border: 1px solid var(--line); border-radi
 .local-hint { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 10px; padding: 10px 12px; border-radius: 8px; background: var(--warn-soft); border: 1px solid color-mix(in srgb, var(--warn) 40%, transparent); }
 .local-voltar { flex: none; font-weight: 700; }
 .local-fim { display: flex; justify-content: center; margin-top: 14px; }
+.spin.spin-btn { display: inline-block; width: 14px; height: 14px; border-width: 2px; margin: 0 8px 0 0; vertical-align: -2px; }
 .lc-barra { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin: -4px 0 14px; }
 .lc-abrir svg { width: 16px; height: 16px; margin-right: 6px; vertical-align: -3px; }
 .lc-barra .hint { color: var(--muted); font-size: 13px; }
@@ -1461,9 +1462,25 @@ form.card.at { padding: 14px 16px; }
   const scrim = document.getElementById("scrim");
   const toastEl = document.getElementById("toast");
 
-  function toast(msg) {
+  function toast(msg, fixo) {
     toastEl.textContent = msg; toastEl.hidden = false;
-    clearTimeout(toast.t); toast.t = setTimeout(function () { toastEl.hidden = true; }, 3400);
+    clearTimeout(toast.t); if (!fixo) toast.t = setTimeout(function () { toastEl.hidden = true; }, 3400);
+  }
+  /** "Salvando…": trava os botões da área, troca o texto do botão clicado e mostra o aviso até o servidor responder.
+      Devolve a função que destrava (para quando dá erro e a tela continua a mesma). */
+  function aguardando(area, botao, texto) {
+    const bts = area ? Array.prototype.slice.call(area.querySelectorAll("button")) : [];
+    const antes = botao ? botao.innerHTML : "";
+    bts.forEach(function (b) { if (!b.disabled) { b.disabled = true; b.dataset.trava = "1"; } });
+    if (botao) { botao.innerHTML = '<span class="spin spin-btn" aria-hidden="true"></span>' + esc(texto); botao.setAttribute("aria-busy", "true"); }
+    document.body.classList.add("ocupado");
+    toast(texto + " Aguarde…", true);
+    return function () {
+      bts.forEach(function (b) { if (b.dataset.trava) { b.disabled = false; delete b.dataset.trava; } });
+      if (botao) { botao.innerHTML = antes; botao.removeAttribute("aria-busy"); }
+      document.body.classList.remove("ocupado");
+      toastEl.hidden = true;
+    };
   }
 
   /* ================= painel e filtro =================
@@ -3079,10 +3096,15 @@ form.card.at { padding: 14px 16px; }
     const atual = mesmoPosto(f);
     if (atual && !substituir) { uf.confirmar = { lugar: f.papel === "CMT_PEL" ? pelNome(f.pelotao) : f.fracao, papel: f.papel, atual: atual }; telaUsuarios(); return; }
     if (REAL) {
+      const form = document.getElementById("u-form");
+      const bt = form && (form.querySelector('[data-u="conf-sim"]') || form.querySelector('button[type="submit"]'));
+      const soltar = aguardando(form, bt, novo ? "Cadastrando usuário…" : "Salvando alterações…");
       api(acao("usuarios.salvar"), { id: f.id || 0, email: f.email, papel: f.papel, fracao: f.fracao, pelotao: f.pelotao, nome: f.nome, substituir: !!atual }).then(function (r) {
+        document.body.classList.remove("ocupado");
         aplicarUsuarios(r); uf.form = null; uf.confirmar = null; telaUsuarios();
         toast(novo ? "Usuário cadastrado. Ele já pode entrar com " + f.email + "." : "Alterações salvas.");
       }).catch(function (e) {
+        soltar();
         if (e.codigo === "SUBSTITUIR" && e.extra && e.extra.atual) { uf.confirmar = { lugar: f.papel === "CMT_PEL" ? pelNome(f.pelotao) : f.fracao, papel: f.papel, atual: e.extra.atual }; telaUsuarios(); return; }
         falha(e, { email: "u-email", nome: "u-nome", fracao: "u-fracao", pelotao: "u-pelotao" });
       });
@@ -3127,13 +3149,21 @@ form.card.at { padding: 14px 16px; }
     else if (a === "conf-sim") { salvarUsu(true); }
     else if (a === "desativar") {
       if (u.papel === "GESTOR" && USUARIOS.filter(x => x.ativo && x.papel === "GESTOR").length < 2) { toast("Não dá para desativar o único Gestor Sistema ativo."); return true; }
-      if (REAL) { api(acao("usuarios.desativar"), { id: u.id }).then(function (r) { aplicarUsuarios(r); telaUsuarios(); toast(rotuloUsu(u) + " desativado. O acesso foi cortado e o histórico continua."); }).catch(e => falha(e)); return true; }
+      if (REAL) {
+        const soltar = aguardando(b.closest("tr") || b.parentNode, b, "Desativando…");
+        api(acao("usuarios.desativar"), { id: u.id }).then(function (r) { document.body.classList.remove("ocupado"); aplicarUsuarios(r); telaUsuarios(); toast(rotuloUsu(u) + " desativado. O acesso foi cortado e o histórico continua."); }).catch(function (e) { soltar(); falha(e); });
+        return true;
+      }
       u.ativo = false; u.desativadoEm = HOJE; logUsu("Desativou " + rotuloUsu(u) + (u.fracao ? " · " + u.fracao : ""));
       toast(rotuloUsu(u) + " desativado. O acesso foi cortado e o histórico continua."); telaUsuarios();
     } else if (a === "reativar") {
       const conflito = mesmoPosto(Object.assign({}, u, { id: -1 }));
       if (conflito) { toast(lotacao(u) + " já tem " + PAPEIS[u.papel].nome + " ativo (" + conflito.nome + "). Edite ou desative o atual antes."); return true; }
-      if (REAL) { api(acao("usuarios.reativar"), { id: u.id }).then(function (r) { aplicarUsuarios(r); telaUsuarios(); toast("Acesso reativado."); }).catch(e => falha(e)); return true; }
+      if (REAL) {
+        const soltar = aguardando(b.closest("tr") || b.parentNode, b, "Reativando…");
+        api(acao("usuarios.reativar"), { id: u.id }).then(function (r) { document.body.classList.remove("ocupado"); aplicarUsuarios(r); telaUsuarios(); toast("Acesso reativado."); }).catch(function (e) { soltar(); falha(e); });
+        return true;
+      }
       u.ativo = true; u.desativadoEm = ""; logUsu("Reativou " + rotuloUsu(u) + (u.fracao ? " · " + u.fracao : "")); toast("Acesso reativado."); telaUsuarios();
     } else if (a === "expirar") expirarSessao();
     return true;
