@@ -700,6 +700,13 @@ details.ufaltas > summary::-webkit-details-marker { display: none; }
 details.ufaltas > summary span { margin-left: auto; font-weight: 600; text-decoration: underline; color: var(--accent); }
 details.ufaltas[open] > summary span { display: none; }
 details.ufaltas > summary svg { width: 18px; height: 18px; }
+.pend-entrada ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.pend-entrada li { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; padding: 8px 12px; border: 1px solid var(--line); border-left: 3px solid var(--warn); border-radius: 8px; font-size: 14px; }
+.pend-entrada li b { font-family: var(--f-mono, monospace); font-weight: 600; }
+.pend-entrada .pe-mun { font-weight: 600; }
+.pend-entrada .pe-mun::before, .pend-entrada .pe-mot::before { content: "— "; color: var(--muted, #6b665c); font-weight: 400; }
+.pend-entrada .pe-mot { color: var(--muted, #6b665c); }
+.pend-entrada .fine { margin: 10px 0 0; }
 .ufaltas .link-btn { color: var(--accent); font-weight: 600; }
 .uform .uf-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 16px; }
 .uform input[readonly] { background: var(--surface-2); color: var(--muted); }
@@ -1306,8 +1313,8 @@ form.card.at { padding: 14px 16px; }
     });
     semear();
     PENDENCIAS.length = 0;
-    PENDENCIAS.push({ tone: "late", titulo: "Município sem fração", texto: (ddu ? "66415320871" : "D154733") + " — CONGONHAS não está na tabela de municípios. A demanda aguarda o cadastro para entrar." },
-      { tone: "warn", titulo: "Duplicata barrada", texto: (ddu ? "66413390245" : "D153994") + " chegou de novo pelo fluxo. Já existe, com envio em outra data; não entrou duas vezes." });
+    PENDENCIAS.push({ codigo: ddu ? "66415320871" : "2026.10.01.503.0001777", municipio: "PATOS DE MINAS", motivo: "município fora da companhia (ou não cadastrado na aba MUNICÍPIOS)", linha: 97 },
+      { codigo: ddu ? "66413390245" : "2026.10.01.503.0001780", municipio: "BETIM", motivo: "data de envio inválida ou vazia", linha: 98 });
   }
 
   /* ================= anotações de exemplo (protótipo) ================= */
@@ -1702,6 +1709,17 @@ form.card.at { padding: 14px 16px; }
       cartoesHtml() + filtrosHtml() + listHtml(listaFiltrada(), false);
   }
 
+  /** motivo curto da pendência da ENTRADA (o texto completo fica na planilha) */
+  function motivoEntrada(t) {
+    t = String(t || "");
+    if (/não é da .* nem das outras companhias|não está na aba MUNICÍPIOS/.test(t)) return "município fora da companhia (ou não cadastrado na aba MUNICÍPIOS)";
+    if (/fração .* não está cadastrada/i.test(t)) return "fração não cadastrada ou inativa na aba FRAÇÕES";
+    if (/Data de envio/i.test(t)) return "data de envio inválida ou vazia";
+    if (/Data gerada inválida/i.test(t)) return "data gerada inválida";
+    if (/sem código/i.test(t)) return "linha sem código";
+    if (/encaminhar/i.test(t)) return "não foi possível encaminhar à outra companhia";
+    return t;
+  }
   function telaGestor() {
     const pelot = st.perfil === "pelotao", pend = pelot ? [] : PENDENCIAS;
     app.innerHTML = abasHtml() +
@@ -1709,8 +1727,9 @@ form.card.at { padding: 14px 16px; }
       '<p class="head-note">Clique num quadro para ver as demandas daquela situação. Escolha uma fração na tabela ou no filtro para ver só ela.' + (pelot ? " Finalizar e devolver à fração são do Gestor Sistema." : "") + "</p></section>" +
       (ehSistema() ? '<div class="lc-barra"><button type="button" class="btn primary lc-abrir" data-lancar>' + ICO_MAIS + 'Lançar denúncia</button><span class="hint">Use quando uma denúncia não entrar sozinha pelo Power Automate.</span></div>' : "") +
       cartoesHtml() + tabelaFracoes() +
-      (pend.length ? '<section class="panel"><div class="panel-head"><h2>' + SIS.entrada + '</h2><p>linhas que não entraram sozinhas</p></div><div class="alerts">' +
-        pend.map(p => '<div class="alert" data-tone="' + p.tone + '"><b>' + esc(p.titulo) + "</b><p>" + esc(p.texto) + "</p></div>").join("") + "</div></section>" : "") +
+      (pend.length ? '<section class="panel pend-entrada"><div class="panel-head"><h2>Entradas pendentes</h2><p>' + pend.length + (pend.length === 1 ? " denúncia chegou e não entrou" : " denúncias chegaram e não entraram") + "</p></div><ul>" +
+        pend.map(p => '<li title="Linha ' + p.linha + ' da aba ENTRADA"><b>' + esc(SIS.titulo + " " + p.codigo) + "</b>" + (p.municipio ? '<span class="pe-mun">' + esc(p.municipio) + "</span>" : "") + '<span class="pe-mot">' + esc(p.motivo) + "</span></li>").join("") +
+        '</ul><p class="fine">Município fora da aba MUNICÍPIOS não entra. Se for desta companhia, cadastre-o (ou a grafia) na aba e a denúncia entra sozinha em até uma hora; se for de companhia que ainda não usa o sistema, não precisa fazer nada.</p></section>' : "") +
       (st.verExcluidas && ehSistema() ? excluidasHtml() : filtrosHtml() + listHtml(listaFiltrada(), true));
   }
 
@@ -2296,10 +2315,11 @@ form.card.at { padding: 14px 16px; }
   }
   function resultadoLancHtml() {
     const r = lc.res || {}, d = r.demanda;
-    const tom = r.situacao === "IMPORTADA" ? "ok" : r.situacao === "DUPLICADA" ? "info" : "warn";
-    const tit = r.situacao === "IMPORTADA" ? "Denúncia lançada" : r.situacao === "DUPLICADA" ? "Esta denúncia já estava no sistema" : "A denúncia foi registrada, mas ainda não entrou";
+    const tom = r.situacao === "IMPORTADA" ? "ok" : r.situacao === "DUPLICADA" || r.situacao === "ENCAMINHADA" ? "info" : "warn";
+    const tit = r.situacao === "IMPORTADA" ? "Denúncia lançada" : r.situacao === "DUPLICADA" ? "Esta denúncia já estava no sistema" : r.situacao === "ENCAMINHADA" ? "Denúncia encaminhada à outra companhia" : "A denúncia foi registrada, mas ainda não entrou";
     const txt = r.situacao === "IMPORTADA" ? "Já aparece para o <b>" + esc(d ? d.fracao : "") + "</b>" + (d ? ", com vencimento em <b>" + br(d.venc) + "</b>" : "") + "." + (r.avisoPdf ? " " + esc(r.avisoPdf) : r.pdf ? " O PDF ficou junto da demanda." : "")
       : r.situacao === "DUPLICADA" ? "Nada foi repetido. " + esc(r.detalhe || "")
+      : r.situacao === "ENCAMINHADA" ? esc(r.detalhe || "")
       : esc(r.detalhe || "") + " Avise o Gestor Sistema: corrigido o motivo, ela entra sozinha.";
     return '<div class="card lc-res" data-tone="' + tom + '" role="status"><p class="lc-res-t">' + (tom === "ok" ? "✓ " : "") + tit + '</p><p>' + txt + "</p>" +
       '<p class="mono lc-res-cod">' + esc(r.codigo || lc.v.cod) + "</p>" +
@@ -3392,8 +3412,7 @@ form.card.at { padding: 14px 16px; }
     if (r.lancamento) { LANC.municipios = r.lancamento.municipios || []; LANC.naturezas = r.lancamento.naturezas || []; }
     PENDENCIAS.length = 0;
     const pe = r.pendenciasEntrada || [];
-    if (pe.length > 3) PENDENCIAS.push({ tone: "warn", titulo: pe.length + " linhas da ENTRADA pendentes", texto: "Códigos: " + pe.map(p => p.codigo || "linha " + p.linha).join(", ") + ". Confira a coluna de situação na aba ENTRADA da planilha." });
-    else pe.forEach(p => PENDENCIAS.push({ tone: "warn", titulo: "Linha " + p.linha + " da ENTRADA pendente", texto: (p.codigo || "Sem código") + " — " + p.detalhe }));
+    pe.forEach(p => PENDENCIAS.push({ codigo: p.codigo || "(sem código)", municipio: p.municipio || "", motivo: motivoEntrada(p.detalhe), linha: p.linha }));
     const u = r.usuario;
     if (!st.usuario || st.usuario.email !== u.email || st.usuario.papel !== u.papel) {
       st.usuario = { id: -1, email: u.email, nome: u.nome, papel: u.papel, fracao: u.fracao, pelotao: u.pelotao, ativo: true };
