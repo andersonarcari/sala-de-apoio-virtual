@@ -700,7 +700,18 @@ details.ufaltas > summary::-webkit-details-marker { display: none; }
 details.ufaltas > summary span { margin-left: auto; font-weight: 600; text-decoration: underline; color: var(--accent); }
 details.ufaltas[open] > summary span { display: none; }
 details.ufaltas > summary svg { width: 18px; height: 18px; }
-.pend-entrada ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.pend-entrada > summary { display: flex; align-items: center; flex-wrap: wrap; gap: 4px 12px; cursor: pointer; list-style: none; }
+.pend-entrada > summary::-webkit-details-marker { display: none; }
+.pend-entrada .pe-tit { font-family: var(--f-display); font-weight: 700; font-size: 20px; display: inline-flex; align-items: center; gap: 8px; }
+.pend-entrada .pe-n { display: inline-block; min-width: 24px; padding: 1px 8px; border-radius: 12px; background: var(--warn); color: #fff; font-family: var(--f-body, inherit); font-size: 13px; text-align: center; }
+.pend-entrada .pe-sub { color: var(--muted, #6b665c); font-size: 13px; }
+.pend-entrada .pe-seta { margin-left: auto; width: 10px; height: 10px; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: rotate(45deg); transition: transform .15s; opacity: .7; }
+.pend-entrada[open] .pe-seta { transform: rotate(-135deg); }
+.pend-entrada[open] > summary { margin-bottom: 12px; }
+.pend-entrada ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; max-height: 360px; overflow-y: auto; }
+.pend-entrada .pe-x { margin-left: auto; border: 1px solid transparent; background: none; color: var(--muted, #6b665c); border-radius: 6px; padding: 2px 8px; font: inherit; font-size: 13px; cursor: pointer; }
+.pend-entrada .pe-x:hover, .pend-entrada .pe-x:focus-visible { border-color: var(--line); color: var(--late, #b42318); }
+.pend-entrada .pe-x.confirmar { border-color: var(--late, #b42318); color: var(--late, #b42318); font-weight: 600; }
 .pend-entrada li { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; padding: 8px 12px; border: 1px solid var(--line); border-left: 3px solid var(--warn); border-radius: 8px; font-size: 14px; }
 .pend-entrada li b { font-family: var(--f-mono, monospace); font-weight: 600; }
 .pend-entrada .pe-mun { font-weight: 600; }
@@ -1720,6 +1731,23 @@ form.card.at { padding: 14px 16px; }
     if (/encaminhar/i.test(t)) return "não foi possível encaminhar à outra companhia";
     return t;
   }
+  document.addEventListener("toggle", function (e) {
+    if (e.target.classList && e.target.classList.contains("pend-entrada")) { try { localStorage.setItem("sav_pend_aberto", e.target.open ? "1" : "0"); } catch (x) { /* sem armazenamento */ } }
+  }, true);
+  function pendAberto() { try { return localStorage.getItem("sav_pend_aberto") === "1"; } catch (e) { return false; } }
+  function dispensarEntrada(bt) {
+    if (bt.dataset.confirmar !== "1") {   // 1º clique pede confirmação no próprio botão
+      bt.dataset.confirmar = "1"; bt.classList.add("confirmar"); bt.textContent = "Dispensar?";
+      setTimeout(function () { if (bt.isConnected && bt.dataset.confirmar === "1") { bt.dataset.confirmar = ""; bt.classList.remove("confirmar"); bt.textContent = "✕"; } }, 4000);
+      return;
+    }
+    const linha = Number(bt.getAttribute("data-dispensar")), codigo = bt.getAttribute("data-cod");
+    bt.disabled = true; bt.textContent = "…";
+    chamar(acao("dispensarEntrada"), { linha: linha, codigo: codigo }).then(function () {
+      const i = PENDENCIAS.findIndex(p => p.linha === linha); if (i >= 0) PENDENCIAS.splice(i, 1);
+      toast("Pendência " + codigo + " tirada do painel."); render();
+    }).catch(function (e) { bt.disabled = false; bt.dataset.confirmar = ""; bt.classList.remove("confirmar"); bt.textContent = "✕"; toast(e && e.message ? e.message : "Não foi possível dispensar."); });
+  }
   function telaGestor() {
     const pelot = st.perfil === "pelotao", pend = pelot ? [] : PENDENCIAS;
     app.innerHTML = abasHtml() +
@@ -1727,9 +1755,10 @@ form.card.at { padding: 14px 16px; }
       '<p class="head-note">Clique num quadro para ver as demandas daquela situação. Escolha uma fração na tabela ou no filtro para ver só ela.' + (pelot ? " Finalizar e devolver à fração são do Gestor Sistema." : "") + "</p></section>" +
       (ehSistema() ? '<div class="lc-barra"><button type="button" class="btn primary lc-abrir" data-lancar>' + ICO_MAIS + 'Lançar denúncia</button><span class="hint">Use quando uma denúncia não entrar sozinha pelo Power Automate.</span></div>' : "") +
       cartoesHtml() + tabelaFracoes() +
-      (pend.length ? '<section class="panel pend-entrada"><div class="panel-head"><h2>Entradas pendentes</h2><p>' + pend.length + (pend.length === 1 ? " denúncia chegou e não entrou" : " denúncias chegaram e não entraram") + "</p></div><ul>" +
-        pend.map(p => '<li title="Linha ' + p.linha + ' da aba ENTRADA"><b>' + esc(SIS.titulo + " " + p.codigo) + "</b>" + (p.municipio ? '<span class="pe-mun">' + esc(p.municipio) + "</span>" : "") + '<span class="pe-mot">' + esc(p.motivo) + "</span></li>").join("") +
-        '</ul><p class="fine">Município fora da aba MUNICÍPIOS não entra. Se for desta companhia, cadastre-o (ou a grafia) na aba e a denúncia entra sozinha em até uma hora; se for de companhia que ainda não usa o sistema, não precisa fazer nada.</p></section>' : "") +
+      (pend.length ? '<details class="panel pend-entrada"' + (pendAberto() ? " open" : "") + '><summary><span class="pe-tit">Entradas pendentes <span class="pe-n">' + pend.length + "</span></span><span class=\"pe-sub\">" + (pend.length === 1 ? "denúncia que chegou e não entrou" : "denúncias que chegaram e não entraram") + '</span><span class="pe-seta" aria-hidden="true"></span></summary><ul>' +
+        pend.map(p => '<li title="Linha ' + p.linha + ' da aba ENTRADA"><b>' + esc(SIS.titulo + " " + p.codigo) + "</b>" + (p.municipio ? '<span class="pe-mun">' + esc(p.municipio) + "</span>" : "") + '<span class="pe-mot">' + esc(p.motivo) + "</span>" +
+          (ehSistema() ? '<button type="button" class="pe-x" data-dispensar="' + p.linha + '" data-cod="' + esc(p.codigo) + '" aria-label="Dispensar a pendência ' + esc(p.codigo) + '" title="Tirar do painel (a denúncia não entra)">✕</button>' : "") + "</li>").join("") +
+        '</ul><p class="fine">Município fora da aba MUNICÍPIOS não entra. Se for desta companhia, cadastre-o (ou a grafia) na aba e a denúncia entra sozinha em até uma hora; se for de companhia que ainda não usa o sistema, clique no ✕ para tirar do painel.</p></details>' : "") +
       (st.verExcluidas && ehSistema() ? excluidasHtml() : filtrosHtml() + listHtml(listaFiltrada(), true));
   }
 
@@ -2066,6 +2095,7 @@ form.card.at { padding: 14px 16px; }
     const fr = !ehGestao(), sis = ehSistema();
     const acao = nomeAcao.slice(nomeAcao.indexOf(".") + 1); // "ddu.abrir" → "abrir": o protótipo usa as mesmas regras nos dois sistemas
     if (acao === "lancar") return demoLancar(x);
+    if (acao === "dispensarEntrada") { if (!sis) throw erroDemo("Só o Gestor Sistema dispensa entradas pendentes.", "PERMISSAO"); return { codigo: x.codigo, linha: x.linha, situacao: "DISPENSADA" }; }
     if (acao === "marcarTodosLidos") { let n = 0; escopo().forEach(d => d.notas.forEach(nt => { if (!nt.vistaGe) { nt.vistaGe = true; n++; } })); return { marcados: n }; }
     let d = x.codigo ? DEMANDAS.find(y => y.codigo === x.codigo) : null;
     if (!d && x.id) d = DEMANDAS.find(y => (y.notas || []).some(n => n.id === Number(x.id)));
@@ -3615,6 +3645,8 @@ form.card.at { padding: 14px 16px; }
     if (e.target.closest("[data-geral]")) { st.gFracao = ""; render(); return; }
     if (e.target.closest("[data-limpar-busca]")) { st.busca = ""; st.local = null; render(); const b = document.getElementById("busca"); if (b) b.focus(); return; }
     if (e.target.closest("[data-lancar]")) { abrirLancamento(); return; }
+    const dsp = e.target.closest("[data-dispensar]");
+    if (dsp) { e.preventDefault(); dispensarEntrada(dsp); return; }
     const sl = e.target.closest("[data-local]");
     if (sl) { e.stopPropagation(); verLocal(sl.getAttribute("data-cod"), sl.getAttribute("data-local")); return; }
     if (e.target.closest("[data-limpar-local]")) { st.local = null; render(); return; }
